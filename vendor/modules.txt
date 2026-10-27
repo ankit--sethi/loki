@@ -950,17 +950,17 @@ github.com/go-openapi/errors
 ## explicit; go 1.26.0
 github.com/go-openapi/jsonpointer
 github.com/go-openapi/jsonpointer/jsonname
-# github.com/go-openapi/jsonreference v1.0.1
-## explicit; go 1.25.0
+# github.com/go-openapi/jsonreference v1.0.2
+## explicit; go 1.26.0
 github.com/go-openapi/jsonreference
 github.com/go-openapi/jsonreference/internal
-# github.com/go-openapi/loads v0.25.2
-## explicit; go 1.25.0
+# github.com/go-openapi/loads v0.25.3
+## explicit; go 1.26.0
 github.com/go-openapi/loads
-# github.com/go-openapi/spec v1.0.0
-## explicit; go 1.25.0
+# github.com/go-openapi/spec v1.0.1
+## explicit; go 1.26.0
 github.com/go-openapi/spec
-# github.com/go-openapi/strfmt v0.27.2
+# github.com/go-openapi/strfmt v0.27.3
 ## explicit; go 1.26.0
 github.com/go-openapi/strfmt
 github.com/go-openapi/strfmt/internal/bsonlite
@@ -1260,7 +1260,7 @@ github.com/grafana/tail/winfile
 # github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
 ## explicit; go 1.24.0
 github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery
-# github.com/grpc-ecosystem/grpc-gateway/v2 v2.31.0
+# github.com/grpc-ecosystem/grpc-gateway/v2 v2.32.0
 ## explicit; go 1.26.0
 github.com/grpc-ecosystem/grpc-gateway/v2/internal/httprule
 github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options
