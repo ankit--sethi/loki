@@ -13,7 +13,7 @@ import (
 
 // MaxKey is the maximum key used for any messages in this package.
 // Note that this value will change as Kafka adds more messages.
-const MaxKey = 92
+const MaxKey = 94
 
 type AssignmentTopicPartition struct {
 	TopicID [16]byte
@@ -35,6 +35,68 @@ func (v *AssignmentTopicPartition) Default() {
 // This is a shortcut for creating a struct and calling Default yourself.
 func NewAssignmentTopicPartition() AssignmentTopicPartition {
 	var v AssignmentTopicPartition
+	v.Default()
+	return v
+}
+
+type TopicInfoConfig struct {
+	// Key is the config key.
+	Key string
+
+	// Value is the config value.
+	Value string
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TopicInfoConfig.
+func (v *TopicInfoConfig) Default() {
+}
+
+// NewTopicInfoConfig returns a default TopicInfoConfig
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTopicInfoConfig() TopicInfoConfig {
+	var v TopicInfoConfig
+	v.Default()
+	return v
+}
+
+// TopologyDescriptionNode is a processor node within a streams topology
+// description.
+type TopologyDescriptionNode struct {
+	// Name is the name of this node.
+	Name string
+
+	// NodeType is the type of this node.
+	NodeType int8
+
+	// SourceTopics are the source topics this node reads from.
+	SourceTopics []string
+
+	// SinkTopic is the sink topic this node writes to, or null.
+	SinkTopic *string
+
+	// Stores are the state stores connected to this node.
+	Stores []string
+
+	// Successors are the names of this node's successor nodes.
+	Successors []string
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TopologyDescriptionNode.
+func (v *TopologyDescriptionNode) Default() {
+}
+
+// NewTopologyDescriptionNode returns a default TopologyDescriptionNode
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTopologyDescriptionNode() TopologyDescriptionNode {
+	var v TopologyDescriptionNode
 	v.Default()
 	return v
 }
@@ -112,15 +174,12 @@ func (v *MessageV0) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *MessageV0) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *MessageV0) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *MessageV0) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -258,15 +317,12 @@ func (v *MessageV1) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *MessageV1) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *MessageV1) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *MessageV1) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -338,15 +394,12 @@ func (v *Header) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *Header) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *Header) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *Header) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -543,15 +596,12 @@ func (v *RecordBatch) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *RecordBatch) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *RecordBatch) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *RecordBatch) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -668,15 +718,12 @@ func (v *OffsetCommitKey) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetCommitKey) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetCommitKey) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetCommitKey) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -761,6 +808,7 @@ type OffsetCommitValue struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (v *OffsetCommitValue) AppendTo(dst []byte) []byte {
@@ -817,15 +865,12 @@ func (v *OffsetCommitValue) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetCommitValue) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetCommitValue) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetCommitValue) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -926,15 +971,12 @@ func (v *GroupMetadataKey) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *GroupMetadataKey) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *GroupMetadataKey) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *GroupMetadataKey) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -996,6 +1038,7 @@ type GroupMetadataValueMember struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -1054,6 +1097,7 @@ type GroupMetadataValue struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (v *GroupMetadataValue) AppendTo(dst []byte) []byte {
@@ -1174,15 +1218,12 @@ func (v *GroupMetadataValue) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *GroupMetadataValue) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *GroupMetadataValue) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *GroupMetadataValue) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -1416,15 +1457,12 @@ func (v *TxnMetadataKey) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *TxnMetadataKey) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *TxnMetadataKey) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *TxnMetadataKey) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -1463,6 +1501,10 @@ type TxnMetadataValueTopic struct {
 
 	// Partitions are partitions in this topic involved in the transaction.
 	Partitions []int32
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -1480,6 +1522,11 @@ func NewTxnMetadataValueTopic() TxnMetadataValueTopic {
 
 // TxnMetadataValue is the value for the Kafka internal __transaction_state
 // topic if the key is of TxnMetadataKey type.
+//
+// Version 0 was introduced in 0.11.0.
+//
+// KAFKA-14869 commit 4b6dcf19dc, proposed in KIP-915 and included in 3.5
+// released version 1.
 type TxnMetadataValue struct {
 	// Version is the version of this value.
 	Version int16
@@ -1507,11 +1554,41 @@ type TxnMetadataValue struct {
 
 	// StartTimestamp is the timestamp in millis of when this transaction started.
 	StartTimestamp int64
+
+	// PreviousProducerID is the producer ID used by the last committed
+	// transaction. KAFKA-14562 commit ede0c94aaa, proposed in KIP-890 and
+	// included in 4.0.
+	//
+	// This field has a default of -1.
+	PreviousProducerID int64 // tag 0
+
+	// NextProducerID is the latest producer ID sent to the producer for the
+	// given transactional ID. KAFKA-14562 commit ede0c94aaa, proposed in
+	// KIP-890 and included in 4.0.
+	//
+	// This field has a default of -1.
+	NextProducerID int64 // tag 1
+
+	// ClientTransactionVersion is the transaction version used by the client.
+	// KAFKA-14562 commit ede0c94aaa, proposed in KIP-890 and included in 4.0.
+	ClientTransactionVersion int16 // tag 2
+
+	// NextProducerEpoch is the producer epoch associated with NextProducerID.
+	// KAFKA-15370 commit 247c0f0ba5, proposed in KIP-939 and included in 4.1.0.
+	//
+	// This field has a default of -1.
+	NextProducerEpoch int16 // tag 3
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags // v1+
+
 }
 
 func (v *TxnMetadataValue) AppendTo(dst []byte) []byte {
 	version := v.Version
 	_ = version
+	isFlexible := version >= 1
+	_ = isFlexible
 	{
 		v := v.Version
 		dst = kbin.AppendInt16(dst, v)
@@ -1537,20 +1614,36 @@ func (v *TxnMetadataValue) AppendTo(dst []byte) []byte {
 	}
 	{
 		v := v.Topics
-		dst = kbin.AppendArrayLen(dst, len(v))
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
 		for i := range v {
 			v := &v[i]
 			{
 				v := v.Topic
-				dst = kbin.AppendString(dst, v)
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
 			}
 			{
 				v := v.Partitions
-				dst = kbin.AppendArrayLen(dst, len(v))
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
 				for i := range v {
 					v := v[i]
 					dst = kbin.AppendInt32(dst, v)
 				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
 			}
 		}
 	}
@@ -1562,23 +1655,71 @@ func (v *TxnMetadataValue) AppendTo(dst []byte) []byte {
 		v := v.StartTimestamp
 		dst = kbin.AppendInt64(dst, v)
 	}
+	if isFlexible {
+		var toEncode []uint32
+		if v.PreviousProducerID != -1 {
+			toEncode = append(toEncode, 0)
+		}
+		if v.NextProducerID != -1 {
+			toEncode = append(toEncode, 1)
+		}
+		if v.ClientTransactionVersion != 0 {
+			toEncode = append(toEncode, 2)
+		}
+		if v.NextProducerEpoch != -1 {
+			toEncode = append(toEncode, 3)
+		}
+		dst = kbin.AppendUvarint(dst, uint32(len(toEncode)+v.UnknownTags.Len()))
+		for _, tag := range toEncode {
+			switch tag {
+			case 0:
+				{
+					v := v.PreviousProducerID
+					dst = kbin.AppendUvarint(dst, 0)
+					dst = kbin.AppendUvarint(dst, 8)
+					dst = kbin.AppendInt64(dst, v)
+				}
+			case 1:
+				{
+					v := v.NextProducerID
+					dst = kbin.AppendUvarint(dst, 1)
+					dst = kbin.AppendUvarint(dst, 8)
+					dst = kbin.AppendInt64(dst, v)
+				}
+			case 2:
+				{
+					v := v.ClientTransactionVersion
+					dst = kbin.AppendUvarint(dst, 2)
+					dst = kbin.AppendUvarint(dst, 2)
+					dst = kbin.AppendInt16(dst, v)
+				}
+			case 3:
+				{
+					v := v.NextProducerEpoch
+					dst = kbin.AppendUvarint(dst, 3)
+					dst = kbin.AppendUvarint(dst, 2)
+					dst = kbin.AppendInt16(dst, v)
+				}
+			}
+		}
+		dst = v.UnknownTags.AppendEach(dst)
+	}
 	return dst
 }
-
 func (v *TxnMetadataValue) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *TxnMetadataValue) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *TxnMetadataValue) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
 	v.Version = b.Int16()
 	version := v.Version
 	_ = version
+	isFlexible := version >= 1
+	_ = isFlexible
 	s := v
 	{
 		v := b.Int64()
@@ -1605,7 +1746,14 @@ func (v *TxnMetadataValue) readFrom(src []byte, unsafe bool) error {
 		v := s.Topics
 		a := v
 		var l int32
-		l = b.ArrayLen()
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TxnMetadataValueTopic{}
+		}
 		if !b.Ok() {
 			return b.Complete()
 		}
@@ -1620,9 +1768,17 @@ func (v *TxnMetadataValue) readFrom(src []byte, unsafe bool) error {
 			{
 				var v string
 				if unsafe {
-					v = b.UnsafeString()
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
 				} else {
-					v = b.String()
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
 				}
 				s.Topic = v
 			}
@@ -1630,7 +1786,11 @@ func (v *TxnMetadataValue) readFrom(src []byte, unsafe bool) error {
 				v := s.Partitions
 				a := v
 				var l int32
-				l = b.ArrayLen()
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
 				if !b.Ok() {
 					return b.Complete()
 				}
@@ -1645,6 +1805,9 @@ func (v *TxnMetadataValue) readFrom(src []byte, unsafe bool) error {
 				v = a
 				s.Partitions = v
 			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
 		}
 		v = a
 		s.Topics = v
@@ -1657,12 +1820,52 @@ func (v *TxnMetadataValue) readFrom(src []byte, unsafe bool) error {
 		v := b.Int64()
 		s.StartTimestamp = v
 	}
+	if isFlexible {
+		for i := b.Uvarint(); i > 0; i-- {
+			switch key := b.Uvarint(); key {
+			default:
+				s.UnknownTags.Set(key, b.Span(int(b.Uvarint())))
+			case 0:
+				b := kbin.Reader{Src: b.Span(int(b.Uvarint()))}
+				v := b.Int64()
+				s.PreviousProducerID = v
+				if err := b.Complete(); err != nil {
+					return err
+				}
+			case 1:
+				b := kbin.Reader{Src: b.Span(int(b.Uvarint()))}
+				v := b.Int64()
+				s.NextProducerID = v
+				if err := b.Complete(); err != nil {
+					return err
+				}
+			case 2:
+				b := kbin.Reader{Src: b.Span(int(b.Uvarint()))}
+				v := b.Int16()
+				s.ClientTransactionVersion = v
+				if err := b.Complete(); err != nil {
+					return err
+				}
+			case 3:
+				b := kbin.Reader{Src: b.Span(int(b.Uvarint()))}
+				v := b.Int16()
+				s.NextProducerEpoch = v
+				if err := b.Complete(); err != nil {
+					return err
+				}
+			}
+		}
+	}
 	return b.Complete()
 }
+func (v *TxnMetadataValue) IsFlexible() bool { return v.Version >= 1 }
 
 // Default sets any default fields. Calling this allows for future compatibility
 // if new fields are added to TxnMetadataValue.
 func (v *TxnMetadataValue) Default() {
+	v.PreviousProducerID = -1
+	v.NextProducerID = -1
+	v.NextProducerEpoch = -1
 }
 
 // NewTxnMetadataValue returns a default TxnMetadataValue
@@ -1824,15 +2027,12 @@ func (v *ConsumerMemberMetadata) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConsumerMemberMetadata) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConsumerMemberMetadata) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConsumerMemberMetadata) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2013,15 +2213,12 @@ func (v *ConsumerMemberAssignment) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConsumerMemberAssignment) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConsumerMemberAssignment) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConsumerMemberAssignment) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2134,15 +2331,12 @@ func (v *ConnectMemberMetadata) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConnectMemberMetadata) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConnectMemberMetadata) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConnectMemberMetadata) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2309,15 +2503,12 @@ func (v *ConnectMemberAssignment) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConnectMemberAssignment) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConnectMemberAssignment) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConnectMemberAssignment) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2520,15 +2711,12 @@ func (v *DefaultPrincipalData) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DefaultPrincipalData) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DefaultPrincipalData) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DefaultPrincipalData) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2613,21 +2801,18 @@ func (v *ControlRecordKey) AppendTo(dst []byte) []byte {
 	{
 		v := v.Type
 		{
-			v := int8(v)
-			dst = kbin.AppendInt8(dst, v)
+			v := int16(v)
+			dst = kbin.AppendInt16(dst, v)
 		}
 	}
 	return dst
 }
-
 func (v *ControlRecordKey) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ControlRecordKey) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ControlRecordKey) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2638,7 +2823,7 @@ func (v *ControlRecordKey) readFrom(src []byte, unsafe bool) error {
 	{
 		var t ControlRecordKeyType
 		{
-			v := b.Int8()
+			v := b.Int16()
 			t = ControlRecordKeyType(v)
 		}
 		v := t
@@ -2680,15 +2865,12 @@ func (v *EndTxnMarker) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *EndTxnMarker) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *EndTxnMarker) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *EndTxnMarker) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2719,6 +2901,10 @@ func NewEndTxnMarker() EndTxnMarker {
 type LeaderChangeMessageVoter struct {
 	VoterID int32
 
+	// VoterDirectoryID is the directory ID of the voter.
+	// KAFKA-16915 commit da8fe6355b, proposed in KIP-853 and included in 3.9.
+	VoterDirectoryID [16]byte // v1+
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
@@ -2736,7 +2922,7 @@ func NewLeaderChangeMessageVoter() LeaderChangeMessageVoter {
 	return v
 }
 
-// LeaderChangeMessage is the value for a control record when the key is type 3.
+// LeaderChangeMessage is the value for a control record when the key is type 2.
 type LeaderChangeMessage struct {
 	Version int16
 
@@ -2779,6 +2965,10 @@ func (v *LeaderChangeMessage) AppendTo(dst []byte) []byte {
 				v := v.VoterID
 				dst = kbin.AppendInt32(dst, v)
 			}
+			if version >= 1 {
+				v := v.VoterDirectoryID
+				dst = kbin.AppendUuid(dst, v)
+			}
 			if isFlexible {
 				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 				dst = v.UnknownTags.AppendEach(dst)
@@ -2798,6 +2988,10 @@ func (v *LeaderChangeMessage) AppendTo(dst []byte) []byte {
 				v := v.VoterID
 				dst = kbin.AppendInt32(dst, v)
 			}
+			if version >= 1 {
+				v := v.VoterDirectoryID
+				dst = kbin.AppendUuid(dst, v)
+			}
 			if isFlexible {
 				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 				dst = v.UnknownTags.AppendEach(dst)
@@ -2810,15 +3004,12 @@ func (v *LeaderChangeMessage) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *LeaderChangeMessage) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *LeaderChangeMessage) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *LeaderChangeMessage) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -2856,6 +3047,10 @@ func (v *LeaderChangeMessage) readFrom(src []byte, unsafe bool) error {
 				v := b.Int32()
 				s.VoterID = v
 			}
+			if version >= 1 {
+				v := b.Uuid()
+				s.VoterDirectoryID = v
+			}
 			if isFlexible {
 				s.UnknownTags = internalReadTags(&b)
 			}
@@ -2886,6 +3081,10 @@ func (v *LeaderChangeMessage) readFrom(src []byte, unsafe bool) error {
 			{
 				v := b.Int32()
 				s.VoterID = v
+			}
+			if version >= 1 {
+				v := b.Uuid()
+				s.VoterDirectoryID = v
 			}
 			if isFlexible {
 				s.UnknownTags = internalReadTags(&b)
@@ -2927,6 +3126,7 @@ type ProduceRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -2954,6 +3154,7 @@ type ProduceRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -3007,6 +3208,7 @@ type ProduceRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 func (*ProduceRequest) Key() int16                       { return 0 }
@@ -3112,15 +3314,12 @@ func (v *ProduceRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ProduceRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ProduceRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ProduceRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -3279,6 +3478,7 @@ type ProduceResponseTopicPartitionErrorRecord struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -3307,6 +3507,7 @@ type ProduceResponseTopicPartitionCurrentLeader struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -3439,6 +3640,7 @@ type ProduceResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -3475,6 +3677,7 @@ type ProduceResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -3505,6 +3708,7 @@ type ProduceResponseBroker struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -3543,6 +3747,7 @@ type ProduceResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 func (*ProduceResponse) Key() int16                         { return 0 }
@@ -3760,15 +3965,12 @@ func (v *ProduceResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ProduceResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ProduceResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ProduceResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -4082,6 +4284,7 @@ type FetchRequestReplicaState struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -4147,6 +4350,7 @@ type FetchRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -4178,6 +4382,7 @@ type FetchRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -4206,6 +4411,7 @@ type FetchRequestForgottenTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -4311,6 +4517,7 @@ type FetchRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 func (*FetchRequest) Key() int16                 { return 1 }
@@ -4564,15 +4771,12 @@ func (v *FetchRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *FetchRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *FetchRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *FetchRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -4905,6 +5109,7 @@ type FetchResponseTopicPartitionDivergingEpoch struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -4935,6 +5140,7 @@ type FetchResponseTopicPartitionCurrentLeader struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -4961,6 +5167,7 @@ type FetchResponseTopicPartitionSnapshotID struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -4987,6 +5194,7 @@ type FetchResponseTopicPartitionAbortedTransaction struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -5056,7 +5264,7 @@ type FetchResponseTopicPartition struct {
 	// LastStableOffset is the offset at which all prior offsets have
 	// been "decided". Non transactional records are always decided
 	// immediately, but transactional records are only decided once
-	// they are commited or aborted.
+	// they are committed or aborted.
 	//
 	// The LastStableOffset will always be at or under the HighWatermark.
 	//
@@ -5110,6 +5318,7 @@ type FetchResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -5159,6 +5368,7 @@ type FetchResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -5189,6 +5399,7 @@ type FetchResponseBroker struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -5243,6 +5454,7 @@ type FetchResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v12+
+
 }
 
 func (*FetchResponse) Key() int16                         { return 1 }
@@ -5532,15 +5744,12 @@ func (v *FetchResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *FetchResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *FetchResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *FetchResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -5924,6 +6133,7 @@ type ListOffsetsRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -5950,6 +6160,7 @@ type ListOffsetsRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -5984,6 +6195,9 @@ func NewListOffsetsRequestTopic() ListOffsetsRequestTopic {
 // Version 10, introduced in Kafka 4.0, adds TimeoutMillis, allowing you to set
 // a timeout when the ListOffsets request triggers a lookup from remote storage.
 // See KIP-1075.
+//
+// Version 11, introduced in Kafka 4.2, supports -6 as a timestamp to return
+// the earliest pending upload offset. See KIP-1023.
 type ListOffsetsRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -6006,21 +6220,26 @@ type ListOffsetsRequest struct {
 	// Topics is an array of topics to get offsets for.
 	Topics []ListOffsetsRequestTopic
 
-	// TimeoutMillis is how long to wait for a lookup the offset being looked up
-	// is in remote storage.
+	// TimeoutMillis is how long Kafka can wait before responding to this request.
+	// This field has no effect on Kafka's processing of the request; the request
+	// will continue to be processed if the timeout is reached. If the timeout is
+	// reached, Kafka will reply with a REQUEST_TIMED_OUT error.
 	//
 	// This field has a default of 30000.
 	TimeoutMillis int32 // v10+
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
-func (*ListOffsetsRequest) Key() int16                 { return 2 }
-func (*ListOffsetsRequest) MaxVersion() int16          { return 10 }
-func (v *ListOffsetsRequest) SetVersion(version int16) { v.Version = version }
-func (v *ListOffsetsRequest) GetVersion() int16        { return v.Version }
-func (v *ListOffsetsRequest) IsFlexible() bool         { return v.Version >= 6 }
+func (*ListOffsetsRequest) Key() int16                       { return 2 }
+func (*ListOffsetsRequest) MaxVersion() int16                { return 11 }
+func (v *ListOffsetsRequest) SetVersion(version int16)       { v.Version = version }
+func (v *ListOffsetsRequest) GetVersion() int16              { return v.Version }
+func (v *ListOffsetsRequest) IsFlexible() bool               { return v.Version >= 6 }
+func (v *ListOffsetsRequest) Timeout() int32                 { return v.TimeoutMillis }
+func (v *ListOffsetsRequest) SetTimeout(timeoutMillis int32) { v.TimeoutMillis = timeoutMillis }
 func (v *ListOffsetsRequest) ResponseKind() Response {
 	r := &ListOffsetsResponse{Version: v.Version}
 	r.Default()
@@ -6113,15 +6332,12 @@ func (v *ListOffsetsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListOffsetsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListOffsetsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListOffsetsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -6326,6 +6542,7 @@ type ListOffsetsResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -6354,6 +6571,7 @@ type ListOffsetsResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -6388,10 +6606,11 @@ type ListOffsetsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 func (*ListOffsetsResponse) Key() int16                         { return 2 }
-func (*ListOffsetsResponse) MaxVersion() int16                  { return 10 }
+func (*ListOffsetsResponse) MaxVersion() int16                  { return 11 }
 func (v *ListOffsetsResponse) SetVersion(version int16)         { v.Version = version }
 func (v *ListOffsetsResponse) GetVersion() int16                { return v.Version }
 func (v *ListOffsetsResponse) IsFlexible() bool                 { return v.Version >= 6 }
@@ -6484,15 +6703,12 @@ func (v *ListOffsetsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListOffsetsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListOffsetsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListOffsetsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -6658,6 +6874,7 @@ type MetadataRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -6701,6 +6918,7 @@ type MetadataRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 func (*MetadataRequest) Key() int16                 { return 3 }
@@ -6796,15 +7014,12 @@ func (v *MetadataRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *MetadataRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *MetadataRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *MetadataRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -6936,6 +7151,7 @@ type MetadataResponseBroker struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -6993,6 +7209,7 @@ type MetadataResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -7047,6 +7264,7 @@ type MetadataResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -7104,6 +7322,7 @@ type MetadataResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v9+
+
 }
 
 func (*MetadataResponse) Key() int16                         { return 3 }
@@ -7310,15 +7529,12 @@ func (v *MetadataResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *MetadataResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *MetadataResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *MetadataResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -7677,6 +7893,7 @@ type LeaderAndISRRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -7703,6 +7920,7 @@ type LeaderAndISRResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -7727,6 +7945,7 @@ type LeaderAndISRRequestTopicState struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -7751,6 +7970,7 @@ type LeaderAndISRRequestLiveLeader struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -7801,6 +8021,7 @@ type LeaderAndISRRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*LeaderAndISRRequest) Key() int16                 { return 4 }
@@ -8110,15 +8331,12 @@ func (v *LeaderAndISRRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *LeaderAndISRRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *LeaderAndISRRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *LeaderAndISRRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -8610,6 +8828,7 @@ type LeaderAndISRResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -8638,6 +8857,7 @@ type LeaderAndISRResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*LeaderAndISRResponse) Key() int16                 { return 4 }
@@ -8743,15 +8963,12 @@ func (v *LeaderAndISRResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *LeaderAndISRResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *LeaderAndISRResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *LeaderAndISRResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -8936,6 +9153,7 @@ type StopReplicaRequestTopicPartitionState struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -8963,6 +9181,7 @@ type StopReplicaRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -9009,6 +9228,7 @@ type StopReplicaRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*StopReplicaRequest) Key() int16                 { return 5 }
@@ -9128,15 +9348,12 @@ func (v *StopReplicaRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *StopReplicaRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *StopReplicaRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *StopReplicaRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -9312,6 +9529,7 @@ type StopReplicaResponsePartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -9339,6 +9557,7 @@ type StopReplicaResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*StopReplicaResponse) Key() int16                 { return 5 }
@@ -9394,15 +9613,12 @@ func (v *StopReplicaResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *StopReplicaResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *StopReplicaResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *StopReplicaResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -9515,6 +9731,7 @@ type UpdateMetadataRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -9539,6 +9756,7 @@ type UpdateMetadataRequestTopicState struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -9565,6 +9783,7 @@ type UpdateMetadataRequestLiveBrokerEndpoint struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -9593,6 +9812,7 @@ type UpdateMetadataRequestLiveBroker struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -9641,6 +9861,7 @@ type UpdateMetadataRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 func (*UpdateMetadataRequest) Key() int16                 { return 6 }
@@ -9953,15 +10174,12 @@ func (v *UpdateMetadataRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UpdateMetadataRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UpdateMetadataRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UpdateMetadataRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -10475,6 +10693,7 @@ type UpdateMetadataResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 func (*UpdateMetadataResponse) Key() int16                 { return 6 }
@@ -10501,15 +10720,12 @@ func (v *UpdateMetadataResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UpdateMetadataResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UpdateMetadataResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UpdateMetadataResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -10571,6 +10787,7 @@ type ControlledShutdownRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*ControlledShutdownRequest) Key() int16                 { return 7 }
@@ -10612,15 +10829,12 @@ func (v *ControlledShutdownRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ControlledShutdownRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ControlledShutdownRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ControlledShutdownRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -10672,6 +10886,7 @@ type ControlledShutdownResponsePartitionsRemaining struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -10698,6 +10913,7 @@ type ControlledShutdownResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*ControlledShutdownResponse) Key() int16                 { return 7 }
@@ -10751,15 +10967,12 @@ func (v *ControlledShutdownResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ControlledShutdownResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ControlledShutdownResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ControlledShutdownResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -10877,6 +11090,7 @@ type OffsetCommitRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v8+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -10896,13 +11110,17 @@ func NewOffsetCommitRequestTopicPartition() OffsetCommitRequestTopicPartition {
 
 type OffsetCommitRequestTopic struct {
 	// Topic is a topic to commit offsets for.
-	Topic string
+	Topic string // v0-v9
+
+	// TopicID is the topic ID, replacing Topic in v10+.
+	TopicID [16]byte // v10+
 
 	// Partitions contains partitions in a topic for which to commit offsets.
 	Partitions []OffsetCommitRequestTopicPartition
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v8+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -10920,6 +11138,8 @@ func NewOffsetCommitRequestTopic() OffsetCommitRequestTopic {
 
 // OffsetCommitRequest commits offsets for consumed topics / partitions in
 // a group.
+// Version 10, introduced in Kafka 4.2, replaces topic names with topic IDs
+// (KIP-848).
 type OffsetCommitRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -10961,10 +11181,11 @@ type OffsetCommitRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v8+
+
 }
 
 func (*OffsetCommitRequest) Key() int16                   { return 8 }
-func (*OffsetCommitRequest) MaxVersion() int16            { return 9 }
+func (*OffsetCommitRequest) MaxVersion() int16            { return 10 }
 func (v *OffsetCommitRequest) SetVersion(version int16)   { v.Version = version }
 func (v *OffsetCommitRequest) GetVersion() int16          { return v.Version }
 func (v *OffsetCommitRequest) IsFlexible() bool           { return v.Version >= 8 }
@@ -11030,13 +11251,17 @@ func (v *OffsetCommitRequest) AppendTo(dst []byte) []byte {
 		}
 		for i := range v {
 			v := &v[i]
-			{
+			if version >= 0 && version <= 9 {
 				v := v.Topic
 				if isFlexible {
 					dst = kbin.AppendCompactString(dst, v)
 				} else {
 					dst = kbin.AppendString(dst, v)
 				}
+			}
+			if version >= 10 {
+				v := v.TopicID
+				dst = kbin.AppendUuid(dst, v)
 			}
 			{
 				v := v.Partitions
@@ -11089,15 +11314,12 @@ func (v *OffsetCommitRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetCommitRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetCommitRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetCommitRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -11185,7 +11407,7 @@ func (v *OffsetCommitRequest) readFrom(src []byte, unsafe bool) error {
 			v := &a[i]
 			v.Default()
 			s := v
-			{
+			if version >= 0 && version <= 9 {
 				var v string
 				if unsafe {
 					if isFlexible {
@@ -11201,6 +11423,10 @@ func (v *OffsetCommitRequest) readFrom(src []byte, unsafe bool) error {
 					}
 				}
 				s.Topic = v
+			}
+			if version >= 10 {
+				v := b.Uuid()
+				s.TopicID = v
 			}
 			{
 				v := s.Partitions
@@ -11339,6 +11565,7 @@ type OffsetCommitResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v8+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -11356,7 +11583,10 @@ func NewOffsetCommitResponseTopicPartition() OffsetCommitResponseTopicPartition 
 
 type OffsetCommitResponseTopic struct {
 	// Topic is the topic this offset commit response corresponds to.
-	Topic string
+	Topic string // v0-v9
+
+	// TopicID is the topic ID, replacing Topic in v10+.
+	TopicID [16]byte // v10+
 
 	// Partitions contains responses for each requested partition in
 	// a topic.
@@ -11364,6 +11594,7 @@ type OffsetCommitResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v8+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -11397,10 +11628,11 @@ type OffsetCommitResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v8+
+
 }
 
 func (*OffsetCommitResponse) Key() int16                         { return 8 }
-func (*OffsetCommitResponse) MaxVersion() int16                  { return 9 }
+func (*OffsetCommitResponse) MaxVersion() int16                  { return 10 }
 func (v *OffsetCommitResponse) SetVersion(version int16)         { v.Version = version }
 func (v *OffsetCommitResponse) GetVersion() int16                { return v.Version }
 func (v *OffsetCommitResponse) IsFlexible() bool                 { return v.Version >= 8 }
@@ -11426,13 +11658,17 @@ func (v *OffsetCommitResponse) AppendTo(dst []byte) []byte {
 		}
 		for i := range v {
 			v := &v[i]
-			{
+			if version >= 0 && version <= 9 {
 				v := v.Topic
 				if isFlexible {
 					dst = kbin.AppendCompactString(dst, v)
 				} else {
 					dst = kbin.AppendString(dst, v)
 				}
+			}
+			if version >= 10 {
+				v := v.TopicID
+				dst = kbin.AppendUuid(dst, v)
 			}
 			{
 				v := v.Partitions
@@ -11469,15 +11705,12 @@ func (v *OffsetCommitResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetCommitResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetCommitResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetCommitResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -11510,7 +11743,7 @@ func (v *OffsetCommitResponse) readFrom(src []byte, unsafe bool) error {
 			v := &a[i]
 			v.Default()
 			s := v
-			{
+			if version >= 0 && version <= 9 {
 				var v string
 				if unsafe {
 					if isFlexible {
@@ -11526,6 +11759,10 @@ func (v *OffsetCommitResponse) readFrom(src []byte, unsafe bool) error {
 					}
 				}
 				s.Topic = v
+			}
+			if version >= 10 {
+				v := b.Uuid()
+				s.TopicID = v
 			}
 			{
 				v := s.Partitions
@@ -11605,6 +11842,7 @@ type OffsetFetchRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -11621,12 +11859,16 @@ func NewOffsetFetchRequestTopic() OffsetFetchRequestTopic {
 }
 
 type OffsetFetchRequestGroupTopic struct {
-	Topic string
+	Topic string // v8-v9
+
+	// TopicID is the topic ID, replacing Topic in v10+.
+	TopicID [16]byte // v10+
 
 	Partitions []int32
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -11657,6 +11899,7 @@ type OffsetFetchRequestGroup struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -11675,6 +11918,8 @@ func NewOffsetFetchRequestGroup() OffsetFetchRequestGroup {
 
 // OffsetFetchRequest requests the most recent committed offsets for topic
 // partitions in a group.
+// Version 10, introduced in Kafka 4.2, replaces topic names with topic IDs
+// in the Groups field (KIP-848).
 type OffsetFetchRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -11701,10 +11946,11 @@ type OffsetFetchRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 func (*OffsetFetchRequest) Key() int16                   { return 9 }
-func (*OffsetFetchRequest) MaxVersion() int16            { return 9 }
+func (*OffsetFetchRequest) MaxVersion() int16            { return 10 }
 func (v *OffsetFetchRequest) SetVersion(version int16)   { v.Version = version }
 func (v *OffsetFetchRequest) GetVersion() int16          { return v.Version }
 func (v *OffsetFetchRequest) IsFlexible() bool           { return v.Version >= 6 }
@@ -11818,13 +12064,17 @@ func (v *OffsetFetchRequest) AppendTo(dst []byte) []byte {
 				}
 				for i := range v {
 					v := &v[i]
-					{
+					if version >= 8 && version <= 9 {
 						v := v.Topic
 						if isFlexible {
 							dst = kbin.AppendCompactString(dst, v)
 						} else {
 							dst = kbin.AppendString(dst, v)
 						}
+					}
+					if version >= 10 {
+						v := v.TopicID
+						dst = kbin.AppendUuid(dst, v)
 					}
 					{
 						v := v.Partitions
@@ -11860,15 +12110,12 @@ func (v *OffsetFetchRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetFetchRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetFetchRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetFetchRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -12045,7 +12292,7 @@ func (v *OffsetFetchRequest) readFrom(src []byte, unsafe bool) error {
 					v := &a[i]
 					v.Default()
 					s := v
-					{
+					if version >= 8 && version <= 9 {
 						var v string
 						if unsafe {
 							if isFlexible {
@@ -12061,6 +12308,10 @@ func (v *OffsetFetchRequest) readFrom(src []byte, unsafe bool) error {
 							}
 						}
 						s.Topic = v
+					}
+					if version >= 10 {
+						v := b.Uuid()
+						s.TopicID = v
 					}
 					{
 						v := s.Partitions
@@ -12174,6 +12425,7 @@ type OffsetFetchResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -12200,6 +12452,7 @@ type OffsetFetchResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -12229,6 +12482,7 @@ type OffsetFetchResponseGroupTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -12246,12 +12500,16 @@ func NewOffsetFetchResponseGroupTopicPartition() OffsetFetchResponseGroupTopicPa
 }
 
 type OffsetFetchResponseGroupTopic struct {
-	Topic string
+	Topic string // v8-v9
+
+	// TopicID is the topic ID, replacing Topic in v10+.
+	TopicID [16]byte // v10+
 
 	Partitions []OffsetFetchResponseGroupTopicPartition
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -12276,6 +12534,7 @@ type OffsetFetchResponseGroup struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -12318,10 +12577,11 @@ type OffsetFetchResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 func (*OffsetFetchResponse) Key() int16                         { return 9 }
-func (*OffsetFetchResponse) MaxVersion() int16                  { return 9 }
+func (*OffsetFetchResponse) MaxVersion() int16                  { return 10 }
 func (v *OffsetFetchResponse) SetVersion(version int16)         { v.Version = version }
 func (v *OffsetFetchResponse) GetVersion() int16                { return v.Version }
 func (v *OffsetFetchResponse) IsFlexible() bool                 { return v.Version >= 6 }
@@ -12430,13 +12690,17 @@ func (v *OffsetFetchResponse) AppendTo(dst []byte) []byte {
 				}
 				for i := range v {
 					v := &v[i]
-					{
+					if version >= 8 && version <= 9 {
 						v := v.Topic
 						if isFlexible {
 							dst = kbin.AppendCompactString(dst, v)
 						} else {
 							dst = kbin.AppendString(dst, v)
 						}
+					}
+					if version >= 10 {
+						v := v.TopicID
+						dst = kbin.AppendUuid(dst, v)
 					}
 					{
 						v := v.Partitions
@@ -12499,15 +12763,12 @@ func (v *OffsetFetchResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetFetchResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetFetchResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetFetchResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -12685,7 +12946,7 @@ func (v *OffsetFetchResponse) readFrom(src []byte, unsafe bool) error {
 					v := &a[i]
 					v.Default()
 					s := v
-					{
+					if version >= 8 && version <= 9 {
 						var v string
 						if unsafe {
 							if isFlexible {
@@ -12701,6 +12962,10 @@ func (v *OffsetFetchResponse) readFrom(src []byte, unsafe bool) error {
 							}
 						}
 						s.Topic = v
+					}
+					if version >= 10 {
+						v := b.Uuid()
+						s.TopicID = v
 					}
 					{
 						v := s.Partitions
@@ -12833,6 +13098,7 @@ type FindCoordinatorRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*FindCoordinatorRequest) Key() int16                 { return 10 }
@@ -12894,15 +13160,12 @@ func (v *FindCoordinatorRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *FindCoordinatorRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *FindCoordinatorRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *FindCoordinatorRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -13010,6 +13273,7 @@ type FindCoordinatorResponseCoordinator struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -13073,6 +13337,7 @@ type FindCoordinatorResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*FindCoordinatorResponse) Key() int16                 { return 10 }
@@ -13084,7 +13349,6 @@ func (v *FindCoordinatorResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *FindCoordinatorResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *FindCoordinatorResponse) RequestKind() Request {
 	return &FindCoordinatorRequest{Version: v.Version}
 }
@@ -13183,15 +13447,12 @@ func (v *FindCoordinatorResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *FindCoordinatorResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *FindCoordinatorResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *FindCoordinatorResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -13388,6 +13649,7 @@ type JoinGroupRequestProtocol struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -13472,6 +13734,7 @@ type JoinGroupRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 func (*JoinGroupRequest) Key() int16                   { return 11 }
@@ -13585,15 +13848,12 @@ func (v *JoinGroupRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *JoinGroupRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *JoinGroupRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *JoinGroupRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -13789,6 +14049,7 @@ type JoinGroupResponseMember struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -13887,6 +14148,7 @@ type JoinGroupResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v6+
+
 }
 
 func (*JoinGroupResponse) Key() int16                         { return 11 }
@@ -14011,15 +14273,12 @@ func (v *JoinGroupResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *JoinGroupResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *JoinGroupResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *JoinGroupResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -14248,6 +14507,7 @@ type HeartbeatRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*HeartbeatRequest) Key() int16                   { return 12 }
@@ -14310,15 +14570,12 @@ func (v *HeartbeatRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *HeartbeatRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *HeartbeatRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *HeartbeatRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -14445,6 +14702,7 @@ type HeartbeatResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*HeartbeatResponse) Key() int16                         { return 12 }
@@ -14475,15 +14733,12 @@ func (v *HeartbeatResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *HeartbeatResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *HeartbeatResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *HeartbeatResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -14538,6 +14793,7 @@ type LeaveGroupRequestMember struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -14573,6 +14829,7 @@ type LeaveGroupRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*LeaveGroupRequest) Key() int16                   { return 13 }
@@ -14662,15 +14919,12 @@ func (v *LeaveGroupRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *LeaveGroupRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *LeaveGroupRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *LeaveGroupRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -14828,6 +15082,7 @@ type LeaveGroupResponseMember struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -14880,6 +15135,7 @@ type LeaveGroupResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*LeaveGroupResponse) Key() int16                         { return 13 }
@@ -14945,15 +15201,12 @@ func (v *LeaveGroupResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *LeaveGroupResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *LeaveGroupResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *LeaveGroupResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -15072,6 +15325,7 @@ type SyncGroupRequestGroupAssignment struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -15120,6 +15374,7 @@ type SyncGroupRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*SyncGroupRequest) Key() int16                   { return 14 }
@@ -15229,15 +15484,12 @@ func (v *SyncGroupRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *SyncGroupRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *SyncGroupRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *SyncGroupRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -15463,6 +15715,7 @@ type SyncGroupResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*SyncGroupResponse) Key() int16                         { return 14 }
@@ -15517,15 +15770,12 @@ func (v *SyncGroupResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *SyncGroupResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *SyncGroupResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *SyncGroupResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -15627,6 +15877,7 @@ type DescribeGroupsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 func (*DescribeGroupsRequest) Key() int16                   { return 15 }
@@ -15681,15 +15932,12 @@ func (v *DescribeGroupsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeGroupsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeGroupsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeGroupsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -15790,6 +16038,7 @@ type DescribeGroupsResponseGroupMember struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -15851,6 +16100,7 @@ type DescribeGroupsResponseGroup struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -15885,6 +16135,7 @@ type DescribeGroupsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 func (*DescribeGroupsResponse) Key() int16                         { return 15 }
@@ -16039,15 +16290,12 @@ func (v *DescribeGroupsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeGroupsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeGroupsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeGroupsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -16330,7 +16578,8 @@ type ListGroupsRequest struct {
 	// StatesFilter, proposed in KIP-518 and introduced in Kafka 2.6.0,
 	// allows filtering groups by state, where a state is any of
 	// "Preparing", "PreparingRebalance", "CompletingRebalance", "Stable",
-	// "Dead", or "Empty". If empty, all groups are returned.
+	// "Dead", "Empty", "Assigning", "Reconciling", or "NotReady".
+	// If empty, all groups are returned.
 	StatesFilter []string // v4+
 
 	// TypesFilter, part of KIP-848, filters the types of groups we want
@@ -16339,6 +16588,7 @@ type ListGroupsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*ListGroupsRequest) Key() int16                 { return 16 }
@@ -16404,15 +16654,12 @@ func (v *ListGroupsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListGroupsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListGroupsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListGroupsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -16535,6 +16782,7 @@ type ListGroupsResponseGroup struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -16575,6 +16823,7 @@ type ListGroupsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*ListGroupsResponse) Key() int16                         { return 16 }
@@ -16652,15 +16901,12 @@ func (v *ListGroupsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListGroupsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListGroupsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListGroupsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -16845,15 +17091,12 @@ func (v *SASLHandshakeRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *SASLHandshakeRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *SASLHandshakeRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *SASLHandshakeRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -16934,15 +17177,12 @@ func (v *SASLHandshakeResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *SASLHandshakeResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *SASLHandshakeResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *SASLHandshakeResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -17015,6 +17255,10 @@ func NewSASLHandshakeResponse() SASLHandshakeResponse {
 // understands, the broker replies with UNSUPPORTED_VERSIONS using the version
 // 0 message format but additionally includes the api versions the broker does
 // support.
+//
+// Version 5 adds ClusterID and NodeID (KIP-1242). If both are set, the broker
+// replies REBOOTSTRAP_REQUIRED when either does not match itself, so a client
+// can detect a connection that was routed to the wrong broker or cluster.
 type ApiVersionsRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -17025,19 +17269,32 @@ type ApiVersionsRequest struct {
 	//
 	// If using v3, this field is required and must match the following pattern:
 	//
-	//	[a-zA-Z0-9](?:[a-zA-Z0-9\\-.]*[a-zA-Z0-9])?
+	//     [a-zA-Z0-9](?:[a-zA-Z0-9\\-.]*[a-zA-Z0-9])?
+	//
 	ClientSoftwareName string // v3+
 
 	// ClientSoftwareVersion is the version of the software name in the prior
 	// field. It must match the same regex (thus, this is also required).
 	ClientSoftwareVersion string // v3+
 
+	// ClusterID is the ID of the cluster the client believes it is connecting
+	// to, or null while bootstrapping. Set ClusterID and NodeID together or
+	// not at all: the broker replies INVALID_REQUEST if only one is set.
+	ClusterID *string // v5+
+
+	// NodeID is the ID of the broker the client believes it is connecting to,
+	// or -1 while bootstrapping.
+	//
+	// This field has a default of -1.
+	NodeID int32 // v5+
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*ApiVersionsRequest) Key() int16                 { return 18 }
-func (*ApiVersionsRequest) MaxVersion() int16          { return 4 }
+func (*ApiVersionsRequest) MaxVersion() int16          { return 5 }
 func (v *ApiVersionsRequest) SetVersion(version int16) { v.Version = version }
 func (v *ApiVersionsRequest) GetVersion() int16        { return v.Version }
 func (v *ApiVersionsRequest) IsFlexible() bool         { return v.Version >= 3 }
@@ -17077,21 +17334,30 @@ func (v *ApiVersionsRequest) AppendTo(dst []byte) []byte {
 			dst = kbin.AppendString(dst, v)
 		}
 	}
+	if version >= 5 {
+		v := v.ClusterID
+		if isFlexible {
+			dst = kbin.AppendCompactNullableString(dst, v)
+		} else {
+			dst = kbin.AppendNullableString(dst, v)
+		}
+	}
+	if version >= 5 {
+		v := v.NodeID
+		dst = kbin.AppendInt32(dst, v)
+	}
 	if isFlexible {
 		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 		dst = v.UnknownTags.AppendEach(dst)
 	}
 	return dst
 }
-
 func (v *ApiVersionsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ApiVersionsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ApiVersionsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -17134,6 +17400,27 @@ func (v *ApiVersionsRequest) readFrom(src []byte, unsafe bool) error {
 		}
 		s.ClientSoftwareVersion = v
 	}
+	if version >= 5 {
+		var v *string
+		if isFlexible {
+			if unsafe {
+				v = b.UnsafeCompactNullableString()
+			} else {
+				v = b.CompactNullableString()
+			}
+		} else {
+			if unsafe {
+				v = b.UnsafeNullableString()
+			} else {
+				v = b.NullableString()
+			}
+		}
+		s.ClusterID = v
+	}
+	if version >= 5 {
+		v := b.Int32()
+		s.NodeID = v
+	}
 	if isFlexible {
 		s.UnknownTags = internalReadTags(&b)
 	}
@@ -17151,6 +17438,7 @@ func NewPtrApiVersionsRequest() *ApiVersionsRequest {
 // Default sets any default fields. Calling this allows for future compatibility
 // if new fields are added to ApiVersionsRequest.
 func (v *ApiVersionsRequest) Default() {
+	v.NodeID = -1
 }
 
 // NewApiVersionsRequest returns a default ApiVersionsRequest
@@ -17173,6 +17461,7 @@ type ApiVersionsResponseApiKey struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -17200,6 +17489,7 @@ type ApiVersionsResponseSupportedFeature struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -17227,6 +17517,7 @@ type ApiVersionsResponseFinalizedFeature struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -17286,10 +17577,11 @@ type ApiVersionsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*ApiVersionsResponse) Key() int16                         { return 18 }
-func (*ApiVersionsResponse) MaxVersion() int16                  { return 4 }
+func (*ApiVersionsResponse) MaxVersion() int16                  { return 5 }
 func (v *ApiVersionsResponse) SetVersion(version int16)         { v.Version = version }
 func (v *ApiVersionsResponse) GetVersion() int16                { return v.Version }
 func (v *ApiVersionsResponse) IsFlexible() bool                 { return v.Version >= 3 }
@@ -17456,15 +17748,12 @@ func (v *ApiVersionsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ApiVersionsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ApiVersionsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ApiVersionsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -17686,6 +17975,7 @@ type CreateTopicsRequestTopicReplicaAssignment struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -17710,6 +18000,7 @@ type CreateTopicsRequestTopicConfig struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -17750,6 +18041,7 @@ type CreateTopicsRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -17792,6 +18084,7 @@ type CreateTopicsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 func (*CreateTopicsRequest) Key() int16                       { return 19 }
@@ -17929,15 +18222,12 @@ func (v *CreateTopicsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreateTopicsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreateTopicsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreateTopicsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -18172,6 +18462,7 @@ type CreateTopicsResponseTopicConfig struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -18252,6 +18543,7 @@ type CreateTopicsResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -18287,6 +18579,7 @@ type CreateTopicsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v5+
+
 }
 
 func (*CreateTopicsResponse) Key() int16                         { return 19 }
@@ -18418,15 +18711,12 @@ func (v *CreateTopicsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreateTopicsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreateTopicsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreateTopicsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -18638,6 +18928,7 @@ type DeleteTopicsRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -18674,6 +18965,7 @@ type DeleteTopicsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*DeleteTopicsRequest) Key() int16                       { return 20 }
@@ -18757,15 +19049,12 @@ func (v *DeleteTopicsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteTopicsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteTopicsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteTopicsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -18926,6 +19215,7 @@ type DeleteTopicsResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -18961,6 +19251,7 @@ type DeleteTopicsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*DeleteTopicsResponse) Key() int16                         { return 20 }
@@ -19041,15 +19332,12 @@ func (v *DeleteTopicsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteTopicsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteTopicsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteTopicsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -19190,6 +19478,7 @@ type DeleteRecordsRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -19214,6 +19503,7 @@ type DeleteRecordsRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -19256,6 +19546,7 @@ type DeleteRecordsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DeleteRecordsRequest) Key() int16                       { return 21 }
@@ -19341,15 +19632,12 @@ func (v *DeleteRecordsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteRecordsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteRecordsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteRecordsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -19500,6 +19788,7 @@ type DeleteRecordsResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -19525,6 +19814,7 @@ type DeleteRecordsResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -19558,6 +19848,7 @@ type DeleteRecordsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DeleteRecordsResponse) Key() int16                         { return 21 }
@@ -19636,15 +19927,12 @@ func (v *DeleteRecordsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteRecordsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteRecordsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteRecordsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -19802,6 +20090,7 @@ type InitProducerIDRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*InitProducerIDRequest) Key() int16                 { return 22 }
@@ -19856,15 +20145,12 @@ func (v *InitProducerIDRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *InitProducerIDRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *InitProducerIDRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *InitProducerIDRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -19977,6 +20263,7 @@ type InitProducerIDResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*InitProducerIDResponse) Key() int16                         { return 22 }
@@ -20017,15 +20304,12 @@ func (v *InitProducerIDResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *InitProducerIDResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *InitProducerIDResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *InitProducerIDResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -20096,6 +20380,7 @@ type OffsetForLeaderEpochRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -20121,6 +20406,7 @@ type OffsetForLeaderEpochRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -20157,6 +20443,7 @@ type OffsetForLeaderEpochRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*OffsetForLeaderEpochRequest) Key() int16                 { return 23 }
@@ -20244,15 +20531,12 @@ func (v *OffsetForLeaderEpochRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetForLeaderEpochRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetForLeaderEpochRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetForLeaderEpochRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -20431,6 +20715,7 @@ type OffsetForLeaderEpochResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -20457,6 +20742,7 @@ type OffsetForLeaderEpochResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -20486,6 +20772,7 @@ type OffsetForLeaderEpochResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*OffsetForLeaderEpochResponse) Key() int16                 { return 23 }
@@ -20496,11 +20783,9 @@ func (v *OffsetForLeaderEpochResponse) IsFlexible() bool         { return v.Vers
 func (v *OffsetForLeaderEpochResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *OffsetForLeaderEpochResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *OffsetForLeaderEpochResponse) RequestKind() Request {
 	return &OffsetForLeaderEpochRequest{Version: v.Version}
 }
@@ -20574,15 +20859,12 @@ func (v *OffsetForLeaderEpochResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetForLeaderEpochResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetForLeaderEpochResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetForLeaderEpochResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -20719,6 +21001,7 @@ type AddPartitionsToTxnRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -20741,6 +21024,7 @@ type AddPartitionsToTxnRequestTransactionTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -20771,6 +21055,7 @@ type AddPartitionsToTxnRequestTransaction struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -20821,6 +21106,7 @@ type AddPartitionsToTxnRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*AddPartitionsToTxnRequest) Key() int16                 { return 24 }
@@ -20976,15 +21262,12 @@ func (v *AddPartitionsToTxnRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AddPartitionsToTxnRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AddPartitionsToTxnRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AddPartitionsToTxnRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -21242,6 +21525,7 @@ type AddPartitionsToTxnResponseTransactionTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -21264,6 +21548,7 @@ type AddPartitionsToTxnResponseTransactionTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -21287,6 +21572,7 @@ type AddPartitionsToTxnResponseTransaction struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -21342,6 +21628,7 @@ type AddPartitionsToTxnResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -21366,6 +21653,7 @@ type AddPartitionsToTxnResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -21407,6 +21695,7 @@ type AddPartitionsToTxnResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*AddPartitionsToTxnResponse) Key() int16                 { return 24 }
@@ -21417,11 +21706,9 @@ func (v *AddPartitionsToTxnResponse) IsFlexible() bool         { return v.Versio
 func (v *AddPartitionsToTxnResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 1
 }
-
 func (v *AddPartitionsToTxnResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AddPartitionsToTxnResponse) RequestKind() Request {
 	return &AddPartitionsToTxnRequest{Version: v.Version}
 }
@@ -21560,15 +21847,12 @@ func (v *AddPartitionsToTxnResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AddPartitionsToTxnResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AddPartitionsToTxnResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AddPartitionsToTxnResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -21842,6 +22126,7 @@ type AddOffsetsToTxnRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*AddOffsetsToTxnRequest) Key() int16                 { return 25 }
@@ -21900,15 +22185,12 @@ func (v *AddOffsetsToTxnRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AddOffsetsToTxnRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AddOffsetsToTxnRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AddOffsetsToTxnRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -22013,6 +22295,7 @@ type AddOffsetsToTxnResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*AddOffsetsToTxnResponse) Key() int16                 { return 25 }
@@ -22024,7 +22307,6 @@ func (v *AddOffsetsToTxnResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *AddOffsetsToTxnResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AddOffsetsToTxnResponse) RequestKind() Request {
 	return &AddOffsetsToTxnRequest{Version: v.Version}
 }
@@ -22048,15 +22330,12 @@ func (v *AddOffsetsToTxnResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AddOffsetsToTxnResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AddOffsetsToTxnResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AddOffsetsToTxnResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -22122,6 +22401,7 @@ type EndTxnRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*EndTxnRequest) Key() int16                 { return 26 }
@@ -22176,15 +22456,12 @@ func (v *EndTxnRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *EndTxnRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *EndTxnRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *EndTxnRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -22299,6 +22576,7 @@ type EndTxnResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*EndTxnResponse) Key() int16                         { return 26 }
@@ -22337,15 +22615,12 @@ func (v *EndTxnResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *EndTxnResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *EndTxnResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *EndTxnResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -22408,6 +22683,7 @@ type WriteTxnMarkersRequestMarkerTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -22442,8 +22718,13 @@ type WriteTxnMarkersRequestMarker struct {
 	// are writing a marker to. This is used to detect fenced writers.
 	CoordinatorEpoch int32
 
+	// TransactionVersion is the transaction version of the marker.
+	// 0/1 = legacy (TV0/TV1), 2 = TV2 etc.
+	TransactionVersion int8 // v2+
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -22461,6 +22742,7 @@ func NewWriteTxnMarkersRequestMarker() WriteTxnMarkersRequestMarker {
 
 // WriteTxnMarkersRequest is a broker-to-broker request that Kafka uses to
 // finish transactions.
+// Version 2, introduced in Kafka 4.2, adds TransactionVersion (KIP-1228).
 type WriteTxnMarkersRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -22470,10 +22752,11 @@ type WriteTxnMarkersRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*WriteTxnMarkersRequest) Key() int16                 { return 27 }
-func (*WriteTxnMarkersRequest) MaxVersion() int16          { return 1 }
+func (*WriteTxnMarkersRequest) MaxVersion() int16          { return 2 }
 func (v *WriteTxnMarkersRequest) SetVersion(version int16) { v.Version = version }
 func (v *WriteTxnMarkersRequest) GetVersion() int16        { return v.Version }
 func (v *WriteTxnMarkersRequest) IsFlexible() bool         { return v.Version >= 1 }
@@ -22557,6 +22840,10 @@ func (v *WriteTxnMarkersRequest) AppendTo(dst []byte) []byte {
 				v := v.CoordinatorEpoch
 				dst = kbin.AppendInt32(dst, v)
 			}
+			if version >= 2 {
+				v := v.TransactionVersion
+				dst = kbin.AppendInt8(dst, v)
+			}
 			if isFlexible {
 				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 				dst = v.UnknownTags.AppendEach(dst)
@@ -22569,15 +22856,12 @@ func (v *WriteTxnMarkersRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *WriteTxnMarkersRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *WriteTxnMarkersRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *WriteTxnMarkersRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -22689,6 +22973,10 @@ func (v *WriteTxnMarkersRequest) readFrom(src []byte, unsafe bool) error {
 				v := b.Int32()
 				s.CoordinatorEpoch = v
 			}
+			if version >= 2 {
+				v := b.Int8()
+				s.TransactionVersion = v
+			}
 			if isFlexible {
 				s.UnknownTags = internalReadTags(&b)
 			}
@@ -22745,6 +23033,7 @@ type WriteTxnMarkersResponseMarkerTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -22770,6 +23059,7 @@ type WriteTxnMarkersResponseMarkerTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -22795,6 +23085,7 @@ type WriteTxnMarkersResponseMarker struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -22820,10 +23111,11 @@ type WriteTxnMarkersResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*WriteTxnMarkersResponse) Key() int16                 { return 27 }
-func (*WriteTxnMarkersResponse) MaxVersion() int16          { return 1 }
+func (*WriteTxnMarkersResponse) MaxVersion() int16          { return 2 }
 func (v *WriteTxnMarkersResponse) SetVersion(version int16) { v.Version = version }
 func (v *WriteTxnMarkersResponse) GetVersion() int16        { return v.Version }
 func (v *WriteTxnMarkersResponse) IsFlexible() bool         { return v.Version >= 1 }
@@ -22907,15 +23199,12 @@ func (v *WriteTxnMarkersResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *WriteTxnMarkersResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *WriteTxnMarkersResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *WriteTxnMarkersResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -23085,6 +23374,7 @@ type TxnOffsetCommitRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -23103,13 +23393,17 @@ func NewTxnOffsetCommitRequestTopicPartition() TxnOffsetCommitRequestTopicPartit
 
 type TxnOffsetCommitRequestTopic struct {
 	// Topic is a topic to add for a pending commit.
-	Topic string
+	Topic string // v0-v5
+
+	// TopicID is the topic ID of this topic.
+	TopicID [16]byte // v6+
 
 	// Partitions are partitions to add for pending commits.
 	Partitions []TxnOffsetCommitRequestTopicPartition
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -23163,10 +23457,11 @@ type TxnOffsetCommitRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*TxnOffsetCommitRequest) Key() int16                   { return 28 }
-func (*TxnOffsetCommitRequest) MaxVersion() int16            { return 5 }
+func (*TxnOffsetCommitRequest) MaxVersion() int16            { return 6 }
 func (v *TxnOffsetCommitRequest) SetVersion(version int16)   { v.Version = version }
 func (v *TxnOffsetCommitRequest) GetVersion() int16          { return v.Version }
 func (v *TxnOffsetCommitRequest) IsFlexible() bool           { return v.Version >= 3 }
@@ -23244,13 +23539,17 @@ func (v *TxnOffsetCommitRequest) AppendTo(dst []byte) []byte {
 		}
 		for i := range v {
 			v := &v[i]
-			{
+			if version >= 0 && version <= 5 {
 				v := v.Topic
 				if isFlexible {
 					dst = kbin.AppendCompactString(dst, v)
 				} else {
 					dst = kbin.AppendString(dst, v)
 				}
+			}
+			if version >= 6 {
+				v := v.TopicID
+				dst = kbin.AppendUuid(dst, v)
 			}
 			{
 				v := v.Partitions
@@ -23299,15 +23598,12 @@ func (v *TxnOffsetCommitRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *TxnOffsetCommitRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *TxnOffsetCommitRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *TxnOffsetCommitRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -23416,7 +23712,7 @@ func (v *TxnOffsetCommitRequest) readFrom(src []byte, unsafe bool) error {
 			v := &a[i]
 			v.Default()
 			s := v
-			{
+			if version >= 0 && version <= 5 {
 				var v string
 				if unsafe {
 					if isFlexible {
@@ -23432,6 +23728,10 @@ func (v *TxnOffsetCommitRequest) readFrom(src []byte, unsafe bool) error {
 					}
 				}
 				s.Topic = v
+			}
+			if version >= 6 {
+				v := b.Uuid()
+				s.TopicID = v
 			}
 			{
 				v := s.Partitions
@@ -23571,6 +23871,7 @@ type TxnOffsetCommitResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -23588,13 +23889,17 @@ func NewTxnOffsetCommitResponseTopicPartition() TxnOffsetCommitResponseTopicPart
 
 type TxnOffsetCommitResponseTopic struct {
 	// Topic is the topic this response is for.
-	Topic string
+	Topic string // v0-v5
+
+	// TopicID is the topic ID of this topic.
+	TopicID [16]byte // v6+
 
 	// Partitions contains responses to the partitions in this topic.
 	Partitions []TxnOffsetCommitResponseTopicPartition
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -23628,10 +23933,11 @@ type TxnOffsetCommitResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v3+
+
 }
 
 func (*TxnOffsetCommitResponse) Key() int16                 { return 28 }
-func (*TxnOffsetCommitResponse) MaxVersion() int16          { return 5 }
+func (*TxnOffsetCommitResponse) MaxVersion() int16          { return 6 }
 func (v *TxnOffsetCommitResponse) SetVersion(version int16) { v.Version = version }
 func (v *TxnOffsetCommitResponse) GetVersion() int16        { return v.Version }
 func (v *TxnOffsetCommitResponse) IsFlexible() bool         { return v.Version >= 3 }
@@ -23639,7 +23945,6 @@ func (v *TxnOffsetCommitResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *TxnOffsetCommitResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *TxnOffsetCommitResponse) RequestKind() Request {
 	return &TxnOffsetCommitRequest{Version: v.Version}
 }
@@ -23662,13 +23967,17 @@ func (v *TxnOffsetCommitResponse) AppendTo(dst []byte) []byte {
 		}
 		for i := range v {
 			v := &v[i]
-			{
+			if version >= 0 && version <= 5 {
 				v := v.Topic
 				if isFlexible {
 					dst = kbin.AppendCompactString(dst, v)
 				} else {
 					dst = kbin.AppendString(dst, v)
 				}
+			}
+			if version >= 6 {
+				v := v.TopicID
+				dst = kbin.AppendUuid(dst, v)
 			}
 			{
 				v := v.Partitions
@@ -23705,15 +24014,12 @@ func (v *TxnOffsetCommitResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *TxnOffsetCommitResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *TxnOffsetCommitResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *TxnOffsetCommitResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -23746,7 +24052,7 @@ func (v *TxnOffsetCommitResponse) readFrom(src []byte, unsafe bool) error {
 			v := &a[i]
 			v.Default()
 			s := v
-			{
+			if version >= 0 && version <= 5 {
 				var v string
 				if unsafe {
 					if isFlexible {
@@ -23762,6 +24068,10 @@ func (v *TxnOffsetCommitResponse) readFrom(src []byte, unsafe bool) error {
 					}
 				}
 				s.Topic = v
+			}
+			if version >= 6 {
+				v := b.Uuid()
+				s.TopicID = v
 			}
 			{
 				v := s.Partitions
@@ -23873,6 +24183,7 @@ type DescribeACLsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DescribeACLsRequest) Key() int16                 { return 29 }
@@ -23958,15 +24269,12 @@ func (v *DescribeACLsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeACLsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeACLsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeACLsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -24105,6 +24413,7 @@ type DescribeACLsResponseResourceACL struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -24137,6 +24446,7 @@ type DescribeACLsResponseResource struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -24182,6 +24492,7 @@ type DescribeACLsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DescribeACLsResponse) Key() int16                         { return 29 }
@@ -24302,15 +24613,12 @@ func (v *DescribeACLsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeACLsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeACLsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeACLsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -24547,6 +24855,7 @@ type CreateACLsRequestCreation struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -24576,6 +24885,7 @@ type CreateACLsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*CreateACLsRequest) Key() int16                 { return 30 }
@@ -24676,15 +24986,12 @@ func (v *CreateACLsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreateACLsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreateACLsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreateACLsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -24843,6 +25150,7 @@ type CreateACLsResponseResult struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -24876,6 +25184,7 @@ type CreateACLsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*CreateACLsResponse) Key() int16                         { return 30 }
@@ -24929,15 +25238,12 @@ func (v *CreateACLsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreateACLsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreateACLsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreateACLsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -25043,6 +25349,7 @@ type DeleteACLsRequestFilter struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -25071,6 +25378,7 @@ type DeleteACLsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DeleteACLsRequest) Key() int16                 { return 31 }
@@ -25171,15 +25479,12 @@ func (v *DeleteACLsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteACLsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteACLsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteACLsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -25353,6 +25658,7 @@ type DeleteACLsResponseResultMatchingACL struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -25381,6 +25687,7 @@ type DeleteACLsResponseResult struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -25414,6 +25721,7 @@ type DeleteACLsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DeleteACLsResponse) Key() int16                         { return 31 }
@@ -25546,15 +25854,12 @@ func (v *DeleteACLsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteACLsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteACLsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteACLsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -25796,6 +26101,7 @@ type DescribeConfigsRequestResource struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -25831,6 +26137,7 @@ type DescribeConfigsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*DescribeConfigsRequest) Key() int16                 { return 32 }
@@ -25918,15 +26225,12 @@ func (v *DescribeConfigsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeConfigsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeConfigsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeConfigsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -26071,6 +26375,7 @@ type DescribeConfigsResponseResourceConfigConfigSynonym struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -26127,6 +26432,7 @@ type DescribeConfigsResponseResourceConfig struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -26176,6 +26482,7 @@ type DescribeConfigsResponseResource struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -26209,6 +26516,7 @@ type DescribeConfigsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v4+
+
 }
 
 func (*DescribeConfigsResponse) Key() int16                 { return 32 }
@@ -26220,7 +26528,6 @@ func (v *DescribeConfigsResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *DescribeConfigsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeConfigsResponse) RequestKind() Request {
 	return &DescribeConfigsRequest{Version: v.Version}
 }
@@ -26385,15 +26692,12 @@ func (v *DescribeConfigsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeConfigsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeConfigsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeConfigsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -26694,6 +26998,7 @@ type AlterConfigsRequestResourceConfig struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -26733,6 +27038,7 @@ type AlterConfigsRequestResource struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -26773,6 +27079,7 @@ type AlterConfigsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*AlterConfigsRequest) Key() int16                 { return 33 }
@@ -26871,15 +27178,12 @@ func (v *AlterConfigsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterConfigsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterConfigsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterConfigsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -27062,6 +27366,7 @@ type AlterConfigsResponseResource struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -27095,6 +27400,7 @@ type AlterConfigsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*AlterConfigsResponse) Key() int16                         { return 33 }
@@ -27163,15 +27469,12 @@ func (v *AlterConfigsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterConfigsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterConfigsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterConfigsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -27294,6 +27597,7 @@ type AlterReplicaLogDirsRequestDirTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -27319,6 +27623,7 @@ type AlterReplicaLogDirsRequestDir struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -27347,6 +27652,7 @@ type AlterReplicaLogDirsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*AlterReplicaLogDirsRequest) Key() int16                 { return 34 }
@@ -27438,15 +27744,12 @@ func (v *AlterReplicaLogDirsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterReplicaLogDirsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterReplicaLogDirsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterReplicaLogDirsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -27612,6 +27915,7 @@ type AlterReplicaLogDirsResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -27637,6 +27941,7 @@ type AlterReplicaLogDirsResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -27671,6 +27976,7 @@ type AlterReplicaLogDirsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*AlterReplicaLogDirsResponse) Key() int16                 { return 34 }
@@ -27681,11 +27987,9 @@ func (v *AlterReplicaLogDirsResponse) IsFlexible() bool         { return v.Versi
 func (v *AlterReplicaLogDirsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 1
 }
-
 func (v *AlterReplicaLogDirsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AlterReplicaLogDirsResponse) RequestKind() Request {
 	return &AlterReplicaLogDirsRequest{Version: v.Version}
 }
@@ -27751,15 +28055,12 @@ func (v *AlterReplicaLogDirsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterReplicaLogDirsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterReplicaLogDirsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterReplicaLogDirsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -27887,6 +28188,7 @@ type DescribeLogDirsRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -27914,10 +28216,11 @@ type DescribeLogDirsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DescribeLogDirsRequest) Key() int16                 { return 35 }
-func (*DescribeLogDirsRequest) MaxVersion() int16          { return 4 }
+func (*DescribeLogDirsRequest) MaxVersion() int16          { return 5 }
 func (v *DescribeLogDirsRequest) SetVersion(version int16) { v.Version = version }
 func (v *DescribeLogDirsRequest) GetVersion() int16        { return v.Version }
 func (v *DescribeLogDirsRequest) IsFlexible() bool         { return v.Version >= 2 }
@@ -27982,15 +28285,12 @@ func (v *DescribeLogDirsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeLogDirsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeLogDirsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeLogDirsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -28122,6 +28422,7 @@ type DescribeLogDirsResponseDirTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -28147,6 +28448,7 @@ type DescribeLogDirsResponseDirTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -28186,8 +28488,12 @@ type DescribeLogDirsResponseDir struct {
 	// This field has a default of -1.
 	UsableBytes int64 // v4+
 
+	// IsCordoned is true if this log directory is cordoned.
+	IsCordoned bool // v5+
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -28222,15 +28528,16 @@ type DescribeLogDirsResponse struct {
 	ErrorCode int16 // v3+
 
 	// Dirs pairs log directories with the topics and partitions that are
-	// stored in those directores.
+	// stored in those directories.
 	Dirs []DescribeLogDirsResponseDir
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DescribeLogDirsResponse) Key() int16                 { return 35 }
-func (*DescribeLogDirsResponse) MaxVersion() int16          { return 4 }
+func (*DescribeLogDirsResponse) MaxVersion() int16          { return 5 }
 func (v *DescribeLogDirsResponse) SetVersion(version int16) { v.Version = version }
 func (v *DescribeLogDirsResponse) GetVersion() int16        { return v.Version }
 func (v *DescribeLogDirsResponse) IsFlexible() bool         { return v.Version >= 2 }
@@ -28238,7 +28545,6 @@ func (v *DescribeLogDirsResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *DescribeLogDirsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeLogDirsResponse) RequestKind() Request {
 	return &DescribeLogDirsRequest{Version: v.Version}
 }
@@ -28339,6 +28645,10 @@ func (v *DescribeLogDirsResponse) AppendTo(dst []byte) []byte {
 				v := v.UsableBytes
 				dst = kbin.AppendInt64(dst, v)
 			}
+			if version >= 5 {
+				v := v.IsCordoned
+				dst = kbin.AppendBool(dst, v)
+			}
 			if isFlexible {
 				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 				dst = v.UnknownTags.AppendEach(dst)
@@ -28351,15 +28661,12 @@ func (v *DescribeLogDirsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeLogDirsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeLogDirsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeLogDirsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -28512,6 +28819,10 @@ func (v *DescribeLogDirsResponse) readFrom(src []byte, unsafe bool) error {
 				v := b.Int64()
 				s.UsableBytes = v
 			}
+			if version >= 5 {
+				v := b.Bool()
+				s.IsCordoned = v
+			}
 			if isFlexible {
 				s.UnknownTags = internalReadTags(&b)
 			}
@@ -28561,6 +28872,7 @@ type SASLAuthenticateRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*SASLAuthenticateRequest) Key() int16                 { return 36 }
@@ -28602,15 +28914,12 @@ func (v *SASLAuthenticateRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *SASLAuthenticateRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *SASLAuthenticateRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *SASLAuthenticateRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -28677,6 +28986,7 @@ type SASLAuthenticateResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*SASLAuthenticateResponse) Key() int16                 { return 36 }
@@ -28723,15 +29033,12 @@ func (v *SASLAuthenticateResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *SASLAuthenticateResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *SASLAuthenticateResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *SASLAuthenticateResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -28807,6 +29114,7 @@ type CreatePartitionsRequestTopicAssignment struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -28845,6 +29153,7 @@ type CreatePartitionsRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -28882,6 +29191,7 @@ type CreatePartitionsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*CreatePartitionsRequest) Key() int16                       { return 37 }
@@ -28980,15 +29290,12 @@ func (v *CreatePartitionsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreatePartitionsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreatePartitionsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreatePartitionsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -29168,6 +29475,7 @@ type CreatePartitionsResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -29201,6 +29509,7 @@ type CreatePartitionsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*CreatePartitionsResponse) Key() int16                 { return 37 }
@@ -29212,7 +29521,6 @@ func (v *CreatePartitionsResponse) Throttle() (int32, bool)  { return v.Throttle
 func (v *CreatePartitionsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *CreatePartitionsResponse) RequestKind() Request {
 	return &CreatePartitionsRequest{Version: v.Version}
 }
@@ -29267,15 +29575,12 @@ func (v *CreatePartitionsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreatePartitionsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreatePartitionsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreatePartitionsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -29389,6 +29694,7 @@ type CreateDelegationTokenRequestRenewer struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -29439,6 +29745,7 @@ type CreateDelegationTokenRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*CreateDelegationTokenRequest) Key() int16                 { return 38 }
@@ -29523,15 +29830,12 @@ func (v *CreateDelegationTokenRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreateDelegationTokenRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreateDelegationTokenRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreateDelegationTokenRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -29719,6 +30023,7 @@ type CreateDelegationTokenResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*CreateDelegationTokenResponse) Key() int16                 { return 38 }
@@ -29729,11 +30034,9 @@ func (v *CreateDelegationTokenResponse) IsFlexible() bool         { return v.Ver
 func (v *CreateDelegationTokenResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 1
 }
-
 func (v *CreateDelegationTokenResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *CreateDelegationTokenResponse) RequestKind() Request {
 	return &CreateDelegationTokenRequest{Version: v.Version}
 }
@@ -29817,15 +30120,12 @@ func (v *CreateDelegationTokenResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *CreateDelegationTokenResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *CreateDelegationTokenResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *CreateDelegationTokenResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -29991,6 +30291,7 @@ type RenewDelegationTokenRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*RenewDelegationTokenRequest) Key() int16                 { return 39 }
@@ -30036,15 +30337,12 @@ func (v *RenewDelegationTokenRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *RenewDelegationTokenRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *RenewDelegationTokenRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *RenewDelegationTokenRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -30116,6 +30414,7 @@ type RenewDelegationTokenResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*RenewDelegationTokenResponse) Key() int16                 { return 39 }
@@ -30126,11 +30425,9 @@ func (v *RenewDelegationTokenResponse) IsFlexible() bool         { return v.Vers
 func (v *RenewDelegationTokenResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 1
 }
-
 func (v *RenewDelegationTokenResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *RenewDelegationTokenResponse) RequestKind() Request {
 	return &RenewDelegationTokenRequest{Version: v.Version}
 }
@@ -30158,15 +30455,12 @@ func (v *RenewDelegationTokenResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *RenewDelegationTokenResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *RenewDelegationTokenResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *RenewDelegationTokenResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -30232,6 +30526,7 @@ type ExpireDelegationTokenRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*ExpireDelegationTokenRequest) Key() int16                 { return 40 }
@@ -30277,15 +30572,12 @@ func (v *ExpireDelegationTokenRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ExpireDelegationTokenRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ExpireDelegationTokenRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ExpireDelegationTokenRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -30356,6 +30648,7 @@ type ExpireDelegationTokenResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*ExpireDelegationTokenResponse) Key() int16                 { return 40 }
@@ -30366,11 +30659,9 @@ func (v *ExpireDelegationTokenResponse) IsFlexible() bool         { return v.Ver
 func (v *ExpireDelegationTokenResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 1
 }
-
 func (v *ExpireDelegationTokenResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ExpireDelegationTokenResponse) RequestKind() Request {
 	return &ExpireDelegationTokenRequest{Version: v.Version}
 }
@@ -30398,15 +30689,12 @@ func (v *ExpireDelegationTokenResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ExpireDelegationTokenResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ExpireDelegationTokenResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ExpireDelegationTokenResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -30465,6 +30753,7 @@ type DescribeDelegationTokenRequestOwner struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -30492,6 +30781,7 @@ type DescribeDelegationTokenRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DescribeDelegationTokenRequest) Key() int16                 { return 41 }
@@ -30556,15 +30846,12 @@ func (v *DescribeDelegationTokenRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeDelegationTokenRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeDelegationTokenRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeDelegationTokenRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -30671,6 +30958,7 @@ type DescribeDelegationTokenResponseTokenDetailRenewer struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -30720,6 +31008,7 @@ type DescribeDelegationTokenResponseTokenDetail struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -30757,6 +31046,7 @@ type DescribeDelegationTokenResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DescribeDelegationTokenResponse) Key() int16                 { return 41 }
@@ -30767,11 +31057,9 @@ func (v *DescribeDelegationTokenResponse) IsFlexible() bool         { return v.V
 func (v *DescribeDelegationTokenResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 1
 }
-
 func (v *DescribeDelegationTokenResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeDelegationTokenResponse) RequestKind() Request {
 	return &DescribeDelegationTokenRequest{Version: v.Version}
 }
@@ -30901,15 +31189,12 @@ func (v *DescribeDelegationTokenResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeDelegationTokenResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeDelegationTokenResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeDelegationTokenResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -31159,10 +31444,11 @@ type DeleteGroupsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DeleteGroupsRequest) Key() int16                   { return 42 }
-func (*DeleteGroupsRequest) MaxVersion() int16            { return 2 }
+func (*DeleteGroupsRequest) MaxVersion() int16            { return 3 }
 func (v *DeleteGroupsRequest) SetVersion(version int16)   { v.Version = version }
 func (v *DeleteGroupsRequest) GetVersion() int16          { return v.Version }
 func (v *DeleteGroupsRequest) IsFlexible() bool           { return v.Version >= 2 }
@@ -31209,15 +31495,12 @@ func (v *DeleteGroupsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteGroupsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteGroupsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteGroupsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -31309,8 +31592,12 @@ type DeleteGroupsResponseGroup struct {
 	// not in the empty state.
 	ErrorCode int16
 
+	// ErrorMessage is the error message, or null if there was no error.
+	ErrorMessage *string // v3+
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -31344,10 +31631,11 @@ type DeleteGroupsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*DeleteGroupsResponse) Key() int16                         { return 42 }
-func (*DeleteGroupsResponse) MaxVersion() int16                  { return 2 }
+func (*DeleteGroupsResponse) MaxVersion() int16                  { return 3 }
 func (v *DeleteGroupsResponse) SetVersion(version int16)         { v.Version = version }
 func (v *DeleteGroupsResponse) GetVersion() int16                { return v.Version }
 func (v *DeleteGroupsResponse) IsFlexible() bool                 { return v.Version >= 2 }
@@ -31385,6 +31673,14 @@ func (v *DeleteGroupsResponse) AppendTo(dst []byte) []byte {
 				v := v.ErrorCode
 				dst = kbin.AppendInt16(dst, v)
 			}
+			if version >= 3 {
+				v := v.ErrorMessage
+				if isFlexible {
+					dst = kbin.AppendCompactNullableString(dst, v)
+				} else {
+					dst = kbin.AppendNullableString(dst, v)
+				}
+			}
 			if isFlexible {
 				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 				dst = v.UnknownTags.AppendEach(dst)
@@ -31397,15 +31693,12 @@ func (v *DeleteGroupsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteGroupsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteGroupsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteGroupsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -31459,6 +31752,23 @@ func (v *DeleteGroupsResponse) readFrom(src []byte, unsafe bool) error {
 				v := b.Int16()
 				s.ErrorCode = v
 			}
+			if version >= 3 {
+				var v *string
+				if isFlexible {
+					if unsafe {
+						v = b.UnsafeCompactNullableString()
+					} else {
+						v = b.CompactNullableString()
+					}
+				} else {
+					if unsafe {
+						v = b.UnsafeNullableString()
+					} else {
+						v = b.NullableString()
+					}
+				}
+				s.ErrorMessage = v
+			}
 			if isFlexible {
 				s.UnknownTags = internalReadTags(&b)
 			}
@@ -31504,6 +31814,7 @@ type ElectLeadersRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -31546,6 +31857,7 @@ type ElectLeadersRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*ElectLeadersRequest) Key() int16                       { return 43 }
@@ -31625,15 +31937,12 @@ func (v *ElectLeadersRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ElectLeadersRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ElectLeadersRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ElectLeadersRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -31776,6 +32085,7 @@ type ElectLeadersResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -31800,6 +32110,7 @@ type ElectLeadersResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -31835,6 +32146,7 @@ type ElectLeadersResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v2+
+
 }
 
 func (*ElectLeadersResponse) Key() int16                         { return 43 }
@@ -31919,15 +32231,12 @@ func (v *ElectLeadersResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ElectLeadersResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ElectLeadersResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ElectLeadersResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -32092,6 +32401,7 @@ type IncrementalAlterConfigsRequestResourceConfig struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -32130,6 +32440,7 @@ type IncrementalAlterConfigsRequestResource struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -32163,6 +32474,7 @@ type IncrementalAlterConfigsRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*IncrementalAlterConfigsRequest) Key() int16                 { return 44 }
@@ -32268,15 +32580,12 @@ func (v *IncrementalAlterConfigsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *IncrementalAlterConfigsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *IncrementalAlterConfigsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *IncrementalAlterConfigsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -32469,6 +32778,7 @@ type IncrementalAlterConfigsResponseResource struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -32498,6 +32808,7 @@ type IncrementalAlterConfigsResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*IncrementalAlterConfigsResponse) Key() int16                 { return 44 }
@@ -32508,11 +32819,9 @@ func (v *IncrementalAlterConfigsResponse) IsFlexible() bool         { return v.V
 func (v *IncrementalAlterConfigsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *IncrementalAlterConfigsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *IncrementalAlterConfigsResponse) RequestKind() Request {
 	return &IncrementalAlterConfigsRequest{Version: v.Version}
 }
@@ -32574,15 +32883,12 @@ func (v *IncrementalAlterConfigsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *IncrementalAlterConfigsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *IncrementalAlterConfigsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *IncrementalAlterConfigsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -32872,15 +33178,12 @@ func (v *AlterPartitionAssignmentsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterPartitionAssignmentsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterPartitionAssignmentsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterPartitionAssignmentsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -33128,11 +33431,9 @@ func (v *AlterPartitionAssignmentsResponse) IsFlexible() bool         { return v
 func (v *AlterPartitionAssignmentsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *AlterPartitionAssignmentsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AlterPartitionAssignmentsResponse) RequestKind() Request {
 	return &AlterPartitionAssignmentsRequest{Version: v.Version}
 }
@@ -33222,15 +33523,12 @@ func (v *AlterPartitionAssignmentsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterPartitionAssignmentsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterPartitionAssignmentsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterPartitionAssignmentsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -33515,15 +33813,12 @@ func (v *ListPartitionReassignmentsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListPartitionReassignmentsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListPartitionReassignmentsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListPartitionReassignmentsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -33726,11 +34021,9 @@ func (v *ListPartitionReassignmentsResponse) IsFlexible() bool         { return 
 func (v *ListPartitionReassignmentsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *ListPartitionReassignmentsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ListPartitionReassignmentsResponse) RequestKind() Request {
 	return &ListPartitionReassignmentsRequest{Version: v.Version}
 }
@@ -33840,15 +34133,12 @@ func (v *ListPartitionReassignmentsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListPartitionReassignmentsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListPartitionReassignmentsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListPartitionReassignmentsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -34160,15 +34450,12 @@ func (v *OffsetDeleteRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetDeleteRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetDeleteRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetDeleteRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -34389,15 +34676,12 @@ func (v *OffsetDeleteResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *OffsetDeleteResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *OffsetDeleteResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *OffsetDeleteResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -34510,6 +34794,7 @@ type DescribeClientQuotasRequestComponent struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -34540,6 +34825,7 @@ type DescribeClientQuotasRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*DescribeClientQuotasRequest) Key() int16                 { return 48 }
@@ -34615,15 +34901,12 @@ func (v *DescribeClientQuotasRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeClientQuotasRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeClientQuotasRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeClientQuotasRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -34742,6 +35025,7 @@ type DescribeClientQuotasResponseEntryEntity struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -34766,6 +35050,7 @@ type DescribeClientQuotasResponseEntryValue struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -34790,6 +35075,7 @@ type DescribeClientQuotasResponseEntry struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -34825,6 +35111,7 @@ type DescribeClientQuotasResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*DescribeClientQuotasResponse) Key() int16                 { return 48 }
@@ -34835,11 +35122,9 @@ func (v *DescribeClientQuotasResponse) IsFlexible() bool         { return v.Vers
 func (v *DescribeClientQuotasResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *DescribeClientQuotasResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeClientQuotasResponse) RequestKind() Request {
 	return &DescribeClientQuotasRequest{Version: v.Version}
 }
@@ -34944,15 +35229,12 @@ func (v *DescribeClientQuotasResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeClientQuotasResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeClientQuotasResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeClientQuotasResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -35161,6 +35443,7 @@ type AlterClientQuotasRequestEntryEntity struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -35188,6 +35471,7 @@ type AlterClientQuotasRequestEntryOp struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -35212,6 +35496,7 @@ type AlterClientQuotasRequestEntry struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -35242,6 +35527,7 @@ type AlterClientQuotasRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*AlterClientQuotasRequest) Key() int16                 { return 49 }
@@ -35356,15 +35642,12 @@ func (v *AlterClientQuotasRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterClientQuotasRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterClientQuotasRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterClientQuotasRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -35553,6 +35836,7 @@ type AlterClientQuotasResponseEntryEntity struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -35580,6 +35864,7 @@ type AlterClientQuotasResponseEntry struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -35609,6 +35894,7 @@ type AlterClientQuotasResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*AlterClientQuotasResponse) Key() int16                 { return 49 }
@@ -35620,7 +35906,6 @@ func (v *AlterClientQuotasResponse) Throttle() (int32, bool)  { return v.Throttl
 func (v *AlterClientQuotasResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AlterClientQuotasResponse) RequestKind() Request {
 	return &AlterClientQuotasRequest{Version: v.Version}
 }
@@ -35698,15 +35983,12 @@ func (v *AlterClientQuotasResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterClientQuotasResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterClientQuotasResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterClientQuotasResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -35948,15 +36230,12 @@ func (v *DescribeUserSCRAMCredentialsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeUserSCRAMCredentialsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeUserSCRAMCredentialsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeUserSCRAMCredentialsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -36131,11 +36410,9 @@ func (v *DescribeUserSCRAMCredentialsResponse) IsFlexible() bool         { retur
 func (v *DescribeUserSCRAMCredentialsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *DescribeUserSCRAMCredentialsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeUserSCRAMCredentialsResponse) RequestKind() Request {
 	return &DescribeUserSCRAMCredentialsRequest{Version: v.Version}
 }
@@ -36225,15 +36502,12 @@ func (v *DescribeUserSCRAMCredentialsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeUserSCRAMCredentialsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeUserSCRAMCredentialsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeUserSCRAMCredentialsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -36580,15 +36854,12 @@ func (v *AlterUserSCRAMCredentialsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterUserSCRAMCredentialsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterUserSCRAMCredentialsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterUserSCRAMCredentialsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -36794,11 +37065,9 @@ func (v *AlterUserSCRAMCredentialsResponse) IsFlexible() bool         { return v
 func (v *AlterUserSCRAMCredentialsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *AlterUserSCRAMCredentialsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AlterUserSCRAMCredentialsResponse) RequestKind() Request {
 	return &AlterUserSCRAMCredentialsRequest{Version: v.Version}
 }
@@ -36853,15 +37122,12 @@ func (v *AlterUserSCRAMCredentialsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterUserSCRAMCredentialsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterUserSCRAMCredentialsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterUserSCRAMCredentialsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -37163,15 +37429,12 @@ func (v *VoteRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *VoteRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *VoteRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *VoteRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -37553,15 +37816,12 @@ func (v *VoteResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *VoteResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *VoteResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *VoteResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -37766,6 +38026,7 @@ type BeginQuorumEpochRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -37788,6 +38049,7 @@ type BeginQuorumEpochRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -37812,6 +38074,7 @@ type BeginQuorumEpochRequestLeaderEndpoint struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -37851,6 +38114,7 @@ type BeginQuorumEpochRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*BeginQuorumEpochRequest) Key() int16                 { return 53 }
@@ -37986,15 +38250,12 @@ func (v *BeginQuorumEpochRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *BeginQuorumEpochRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *BeginQuorumEpochRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *BeginQuorumEpochRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -38217,6 +38478,7 @@ type BeginQuorumEpochResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -38239,6 +38501,7 @@ type BeginQuorumEpochResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -38263,6 +38526,7 @@ type BeginQuorumEpochResponseNodeEndpoint struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -38291,6 +38555,7 @@ type BeginQuorumEpochResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*BeginQuorumEpochResponse) Key() int16                 { return 53 }
@@ -38420,15 +38685,12 @@ func (v *BeginQuorumEpochResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *BeginQuorumEpochResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *BeginQuorumEpochResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *BeginQuorumEpochResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -38622,6 +38884,7 @@ type EndQuorumEpochRequestTopicPartitionPreferredCandidate struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -38654,6 +38917,7 @@ type EndQuorumEpochRequestTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -38676,6 +38940,7 @@ type EndQuorumEpochRequestTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -38700,6 +38965,7 @@ type EndQuorumEpochRequestLeaderEndpoint struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -38734,6 +39000,7 @@ type EndQuorumEpochRequest struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*EndQuorumEpochRequest) Key() int16                 { return 54 }
@@ -38808,7 +39075,7 @@ func (v *EndQuorumEpochRequest) AppendTo(dst []byte) []byte {
 						v := v.LeaderEpoch
 						dst = kbin.AppendInt32(dst, v)
 					}
-					{
+					if version >= 0 && version <= 0 {
 						v := v.PreferredSuccessors
 						if isFlexible {
 							dst = kbin.AppendCompactArrayLen(dst, len(v))
@@ -38896,15 +39163,12 @@ func (v *EndQuorumEpochRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *EndQuorumEpochRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *EndQuorumEpochRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *EndQuorumEpochRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -38999,7 +39263,7 @@ func (v *EndQuorumEpochRequest) readFrom(src []byte, unsafe bool) error {
 						v := b.Int32()
 						s.LeaderEpoch = v
 					}
-					{
+					if version >= 0 && version <= 0 {
 						v := s.PreferredSuccessors
 						a := v
 						var l int32
@@ -39176,6 +39440,7 @@ type EndQuorumEpochResponseTopicPartition struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -39198,6 +39463,7 @@ type EndQuorumEpochResponseTopic struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -39222,6 +39488,7 @@ type EndQuorumEpochResponseNodeEndpoint struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
@@ -39250,6 +39517,7 @@ type EndQuorumEpochResponse struct {
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags // v1+
+
 }
 
 func (*EndQuorumEpochResponse) Key() int16                 { return 54 }
@@ -39379,15 +39647,12 @@ func (v *EndQuorumEpochResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *EndQuorumEpochResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *EndQuorumEpochResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *EndQuorumEpochResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -39744,15 +40009,12 @@ func (v *DescribeQuorumRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeQuorumRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeQuorumRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeQuorumRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -40205,15 +40467,12 @@ func (v *DescribeQuorumResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeQuorumResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeQuorumResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeQuorumResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -40575,7 +40834,7 @@ type AlterPartitionRequestTopicPartitionNewEpochISR struct {
 	// The broker's epoch; -1 if the epoch check is not supported.
 	//
 	// This field has a default of -1.
-	BrokerEpoch int32
+	BrokerEpoch int64
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -40775,7 +41034,7 @@ func (v *AlterPartitionRequest) AppendTo(dst []byte) []byte {
 							}
 							{
 								v := v.BrokerEpoch
-								dst = kbin.AppendInt32(dst, v)
+								dst = kbin.AppendInt64(dst, v)
 							}
 							if isFlexible {
 								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
@@ -40809,15 +41068,12 @@ func (v *AlterPartitionRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterPartitionRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterPartitionRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterPartitionRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -40951,7 +41207,7 @@ func (v *AlterPartitionRequest) readFrom(src []byte, unsafe bool) error {
 								s.BrokerID = v
 							}
 							{
-								v := b.Int32()
+								v := b.Int64()
 								s.BrokerEpoch = v
 							}
 							if isFlexible {
@@ -41197,15 +41453,12 @@ func (v *AlterPartitionResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterPartitionResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterPartitionResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterPartitionResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -41511,15 +41764,12 @@ func (v *UpdateFeaturesRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UpdateFeaturesRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UpdateFeaturesRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UpdateFeaturesRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -41662,7 +41912,7 @@ type UpdateFeaturesResponse struct {
 	ErrorMessage *string
 
 	// The results for each feature update request.
-	Results []UpdateFeaturesResponseResult
+	Results []UpdateFeaturesResponseResult // v0-v1
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -41700,7 +41950,7 @@ func (v *UpdateFeaturesResponse) AppendTo(dst []byte) []byte {
 			dst = kbin.AppendNullableString(dst, v)
 		}
 	}
-	{
+	if version >= 0 && version <= 1 {
 		v := v.Results
 		if isFlexible {
 			dst = kbin.AppendCompactArrayLen(dst, len(v))
@@ -41741,15 +41991,12 @@ func (v *UpdateFeaturesResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UpdateFeaturesResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UpdateFeaturesResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UpdateFeaturesResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -41783,7 +42030,7 @@ func (v *UpdateFeaturesResponse) readFrom(src []byte, unsafe bool) error {
 		}
 		s.ErrorMessage = v
 	}
-	{
+	if version >= 0 && version <= 1 {
 		v := s.Results
 		a := v
 		var l int32
@@ -41950,15 +42197,12 @@ func (v *EnvelopeRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *EnvelopeRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *EnvelopeRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *EnvelopeRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -42069,15 +42313,12 @@ func (v *EnvelopeResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *EnvelopeResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *EnvelopeResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *EnvelopeResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -42381,15 +42622,12 @@ func (v *FetchSnapshotRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *FetchSnapshotRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *FetchSnapshotRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *FetchSnapshotRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -42927,15 +43165,12 @@ func (v *FetchSnapshotResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *FetchSnapshotResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *FetchSnapshotResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *FetchSnapshotResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -43241,15 +43476,12 @@ func (v *DescribeClusterRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeClusterRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeClusterRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeClusterRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -43380,7 +43612,6 @@ func (v *DescribeClusterResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *DescribeClusterResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeClusterResponse) RequestKind() Request {
 	return &DescribeClusterRequest{Version: v.Version}
 }
@@ -43475,15 +43706,12 @@ func (v *DescribeClusterResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeClusterResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeClusterResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeClusterResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -43755,15 +43983,12 @@ func (v *DescribeProducersRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeProducersRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeProducersRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeProducersRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -43995,7 +44220,6 @@ func (v *DescribeProducersResponse) Throttle() (int32, bool)  { return v.Throttl
 func (v *DescribeProducersResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeProducersResponse) RequestKind() Request {
 	return &DescribeProducersRequest{Version: v.Version}
 }
@@ -44108,15 +44332,12 @@ func (v *DescribeProducersResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeProducersResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeProducersResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeProducersResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -44545,15 +44766,12 @@ func (v *BrokerRegistrationRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *BrokerRegistrationRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *BrokerRegistrationRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *BrokerRegistrationRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -44813,11 +45031,9 @@ func (v *BrokerRegistrationResponse) IsFlexible() bool         { return v.Versio
 func (v *BrokerRegistrationResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *BrokerRegistrationResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *BrokerRegistrationResponse) RequestKind() Request {
 	return &BrokerRegistrationRequest{Version: v.Version}
 }
@@ -44845,15 +45061,12 @@ func (v *BrokerRegistrationResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *BrokerRegistrationResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *BrokerRegistrationResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *BrokerRegistrationResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -44928,12 +45141,16 @@ type BrokerHeartbeatRequest struct {
 	// Log directories that failed and went offline.
 	OfflineLogDirs [][16]byte // tag 0
 
+	// Log directories that are cordoned. This is null before the broker
+	// reaches the RECOVERY state.
+	CordonedLogDirs [][16]byte // tag 1
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
 
 func (*BrokerHeartbeatRequest) Key() int16                 { return 63 }
-func (*BrokerHeartbeatRequest) MaxVersion() int16          { return 1 }
+func (*BrokerHeartbeatRequest) MaxVersion() int16          { return 2 }
 func (v *BrokerHeartbeatRequest) SetVersion(version int16) { v.Version = version }
 func (v *BrokerHeartbeatRequest) GetVersion() int16        { return v.Version }
 func (v *BrokerHeartbeatRequest) IsFlexible() bool         { return v.Version >= 0 }
@@ -44982,6 +45199,9 @@ func (v *BrokerHeartbeatRequest) AppendTo(dst []byte) []byte {
 		if len(v.OfflineLogDirs) > 0 {
 			toEncode = append(toEncode, 0)
 		}
+		if version < 0 && len(v.CordonedLogDirs) > 0 || version >= 0 && v.CordonedLogDirs != nil {
+			toEncode = append(toEncode, 1)
+		}
 		dst = kbin.AppendUvarint(dst, uint32(len(toEncode)+v.UnknownTags.Len()))
 		for _, tag := range toEncode {
 			switch tag {
@@ -45007,21 +45227,40 @@ func (v *BrokerHeartbeatRequest) AppendTo(dst []byte) []byte {
 						goto fOfflineLogDirs
 					}
 				}
+			case 1:
+				{
+					v := v.CordonedLogDirs
+					dst = kbin.AppendUvarint(dst, 1)
+					sized := false
+					lenAt := len(dst)
+				fCordonedLogDirs:
+					if isFlexible {
+						dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+					} else {
+						dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+					}
+					for i := range v {
+						v := v[i]
+						dst = kbin.AppendUuid(dst, v)
+					}
+					if !sized {
+						dst = kbin.AppendUvarint(dst[:lenAt], uint32(len(dst[lenAt:])))
+						sized = true
+						goto fCordonedLogDirs
+					}
+				}
 			}
 		}
 		dst = v.UnknownTags.AppendEach(dst)
 	}
 	return dst
 }
-
 func (v *BrokerHeartbeatRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *BrokerHeartbeatRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *BrokerHeartbeatRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -45081,6 +45320,35 @@ func (v *BrokerHeartbeatRequest) readFrom(src []byte, unsafe bool) error {
 				if err := b.Complete(); err != nil {
 					return err
 				}
+			case 1:
+				b := kbin.Reader{Src: b.Span(int(b.Uvarint()))}
+				v := s.CordonedLogDirs
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if version < 0 || l == 0 {
+					a = [][16]byte{}
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([][16]byte, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := b.Uuid()
+					a[i] = v
+				}
+				v = a
+				s.CordonedLogDirs = v
+				if err := b.Complete(); err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -45137,7 +45405,7 @@ type BrokerHeartbeatResponse struct {
 }
 
 func (*BrokerHeartbeatResponse) Key() int16                 { return 63 }
-func (*BrokerHeartbeatResponse) MaxVersion() int16          { return 1 }
+func (*BrokerHeartbeatResponse) MaxVersion() int16          { return 2 }
 func (v *BrokerHeartbeatResponse) SetVersion(version int16) { v.Version = version }
 func (v *BrokerHeartbeatResponse) GetVersion() int16        { return v.Version }
 func (v *BrokerHeartbeatResponse) IsFlexible() bool         { return v.Version >= 0 }
@@ -45145,7 +45413,6 @@ func (v *BrokerHeartbeatResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *BrokerHeartbeatResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *BrokerHeartbeatResponse) RequestKind() Request {
 	return &BrokerHeartbeatRequest{Version: v.Version}
 }
@@ -45181,15 +45448,12 @@ func (v *BrokerHeartbeatResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *BrokerHeartbeatResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *BrokerHeartbeatResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *BrokerHeartbeatResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -45294,15 +45558,12 @@ func (v *UnregisterBrokerRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UnregisterBrokerRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UnregisterBrokerRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UnregisterBrokerRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -45370,7 +45631,6 @@ func (v *UnregisterBrokerResponse) Throttle() (int32, bool)  { return v.Throttle
 func (v *UnregisterBrokerResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *UnregisterBrokerResponse) RequestKind() Request {
 	return &UnregisterBrokerRequest{Version: v.Version}
 }
@@ -45402,15 +45662,12 @@ func (v *UnregisterBrokerResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UnregisterBrokerResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UnregisterBrokerResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UnregisterBrokerResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -45531,15 +45788,12 @@ func (v *DescribeTransactionsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeTransactionsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeTransactionsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeTransactionsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -45639,7 +45893,7 @@ type DescribeTransactionsResponseTransactionState struct {
 	// NOT_COORDINATOR is returned if the broker receiving this transactional
 	// ID does not own the ID.
 	//
-	// COORDINATOR_LOAD_IN_PROGRESS is returned if the coordiantor is laoding.
+	// COORDINATOR_LOAD_IN_PROGRESS is returned if the coordinator is loading.
 	//
 	// COORDINATOR_NOT_AVAILABLE is returned if the coordinator is being shutdown.
 	//
@@ -45714,11 +45968,9 @@ func (v *DescribeTransactionsResponse) IsFlexible() bool         { return v.Vers
 func (v *DescribeTransactionsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *DescribeTransactionsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeTransactionsResponse) RequestKind() Request {
 	return &DescribeTransactionsRequest{Version: v.Version}
 }
@@ -45824,15 +46076,12 @@ func (v *DescribeTransactionsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeTransactionsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeTransactionsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeTransactionsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -46125,15 +46374,12 @@ func (v *ListTransactionsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListTransactionsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListTransactionsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListTransactionsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -46319,7 +46565,6 @@ func (v *ListTransactionsResponse) Throttle() (int32, bool)  { return v.Throttle
 func (v *ListTransactionsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ListTransactionsResponse) RequestKind() Request {
 	return &ListTransactionsRequest{Version: v.Version}
 }
@@ -46394,15 +46639,12 @@ func (v *ListTransactionsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListTransactionsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListTransactionsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListTransactionsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -46606,15 +46848,12 @@ func (v *AllocateProducerIDsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AllocateProducerIDsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AllocateProducerIDsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AllocateProducerIDsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -46689,11 +46928,9 @@ func (v *AllocateProducerIDsResponse) IsFlexible() bool         { return v.Versi
 func (v *AllocateProducerIDsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *AllocateProducerIDsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AllocateProducerIDsResponse) RequestKind() Request {
 	return &AllocateProducerIDsRequest{Version: v.Version}
 }
@@ -46725,15 +46962,12 @@ func (v *AllocateProducerIDsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AllocateProducerIDsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AllocateProducerIDsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AllocateProducerIDsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -46989,15 +47223,12 @@ func (v *ConsumerGroupHeartbeatRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConsumerGroupHeartbeatRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConsumerGroupHeartbeatRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConsumerGroupHeartbeatRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -47336,11 +47567,9 @@ func (v *ConsumerGroupHeartbeatResponse) IsFlexible() bool         { return v.Ve
 func (v *ConsumerGroupHeartbeatResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *ConsumerGroupHeartbeatResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ConsumerGroupHeartbeatResponse) RequestKind() Request {
 	return &ConsumerGroupHeartbeatRequest{Version: v.Version}
 }
@@ -47431,15 +47660,12 @@ func (v *ConsumerGroupHeartbeatResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConsumerGroupHeartbeatResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConsumerGroupHeartbeatResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConsumerGroupHeartbeatResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -47683,15 +47909,12 @@ func (v *ConsumerGroupDescribeRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConsumerGroupDescribeRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConsumerGroupDescribeRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConsumerGroupDescribeRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -47909,11 +48132,9 @@ func (v *ConsumerGroupDescribeResponse) IsFlexible() bool         { return v.Ver
 func (v *ConsumerGroupDescribeResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *ConsumerGroupDescribeResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ConsumerGroupDescribeResponse) RequestKind() Request {
 	return &ConsumerGroupDescribeRequest{Version: v.Version}
 }
@@ -48175,15 +48396,12 @@ func (v *ConsumerGroupDescribeResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ConsumerGroupDescribeResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ConsumerGroupDescribeResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ConsumerGroupDescribeResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -48855,15 +49073,12 @@ func (v *ControllerRegistrationRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ControllerRegistrationRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ControllerRegistrationRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ControllerRegistrationRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -49056,11 +49271,9 @@ func (v *ControllerRegistrationResponse) IsFlexible() bool         { return v.Ve
 func (v *ControllerRegistrationResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *ControllerRegistrationResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ControllerRegistrationResponse) RequestKind() Request {
 	return &ControllerRegistrationRequest{Version: v.Version}
 }
@@ -49092,15 +49305,12 @@ func (v *ControllerRegistrationResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ControllerRegistrationResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ControllerRegistrationResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ControllerRegistrationResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -49211,15 +49421,12 @@ func (v *GetTelemetrySubscriptionsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *GetTelemetrySubscriptionsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *GetTelemetrySubscriptionsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *GetTelemetrySubscriptionsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -49303,11 +49510,9 @@ func (v *GetTelemetrySubscriptionsResponse) IsFlexible() bool         { return v
 func (v *GetTelemetrySubscriptionsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *GetTelemetrySubscriptionsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *GetTelemetrySubscriptionsResponse) RequestKind() Request {
 	return &GetTelemetrySubscriptionsRequest{Version: v.Version}
 }
@@ -49379,15 +49584,12 @@ func (v *GetTelemetrySubscriptionsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *GetTelemetrySubscriptionsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *GetTelemetrySubscriptionsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *GetTelemetrySubscriptionsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -49589,15 +49791,12 @@ func (v *PushTelemetryRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *PushTelemetryRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *PushTelemetryRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *PushTelemetryRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -49702,15 +49901,12 @@ func (v *PushTelemetryResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *PushTelemetryResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *PushTelemetryResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *PushTelemetryResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -49754,7 +49950,7 @@ func NewPushTelemetryResponse() PushTelemetryResponse {
 	return v
 }
 
-type AssignReplicasToDirsRequestDirectorieTopicPartition struct {
+type AssignReplicasToDirsRequestDirectoryTopicPartition struct {
 	// The partition index.
 	Partition int32
 
@@ -49763,62 +49959,62 @@ type AssignReplicasToDirsRequestDirectorieTopicPartition struct {
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to AssignReplicasToDirsRequestDirectorieTopicPartition.
-func (v *AssignReplicasToDirsRequestDirectorieTopicPartition) Default() {
+// if new fields are added to AssignReplicasToDirsRequestDirectoryTopicPartition.
+func (v *AssignReplicasToDirsRequestDirectoryTopicPartition) Default() {
 }
 
-// NewAssignReplicasToDirsRequestDirectorieTopicPartition returns a default AssignReplicasToDirsRequestDirectorieTopicPartition
+// NewAssignReplicasToDirsRequestDirectoryTopicPartition returns a default AssignReplicasToDirsRequestDirectoryTopicPartition
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewAssignReplicasToDirsRequestDirectorieTopicPartition() AssignReplicasToDirsRequestDirectorieTopicPartition {
-	var v AssignReplicasToDirsRequestDirectorieTopicPartition
+func NewAssignReplicasToDirsRequestDirectoryTopicPartition() AssignReplicasToDirsRequestDirectoryTopicPartition {
+	var v AssignReplicasToDirsRequestDirectoryTopicPartition
 	v.Default()
 	return v
 }
 
-type AssignReplicasToDirsRequestDirectorieTopic struct {
+type AssignReplicasToDirsRequestDirectoryTopic struct {
 	// The ID of the assigned topic.
 	TopicID [16]byte
 
 	// The partitions assigned to the directory.
-	Partitions []AssignReplicasToDirsRequestDirectorieTopicPartition
+	Partitions []AssignReplicasToDirsRequestDirectoryTopicPartition
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to AssignReplicasToDirsRequestDirectorieTopic.
-func (v *AssignReplicasToDirsRequestDirectorieTopic) Default() {
+// if new fields are added to AssignReplicasToDirsRequestDirectoryTopic.
+func (v *AssignReplicasToDirsRequestDirectoryTopic) Default() {
 }
 
-// NewAssignReplicasToDirsRequestDirectorieTopic returns a default AssignReplicasToDirsRequestDirectorieTopic
+// NewAssignReplicasToDirsRequestDirectoryTopic returns a default AssignReplicasToDirsRequestDirectoryTopic
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewAssignReplicasToDirsRequestDirectorieTopic() AssignReplicasToDirsRequestDirectorieTopic {
-	var v AssignReplicasToDirsRequestDirectorieTopic
+func NewAssignReplicasToDirsRequestDirectoryTopic() AssignReplicasToDirsRequestDirectoryTopic {
+	var v AssignReplicasToDirsRequestDirectoryTopic
 	v.Default()
 	return v
 }
 
-type AssignReplicasToDirsRequestDirectorie struct {
+type AssignReplicasToDirsRequestDirectory struct {
 	// The ID of the directory.
 	ID [16]byte
 
 	// The topics assigned to the directory.
-	Topics []AssignReplicasToDirsRequestDirectorieTopic
+	Topics []AssignReplicasToDirsRequestDirectoryTopic
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to AssignReplicasToDirsRequestDirectorie.
-func (v *AssignReplicasToDirsRequestDirectorie) Default() {
+// if new fields are added to AssignReplicasToDirsRequestDirectory.
+func (v *AssignReplicasToDirsRequestDirectory) Default() {
 }
 
-// NewAssignReplicasToDirsRequestDirectorie returns a default AssignReplicasToDirsRequestDirectorie
+// NewAssignReplicasToDirsRequestDirectory returns a default AssignReplicasToDirsRequestDirectory
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewAssignReplicasToDirsRequestDirectorie() AssignReplicasToDirsRequestDirectorie {
-	var v AssignReplicasToDirsRequestDirectorie
+func NewAssignReplicasToDirsRequestDirectory() AssignReplicasToDirsRequestDirectory {
+	var v AssignReplicasToDirsRequestDirectory
 	v.Default()
 	return v
 }
@@ -49839,7 +50035,7 @@ type AssignReplicasToDirsRequest struct {
 	BrokerEpoch int64
 
 	// The directories to which replicas should be assigned.
-	Directories []AssignReplicasToDirsRequestDirectorie
+	Directories []AssignReplicasToDirsRequestDirectory
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -49941,15 +50137,12 @@ func (v *AssignReplicasToDirsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AssignReplicasToDirsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AssignReplicasToDirsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AssignReplicasToDirsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -49980,7 +50173,7 @@ func (v *AssignReplicasToDirsRequest) readFrom(src []byte, unsafe bool) error {
 		}
 		a = a[:0]
 		if l > 0 {
-			a = append(a, make([]AssignReplicasToDirsRequestDirectorie, l)...)
+			a = append(a, make([]AssignReplicasToDirsRequestDirectory, l)...)
 		}
 		for i := int32(0); i < l; i++ {
 			v := &a[i]
@@ -50004,7 +50197,7 @@ func (v *AssignReplicasToDirsRequest) readFrom(src []byte, unsafe bool) error {
 				}
 				a = a[:0]
 				if l > 0 {
-					a = append(a, make([]AssignReplicasToDirsRequestDirectorieTopic, l)...)
+					a = append(a, make([]AssignReplicasToDirsRequestDirectoryTopic, l)...)
 				}
 				for i := int32(0); i < l; i++ {
 					v := &a[i]
@@ -50028,7 +50221,7 @@ func (v *AssignReplicasToDirsRequest) readFrom(src []byte, unsafe bool) error {
 						}
 						a = a[:0]
 						if l > 0 {
-							a = append(a, make([]AssignReplicasToDirsRequestDirectorieTopicPartition, l)...)
+							a = append(a, make([]AssignReplicasToDirsRequestDirectoryTopicPartition, l)...)
 						}
 						for i := int32(0); i < l; i++ {
 							v := &a[i]
@@ -50087,7 +50280,7 @@ func NewAssignReplicasToDirsRequest() AssignReplicasToDirsRequest {
 	return v
 }
 
-type AssignReplicasToDirsResponseDirectorieTopicPartition struct {
+type AssignReplicasToDirsResponseDirectoryTopicPartition struct {
 	Partition int32
 
 	ErrorCode int16
@@ -50097,58 +50290,58 @@ type AssignReplicasToDirsResponseDirectorieTopicPartition struct {
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to AssignReplicasToDirsResponseDirectorieTopicPartition.
-func (v *AssignReplicasToDirsResponseDirectorieTopicPartition) Default() {
+// if new fields are added to AssignReplicasToDirsResponseDirectoryTopicPartition.
+func (v *AssignReplicasToDirsResponseDirectoryTopicPartition) Default() {
 }
 
-// NewAssignReplicasToDirsResponseDirectorieTopicPartition returns a default AssignReplicasToDirsResponseDirectorieTopicPartition
+// NewAssignReplicasToDirsResponseDirectoryTopicPartition returns a default AssignReplicasToDirsResponseDirectoryTopicPartition
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewAssignReplicasToDirsResponseDirectorieTopicPartition() AssignReplicasToDirsResponseDirectorieTopicPartition {
-	var v AssignReplicasToDirsResponseDirectorieTopicPartition
+func NewAssignReplicasToDirsResponseDirectoryTopicPartition() AssignReplicasToDirsResponseDirectoryTopicPartition {
+	var v AssignReplicasToDirsResponseDirectoryTopicPartition
 	v.Default()
 	return v
 }
 
-type AssignReplicasToDirsResponseDirectorieTopic struct {
+type AssignReplicasToDirsResponseDirectoryTopic struct {
 	TopicID [16]byte
 
-	Partitions []AssignReplicasToDirsResponseDirectorieTopicPartition
+	Partitions []AssignReplicasToDirsResponseDirectoryTopicPartition
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to AssignReplicasToDirsResponseDirectorieTopic.
-func (v *AssignReplicasToDirsResponseDirectorieTopic) Default() {
+// if new fields are added to AssignReplicasToDirsResponseDirectoryTopic.
+func (v *AssignReplicasToDirsResponseDirectoryTopic) Default() {
 }
 
-// NewAssignReplicasToDirsResponseDirectorieTopic returns a default AssignReplicasToDirsResponseDirectorieTopic
+// NewAssignReplicasToDirsResponseDirectoryTopic returns a default AssignReplicasToDirsResponseDirectoryTopic
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewAssignReplicasToDirsResponseDirectorieTopic() AssignReplicasToDirsResponseDirectorieTopic {
-	var v AssignReplicasToDirsResponseDirectorieTopic
+func NewAssignReplicasToDirsResponseDirectoryTopic() AssignReplicasToDirsResponseDirectoryTopic {
+	var v AssignReplicasToDirsResponseDirectoryTopic
 	v.Default()
 	return v
 }
 
-type AssignReplicasToDirsResponseDirectorie struct {
+type AssignReplicasToDirsResponseDirectory struct {
 	ID [16]byte
 
-	Topics []AssignReplicasToDirsResponseDirectorieTopic
+	Topics []AssignReplicasToDirsResponseDirectoryTopic
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to AssignReplicasToDirsResponseDirectorie.
-func (v *AssignReplicasToDirsResponseDirectorie) Default() {
+// if new fields are added to AssignReplicasToDirsResponseDirectory.
+func (v *AssignReplicasToDirsResponseDirectory) Default() {
 }
 
-// NewAssignReplicasToDirsResponseDirectorie returns a default AssignReplicasToDirsResponseDirectorie
+// NewAssignReplicasToDirsResponseDirectory returns a default AssignReplicasToDirsResponseDirectory
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewAssignReplicasToDirsResponseDirectorie() AssignReplicasToDirsResponseDirectorie {
-	var v AssignReplicasToDirsResponseDirectorie
+func NewAssignReplicasToDirsResponseDirectory() AssignReplicasToDirsResponseDirectory {
+	var v AssignReplicasToDirsResponseDirectory
 	v.Default()
 	return v
 }
@@ -50165,7 +50358,7 @@ type AssignReplicasToDirsResponse struct {
 
 	ErrorCode int16
 
-	Directories []AssignReplicasToDirsResponseDirectorie
+	Directories []AssignReplicasToDirsResponseDirectory
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -50179,11 +50372,9 @@ func (v *AssignReplicasToDirsResponse) IsFlexible() bool         { return v.Vers
 func (v *AssignReplicasToDirsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *AssignReplicasToDirsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AssignReplicasToDirsResponse) RequestKind() Request {
 	return &AssignReplicasToDirsRequest{Version: v.Version}
 }
@@ -50268,15 +50459,12 @@ func (v *AssignReplicasToDirsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AssignReplicasToDirsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AssignReplicasToDirsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AssignReplicasToDirsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -50307,7 +50495,7 @@ func (v *AssignReplicasToDirsResponse) readFrom(src []byte, unsafe bool) error {
 		}
 		a = a[:0]
 		if l > 0 {
-			a = append(a, make([]AssignReplicasToDirsResponseDirectorie, l)...)
+			a = append(a, make([]AssignReplicasToDirsResponseDirectory, l)...)
 		}
 		for i := int32(0); i < l; i++ {
 			v := &a[i]
@@ -50331,7 +50519,7 @@ func (v *AssignReplicasToDirsResponse) readFrom(src []byte, unsafe bool) error {
 				}
 				a = a[:0]
 				if l > 0 {
-					a = append(a, make([]AssignReplicasToDirsResponseDirectorieTopic, l)...)
+					a = append(a, make([]AssignReplicasToDirsResponseDirectoryTopic, l)...)
 				}
 				for i := int32(0); i < l; i++ {
 					v := &a[i]
@@ -50355,7 +50543,7 @@ func (v *AssignReplicasToDirsResponse) readFrom(src []byte, unsafe bool) error {
 						}
 						a = a[:0]
 						if l > 0 {
-							a = append(a, make([]AssignReplicasToDirsResponseDirectorieTopicPartition, l)...)
+							a = append(a, make([]AssignReplicasToDirsResponseDirectoryTopicPartition, l)...)
 						}
 						for i := int32(0); i < l; i++ {
 							v := &a[i]
@@ -50476,15 +50664,12 @@ func (v *ListConfigResourcesRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListConfigResourcesRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListConfigResourcesRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListConfigResourcesRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -50595,11 +50780,9 @@ func (v *ListConfigResourcesResponse) IsFlexible() bool         { return v.Versi
 func (v *ListConfigResourcesResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *ListConfigResourcesResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ListConfigResourcesResponse) RequestKind() Request {
 	return &ListConfigResourcesRequest{Version: v.Version}
 }
@@ -50650,15 +50833,12 @@ func (v *ListConfigResourcesResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ListConfigResourcesResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ListConfigResourcesResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ListConfigResourcesResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -50809,7 +50989,7 @@ type DescribeTopicPartitionsRequest struct {
 
 	// The maximum nuber of partitions included in the response.
 	//
-	// This field has a default of 200.
+	// This field has a default of 2000.
 	ResponsePartitionLimit int32
 
 	// If non-nil, cursor is the first topic and partition to fetch details for.
@@ -50901,15 +51081,12 @@ func (v *DescribeTopicPartitionsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeTopicPartitionsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeTopicPartitionsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeTopicPartitionsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -51015,7 +51192,7 @@ func NewPtrDescribeTopicPartitionsRequest() *DescribeTopicPartitionsRequest {
 // Default sets any default fields. Calling this allows for future compatibility
 // if new fields are added to DescribeTopicPartitionsRequest.
 func (v *DescribeTopicPartitionsRequest) Default() {
-	v.ResponsePartitionLimit = 200
+	v.ResponsePartitionLimit = 2000
 	{
 		v := &v.Cursor
 		_ = v
@@ -51032,7 +51209,7 @@ func NewDescribeTopicPartitionsRequest() DescribeTopicPartitionsRequest {
 
 type DescribeTopicPartitionsResponseTopicPartition struct {
 	// The partition error, or 0 if there is no error.
-	ErrorCode int32
+	ErrorCode int16
 
 	// The partition this is a response for.
 	Partition int32
@@ -51080,7 +51257,7 @@ func NewDescribeTopicPartitionsResponseTopicPartition() DescribeTopicPartitionsR
 
 type DescribeTopicPartitionsResponseTopic struct {
 	// The topic error, or 0 if there is no error.
-	ErrorCode int32
+	ErrorCode int16
 
 	// The topic name.
 	Topic *string
@@ -51166,11 +51343,9 @@ func (v *DescribeTopicPartitionsResponse) IsFlexible() bool         { return v.V
 func (v *DescribeTopicPartitionsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *DescribeTopicPartitionsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeTopicPartitionsResponse) RequestKind() Request {
 	return &DescribeTopicPartitionsRequest{Version: v.Version}
 }
@@ -51195,7 +51370,7 @@ func (v *DescribeTopicPartitionsResponse) AppendTo(dst []byte) []byte {
 			v := &v[i]
 			{
 				v := v.ErrorCode
-				dst = kbin.AppendInt32(dst, v)
+				dst = kbin.AppendInt16(dst, v)
 			}
 			{
 				v := v.Topic
@@ -51224,7 +51399,7 @@ func (v *DescribeTopicPartitionsResponse) AppendTo(dst []byte) []byte {
 					v := &v[i]
 					{
 						v := v.ErrorCode
-						dst = kbin.AppendInt32(dst, v)
+						dst = kbin.AppendInt16(dst, v)
 					}
 					{
 						v := v.Partition
@@ -51344,15 +51519,12 @@ func (v *DescribeTopicPartitionsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeTopicPartitionsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeTopicPartitionsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeTopicPartitionsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -51386,7 +51558,7 @@ func (v *DescribeTopicPartitionsResponse) readFrom(src []byte, unsafe bool) erro
 			v.Default()
 			s := v
 			{
-				v := b.Int32()
+				v := b.Int16()
 				s.ErrorCode = v
 			}
 			{
@@ -51435,7 +51607,7 @@ func (v *DescribeTopicPartitionsResponse) readFrom(src []byte, unsafe bool) erro
 					v.Default()
 					s := v
 					{
-						v := b.Int32()
+						v := b.Int16()
 						s.ErrorCode = v
 					}
 					{
@@ -51680,11 +51852,12 @@ type ShareGroupHeartbeatRequest struct {
 	UnknownTags Tags
 }
 
-func (*ShareGroupHeartbeatRequest) Key() int16                 { return 76 }
-func (*ShareGroupHeartbeatRequest) MaxVersion() int16          { return 1 }
-func (v *ShareGroupHeartbeatRequest) SetVersion(version int16) { v.Version = version }
-func (v *ShareGroupHeartbeatRequest) GetVersion() int16        { return v.Version }
-func (v *ShareGroupHeartbeatRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*ShareGroupHeartbeatRequest) Key() int16                   { return 76 }
+func (*ShareGroupHeartbeatRequest) MaxVersion() int16            { return 1 }
+func (v *ShareGroupHeartbeatRequest) SetVersion(version int16)   { v.Version = version }
+func (v *ShareGroupHeartbeatRequest) GetVersion() int16          { return v.Version }
+func (v *ShareGroupHeartbeatRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *ShareGroupHeartbeatRequest) IsGroupCoordinatorRequest() {}
 func (v *ShareGroupHeartbeatRequest) ResponseKind() Response {
 	r := &ShareGroupHeartbeatResponse{Version: v.Version}
 	r.Default()
@@ -51755,15 +51928,12 @@ func (v *ShareGroupHeartbeatRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareGroupHeartbeatRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareGroupHeartbeatRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareGroupHeartbeatRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -51991,11 +52161,9 @@ func (v *ShareGroupHeartbeatResponse) IsFlexible() bool         { return v.Versi
 func (v *ShareGroupHeartbeatResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *ShareGroupHeartbeatResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ShareGroupHeartbeatResponse) RequestKind() Request {
 	return &ShareGroupHeartbeatRequest{Version: v.Version}
 }
@@ -52086,15 +52254,12 @@ func (v *ShareGroupHeartbeatResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareGroupHeartbeatResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareGroupHeartbeatResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareGroupHeartbeatResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -52269,11 +52434,12 @@ type ShareGroupDescribeRequest struct {
 	UnknownTags Tags
 }
 
-func (*ShareGroupDescribeRequest) Key() int16                 { return 77 }
-func (*ShareGroupDescribeRequest) MaxVersion() int16          { return 1 }
-func (v *ShareGroupDescribeRequest) SetVersion(version int16) { v.Version = version }
-func (v *ShareGroupDescribeRequest) GetVersion() int16        { return v.Version }
-func (v *ShareGroupDescribeRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*ShareGroupDescribeRequest) Key() int16                   { return 77 }
+func (*ShareGroupDescribeRequest) MaxVersion() int16            { return 1 }
+func (v *ShareGroupDescribeRequest) SetVersion(version int16)   { v.Version = version }
+func (v *ShareGroupDescribeRequest) GetVersion() int16          { return v.Version }
+func (v *ShareGroupDescribeRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *ShareGroupDescribeRequest) IsGroupCoordinatorRequest() {}
 func (v *ShareGroupDescribeRequest) ResponseKind() Response {
 	r := &ShareGroupDescribeResponse{Version: v.Version}
 	r.Default()
@@ -52320,15 +52486,12 @@ func (v *ShareGroupDescribeRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareGroupDescribeRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareGroupDescribeRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareGroupDescribeRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -52578,11 +52741,9 @@ func (v *ShareGroupDescribeResponse) IsFlexible() bool         { return v.Versio
 func (v *ShareGroupDescribeResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *ShareGroupDescribeResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ShareGroupDescribeResponse) RequestKind() Request {
 	return &ShareGroupDescribeRequest{Version: v.Version}
 }
@@ -52778,15 +52939,12 @@ func (v *ShareGroupDescribeResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareGroupDescribeResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareGroupDescribeResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareGroupDescribeResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -53151,7 +53309,7 @@ func NewShareGroupDescribeResponse() ShareGroupDescribeResponse {
 	return v
 }
 
-type ShareFetchRequestTopicPartitionAcknowledgementBatche struct {
+type ShareFetchRequestTopicPartitionAcknowledgementBatch struct {
 	// FirstOffset is the first offset of batch of records to acknowledge.
 	FirstOffset int64
 
@@ -53168,14 +53326,14 @@ type ShareFetchRequestTopicPartitionAcknowledgementBatche struct {
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to ShareFetchRequestTopicPartitionAcknowledgementBatche.
-func (v *ShareFetchRequestTopicPartitionAcknowledgementBatche) Default() {
+// if new fields are added to ShareFetchRequestTopicPartitionAcknowledgementBatch.
+func (v *ShareFetchRequestTopicPartitionAcknowledgementBatch) Default() {
 }
 
-// NewShareFetchRequestTopicPartitionAcknowledgementBatche returns a default ShareFetchRequestTopicPartitionAcknowledgementBatche
+// NewShareFetchRequestTopicPartitionAcknowledgementBatch returns a default ShareFetchRequestTopicPartitionAcknowledgementBatch
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewShareFetchRequestTopicPartitionAcknowledgementBatche() ShareFetchRequestTopicPartitionAcknowledgementBatche {
-	var v ShareFetchRequestTopicPartitionAcknowledgementBatche
+func NewShareFetchRequestTopicPartitionAcknowledgementBatch() ShareFetchRequestTopicPartitionAcknowledgementBatch {
+	var v ShareFetchRequestTopicPartitionAcknowledgementBatch
 	v.Default()
 	return v
 }
@@ -53190,7 +53348,7 @@ type ShareFetchRequestTopicPartition struct {
 	PartitionMaxBytes int32
 
 	// AcknowledgementBatches are record batches to acknowledge.
-	AcknowledgementBatches []ShareFetchRequestTopicPartitionAcknowledgementBatche
+	AcknowledgementBatches []ShareFetchRequestTopicPartitionAcknowledgementBatch
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -53263,6 +53421,9 @@ func NewShareFetchRequestForgottenTopicsData() ShareFetchRequestForgottenTopicsD
 // removed in Apacke Kafka 4.1.
 //
 // Version 1 is the initial stable version (KIP-932).
+//
+// Version 2, introduced in Kafka 4.2, adds ShareAcquireMode (KIP-1206) and
+// IsRenewAck for renew acknowledgements (KIP-1222).
 type ShareFetchRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -53298,6 +53459,14 @@ type ShareFetchRequest struct {
 	// records and acknowledgements.
 	BatchSize int32 // v1+
 
+	// ShareAcquireMode controls the fetch behavior:
+	// 0 = batch-optimized, 1 = record-limit.
+	ShareAcquireMode int8 // v2+
+
+	// IsRenewAck indicates whether Renew type acknowledgements are present
+	// in AcknowledgementBatches.
+	IsRenewAck bool // v2+
+
 	// Topics are the topics to fetch.
 	Topics []ShareFetchRequestTopic
 
@@ -53309,7 +53478,7 @@ type ShareFetchRequest struct {
 }
 
 func (*ShareFetchRequest) Key() int16                 { return 78 }
-func (*ShareFetchRequest) MaxVersion() int16          { return 1 }
+func (*ShareFetchRequest) MaxVersion() int16          { return 2 }
 func (v *ShareFetchRequest) SetVersion(version int16) { v.Version = version }
 func (v *ShareFetchRequest) GetVersion() int16        { return v.Version }
 func (v *ShareFetchRequest) IsFlexible() bool         { return v.Version >= 0 }
@@ -53373,6 +53542,14 @@ func (v *ShareFetchRequest) AppendTo(dst []byte) []byte {
 		v := v.BatchSize
 		dst = kbin.AppendInt32(dst, v)
 	}
+	if version >= 2 {
+		v := v.ShareAcquireMode
+		dst = kbin.AppendInt8(dst, v)
+	}
+	if version >= 2 {
+		v := v.IsRenewAck
+		dst = kbin.AppendBool(dst, v)
+	}
 	{
 		v := v.Topics
 		if isFlexible {
@@ -53399,7 +53576,7 @@ func (v *ShareFetchRequest) AppendTo(dst []byte) []byte {
 						v := v.Partition
 						dst = kbin.AppendInt32(dst, v)
 					}
-					{
+					if version >= 0 && version <= 0 {
 						v := v.PartitionMaxBytes
 						dst = kbin.AppendInt32(dst, v)
 					}
@@ -53487,15 +53664,12 @@ func (v *ShareFetchRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareFetchRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareFetchRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareFetchRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -53562,6 +53736,14 @@ func (v *ShareFetchRequest) readFrom(src []byte, unsafe bool) error {
 		v := b.Int32()
 		s.BatchSize = v
 	}
+	if version >= 2 {
+		v := b.Int8()
+		s.ShareAcquireMode = v
+	}
+	if version >= 2 {
+		v := b.Bool()
+		s.IsRenewAck = v
+	}
 	{
 		v := s.Topics
 		a := v
@@ -53610,7 +53792,7 @@ func (v *ShareFetchRequest) readFrom(src []byte, unsafe bool) error {
 						v := b.Int32()
 						s.Partition = v
 					}
-					{
+					if version >= 0 && version <= 0 {
 						v := b.Int32()
 						s.PartitionMaxBytes = v
 					}
@@ -53628,7 +53810,7 @@ func (v *ShareFetchRequest) readFrom(src []byte, unsafe bool) error {
 						}
 						a = a[:0]
 						if l > 0 {
-							a = append(a, make([]ShareFetchRequestTopicPartitionAcknowledgementBatche, l)...)
+							a = append(a, make([]ShareFetchRequestTopicPartitionAcknowledgementBatch, l)...)
 						}
 						for i := int32(0); i < l; i++ {
 							v := &a[i]
@@ -53972,7 +54154,7 @@ type ShareFetchResponse struct {
 }
 
 func (*ShareFetchResponse) Key() int16                         { return 78 }
-func (*ShareFetchResponse) MaxVersion() int16                  { return 1 }
+func (*ShareFetchResponse) MaxVersion() int16                  { return 2 }
 func (v *ShareFetchResponse) SetVersion(version int16)         { v.Version = version }
 func (v *ShareFetchResponse) GetVersion() int16                { return v.Version }
 func (v *ShareFetchResponse) IsFlexible() bool                 { return v.Version >= 0 }
@@ -54162,15 +54344,12 @@ func (v *ShareFetchResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareFetchResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareFetchResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareFetchResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -54472,7 +54651,7 @@ func NewShareFetchResponse() ShareFetchResponse {
 	return v
 }
 
-type ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche struct {
+type ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch struct {
 	// FirstOffset is the first offset of batch of records to acknowledge.
 	FirstOffset int64
 
@@ -54489,14 +54668,14 @@ type ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche struct {
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche.
-func (v *ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche) Default() {
+// if new fields are added to ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch.
+func (v *ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch) Default() {
 }
 
-// NewShareAcknowledgeRequestTopicPartitionAcknowledgementBatche returns a default ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche
+// NewShareAcknowledgeRequestTopicPartitionAcknowledgementBatch returns a default ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewShareAcknowledgeRequestTopicPartitionAcknowledgementBatche() ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche {
-	var v ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche
+func NewShareAcknowledgeRequestTopicPartitionAcknowledgementBatch() ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch {
+	var v ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch
 	v.Default()
 	return v
 }
@@ -54506,7 +54685,7 @@ type ShareAcknowledgeRequestTopicPartition struct {
 	Partition int32
 
 	// AcknowledgementBatches are record batches to acknowledge.
-	AcknowledgementBatches []ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche
+	AcknowledgementBatches []ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -54555,6 +54734,9 @@ func NewShareAcknowledgeRequestTopic() ShareAcknowledgeRequestTopic {
 // removed in Apacke Kafka 4.1.
 //
 // Version 1 is the initial stable version (KIP-932).
+//
+// Version 2, introduced in Kafka 4.2, adds IsRenewAck (KIP-1222) and
+// AcquisitionLockTimeoutMillis in the response.
 type ShareAcknowledgeRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -54569,6 +54751,10 @@ type ShareAcknowledgeRequest struct {
 	// session; -1 to close it; otherwise increments for consecutive requests.
 	ShareSessionEpoch int32
 
+	// IsRenewAck indicates whether Renew type acknowledgements are present
+	// in AcknowledgementBatches.
+	IsRenewAck bool // v2+
+
 	// Topics are the topics containing records to acknowledge.
 	Topics []ShareAcknowledgeRequestTopic
 
@@ -54577,7 +54763,7 @@ type ShareAcknowledgeRequest struct {
 }
 
 func (*ShareAcknowledgeRequest) Key() int16                 { return 79 }
-func (*ShareAcknowledgeRequest) MaxVersion() int16          { return 1 }
+func (*ShareAcknowledgeRequest) MaxVersion() int16          { return 2 }
 func (v *ShareAcknowledgeRequest) SetVersion(version int16) { v.Version = version }
 func (v *ShareAcknowledgeRequest) GetVersion() int16        { return v.Version }
 func (v *ShareAcknowledgeRequest) IsFlexible() bool         { return v.Version >= 0 }
@@ -54620,6 +54806,10 @@ func (v *ShareAcknowledgeRequest) AppendTo(dst []byte) []byte {
 	{
 		v := v.ShareSessionEpoch
 		dst = kbin.AppendInt32(dst, v)
+	}
+	if version >= 2 {
+		v := v.IsRenewAck
+		dst = kbin.AppendBool(dst, v)
 	}
 	{
 		v := v.Topics
@@ -54700,15 +54890,12 @@ func (v *ShareAcknowledgeRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareAcknowledgeRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareAcknowledgeRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareAcknowledgeRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -54754,6 +54941,10 @@ func (v *ShareAcknowledgeRequest) readFrom(src []byte, unsafe bool) error {
 	{
 		v := b.Int32()
 		s.ShareSessionEpoch = v
+	}
+	if version >= 2 {
+		v := b.Bool()
+		s.IsRenewAck = v
 	}
 	{
 		v := s.Topics
@@ -54817,7 +55008,7 @@ func (v *ShareAcknowledgeRequest) readFrom(src []byte, unsafe bool) error {
 						}
 						a = a[:0]
 						if l > 0 {
-							a = append(a, make([]ShareAcknowledgeRequestTopicPartitionAcknowledgementBatche, l)...)
+							a = append(a, make([]ShareAcknowledgeRequestTopicPartitionAcknowledgementBatch, l)...)
 						}
 						for i := int32(0); i < l; i++ {
 							v := &a[i]
@@ -55045,6 +55236,10 @@ type ShareAcknowledgeResponse struct {
 	// error.
 	ErrorMessage *string
 
+	// AcquisitionLockTimeoutMillis is the time in milliseconds for which the
+	// acquired records are locked.
+	AcquisitionLockTimeoutMillis int32 // v2+
+
 	// Topics are the response topics.
 	Topics []ShareAcknowledgeResponseTopic
 
@@ -55057,7 +55252,7 @@ type ShareAcknowledgeResponse struct {
 }
 
 func (*ShareAcknowledgeResponse) Key() int16                 { return 79 }
-func (*ShareAcknowledgeResponse) MaxVersion() int16          { return 1 }
+func (*ShareAcknowledgeResponse) MaxVersion() int16          { return 2 }
 func (v *ShareAcknowledgeResponse) SetVersion(version int16) { v.Version = version }
 func (v *ShareAcknowledgeResponse) GetVersion() int16        { return v.Version }
 func (v *ShareAcknowledgeResponse) IsFlexible() bool         { return v.Version >= 0 }
@@ -55065,7 +55260,6 @@ func (v *ShareAcknowledgeResponse) Throttle() (int32, bool)  { return v.Throttle
 func (v *ShareAcknowledgeResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *ShareAcknowledgeResponse) RequestKind() Request {
 	return &ShareAcknowledgeRequest{Version: v.Version}
 }
@@ -55090,6 +55284,10 @@ func (v *ShareAcknowledgeResponse) AppendTo(dst []byte) []byte {
 		} else {
 			dst = kbin.AppendNullableString(dst, v)
 		}
+	}
+	if version >= 2 {
+		v := v.AcquisitionLockTimeoutMillis
+		dst = kbin.AppendInt32(dst, v)
 	}
 	{
 		v := v.Topics
@@ -55201,15 +55399,12 @@ func (v *ShareAcknowledgeResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ShareAcknowledgeResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ShareAcknowledgeResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ShareAcknowledgeResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -55242,6 +55437,10 @@ func (v *ShareAcknowledgeResponse) readFrom(src []byte, unsafe bool) error {
 			}
 		}
 		s.ErrorMessage = v
+	}
+	if version >= 2 {
+		v := b.Int32()
+		s.AcquisitionLockTimeoutMillis = v
 	}
 	{
 		v := s.Topics
@@ -55446,7 +55645,7 @@ type AddRaftVoterRequestListener struct {
 	Host string
 
 	// The port.
-	Port int16
+	Port uint16
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -55467,6 +55666,7 @@ func NewAddRaftVoterRequestListener() AddRaftVoterRequestListener {
 
 // AddRaftVoter, added for KIP-853, allows you to manage your KRaft
 // controllers.
+// Version 1, introduced in Kafka 4.2, adds AckWhenCommitted (KIP-1186).
 type AddRaftVoterRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -55491,12 +55691,18 @@ type AddRaftVoterRequest struct {
 	// The endpoints that can be used to communicate with the voter.
 	Listeners []AddRaftVoterRequestListener
 
+	// When true, return a response after the new voter set is committed.
+	// Otherwise, return after the leader writes the changes locally.
+	//
+	// This field has a default of true.
+	AckWhenCommitted bool // v1+
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
 
 func (*AddRaftVoterRequest) Key() int16                       { return 80 }
-func (*AddRaftVoterRequest) MaxVersion() int16                { return 0 }
+func (*AddRaftVoterRequest) MaxVersion() int16                { return 1 }
 func (v *AddRaftVoterRequest) SetVersion(version int16)       { v.Version = version }
 func (v *AddRaftVoterRequest) GetVersion() int16              { return v.Version }
 func (v *AddRaftVoterRequest) IsFlexible() bool               { return v.Version >= 0 }
@@ -55569,7 +55775,7 @@ func (v *AddRaftVoterRequest) AppendTo(dst []byte) []byte {
 			}
 			{
 				v := v.Port
-				dst = kbin.AppendInt16(dst, v)
+				dst = kbin.AppendUint16(dst, v)
 			}
 			if isFlexible {
 				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
@@ -55577,21 +55783,22 @@ func (v *AddRaftVoterRequest) AppendTo(dst []byte) []byte {
 			}
 		}
 	}
+	if version >= 1 {
+		v := v.AckWhenCommitted
+		dst = kbin.AppendBool(dst, v)
+	}
 	if isFlexible {
 		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 		dst = v.UnknownTags.AppendEach(dst)
 	}
 	return dst
 }
-
 func (v *AddRaftVoterRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AddRaftVoterRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AddRaftVoterRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -55684,7 +55891,7 @@ func (v *AddRaftVoterRequest) readFrom(src []byte, unsafe bool) error {
 				s.Host = v
 			}
 			{
-				v := b.Int16()
+				v := b.Uint16()
 				s.Port = v
 			}
 			if isFlexible {
@@ -55693,6 +55900,10 @@ func (v *AddRaftVoterRequest) readFrom(src []byte, unsafe bool) error {
 		}
 		v = a
 		s.Listeners = v
+	}
+	if version >= 1 {
+		v := b.Bool()
+		s.AckWhenCommitted = v
 	}
 	if isFlexible {
 		s.UnknownTags = internalReadTags(&b)
@@ -55712,6 +55923,7 @@ func NewPtrAddRaftVoterRequest() *AddRaftVoterRequest {
 // if new fields are added to AddRaftVoterRequest.
 func (v *AddRaftVoterRequest) Default() {
 	v.TimeoutMillis = 15000
+	v.AckWhenCommitted = true
 }
 
 // NewAddRaftVoterRequest returns a default AddRaftVoterRequest
@@ -55739,7 +55951,7 @@ type AddRaftVoterResponse struct {
 }
 
 func (*AddRaftVoterResponse) Key() int16                         { return 80 }
-func (*AddRaftVoterResponse) MaxVersion() int16                  { return 0 }
+func (*AddRaftVoterResponse) MaxVersion() int16                  { return 1 }
 func (v *AddRaftVoterResponse) SetVersion(version int16)         { v.Version = version }
 func (v *AddRaftVoterResponse) GetVersion() int16                { return v.Version }
 func (v *AddRaftVoterResponse) IsFlexible() bool                 { return v.Version >= 0 }
@@ -55774,15 +55986,12 @@ func (v *AddRaftVoterResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AddRaftVoterResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AddRaftVoterResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AddRaftVoterResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -55909,15 +56118,12 @@ func (v *RemoveRaftVoterRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *RemoveRaftVoterRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *RemoveRaftVoterRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *RemoveRaftVoterRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -56003,7 +56209,6 @@ func (v *RemoveRaftVoterResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *RemoveRaftVoterResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *RemoveRaftVoterResponse) RequestKind() Request {
 	return &RemoveRaftVoterRequest{Version: v.Version}
 }
@@ -56035,15 +56240,12 @@ func (v *RemoveRaftVoterResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *RemoveRaftVoterResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *RemoveRaftVoterResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *RemoveRaftVoterResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -56112,7 +56314,7 @@ type UpdateRaftVoterRequestListener struct {
 	Host string
 
 	// The port.
-	Port int16
+	Port uint16
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -56255,7 +56457,7 @@ func (v *UpdateRaftVoterRequest) AppendTo(dst []byte) []byte {
 			}
 			{
 				v := v.Port
-				dst = kbin.AppendInt16(dst, v)
+				dst = kbin.AppendUint16(dst, v)
 			}
 			if isFlexible {
 				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
@@ -56284,15 +56486,12 @@ func (v *UpdateRaftVoterRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UpdateRaftVoterRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UpdateRaftVoterRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UpdateRaftVoterRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -56385,7 +56584,7 @@ func (v *UpdateRaftVoterRequest) readFrom(src []byte, unsafe bool) error {
 				s.Host = v
 			}
 			{
-				v := b.Int16()
+				v := b.Uint16()
 				s.Port = v
 			}
 			if isFlexible {
@@ -56504,7 +56703,6 @@ func (v *UpdateRaftVoterResponse) Throttle() (int32, bool)  { return v.ThrottleM
 func (v *UpdateRaftVoterResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *UpdateRaftVoterResponse) RequestKind() Request {
 	return &UpdateRaftVoterRequest{Version: v.Version}
 }
@@ -56577,15 +56775,12 @@ func (v *UpdateRaftVoterResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *UpdateRaftVoterResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *UpdateRaftVoterResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *UpdateRaftVoterResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -56747,11 +56942,12 @@ type InitializeShareGroupStateRequest struct {
 	UnknownTags Tags
 }
 
-func (*InitializeShareGroupStateRequest) Key() int16                 { return 83 }
-func (*InitializeShareGroupStateRequest) MaxVersion() int16          { return 0 }
-func (v *InitializeShareGroupStateRequest) SetVersion(version int16) { v.Version = version }
-func (v *InitializeShareGroupStateRequest) GetVersion() int16        { return v.Version }
-func (v *InitializeShareGroupStateRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*InitializeShareGroupStateRequest) Key() int16                   { return 83 }
+func (*InitializeShareGroupStateRequest) MaxVersion() int16            { return 0 }
+func (v *InitializeShareGroupStateRequest) SetVersion(version int16)   { v.Version = version }
+func (v *InitializeShareGroupStateRequest) GetVersion() int16          { return v.Version }
+func (v *InitializeShareGroupStateRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *InitializeShareGroupStateRequest) IsShareCoordinatorRequest() {}
 func (v *InitializeShareGroupStateRequest) ResponseKind() Response {
 	r := &InitializeShareGroupStateResponse{Version: v.Version}
 	r.Default()
@@ -56832,15 +57028,12 @@ func (v *InitializeShareGroupStateRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *InitializeShareGroupStateRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *InitializeShareGroupStateRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *InitializeShareGroupStateRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -57103,15 +57296,12 @@ func (v *InitializeShareGroupStateResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *InitializeShareGroupStateResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *InitializeShareGroupStateResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *InitializeShareGroupStateResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -57293,11 +57483,12 @@ type ReadShareGroupStateRequest struct {
 	UnknownTags Tags
 }
 
-func (*ReadShareGroupStateRequest) Key() int16                 { return 84 }
-func (*ReadShareGroupStateRequest) MaxVersion() int16          { return 0 }
-func (v *ReadShareGroupStateRequest) SetVersion(version int16) { v.Version = version }
-func (v *ReadShareGroupStateRequest) GetVersion() int16        { return v.Version }
-func (v *ReadShareGroupStateRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*ReadShareGroupStateRequest) Key() int16                   { return 84 }
+func (*ReadShareGroupStateRequest) MaxVersion() int16            { return 0 }
+func (v *ReadShareGroupStateRequest) SetVersion(version int16)   { v.Version = version }
+func (v *ReadShareGroupStateRequest) GetVersion() int16          { return v.Version }
+func (v *ReadShareGroupStateRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *ReadShareGroupStateRequest) IsShareCoordinatorRequest() {}
 func (v *ReadShareGroupStateRequest) ResponseKind() Response {
 	r := &ReadShareGroupStateResponse{Version: v.Version}
 	r.Default()
@@ -57374,15 +57565,12 @@ func (v *ReadShareGroupStateRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ReadShareGroupStateRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ReadShareGroupStateRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ReadShareGroupStateRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -57501,7 +57689,7 @@ func NewReadShareGroupStateRequest() ReadShareGroupStateRequest {
 	return v
 }
 
-type ReadShareGroupStateResponseTopicPartitionStateBatche struct {
+type ReadShareGroupStateResponseTopicPartitionStateBatch struct {
 	// FirstOffset is the first offset of this state batch.
 	FirstOffset int64
 
@@ -57520,14 +57708,14 @@ type ReadShareGroupStateResponseTopicPartitionStateBatche struct {
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to ReadShareGroupStateResponseTopicPartitionStateBatche.
-func (v *ReadShareGroupStateResponseTopicPartitionStateBatche) Default() {
+// if new fields are added to ReadShareGroupStateResponseTopicPartitionStateBatch.
+func (v *ReadShareGroupStateResponseTopicPartitionStateBatch) Default() {
 }
 
-// NewReadShareGroupStateResponseTopicPartitionStateBatche returns a default ReadShareGroupStateResponseTopicPartitionStateBatche
+// NewReadShareGroupStateResponseTopicPartitionStateBatch returns a default ReadShareGroupStateResponseTopicPartitionStateBatch
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewReadShareGroupStateResponseTopicPartitionStateBatche() ReadShareGroupStateResponseTopicPartitionStateBatche {
-	var v ReadShareGroupStateResponseTopicPartitionStateBatche
+func NewReadShareGroupStateResponseTopicPartitionStateBatch() ReadShareGroupStateResponseTopicPartitionStateBatch {
+	var v ReadShareGroupStateResponseTopicPartitionStateBatch
 	v.Default()
 	return v
 }
@@ -57550,7 +57738,7 @@ type ReadShareGroupStateResponseTopicPartition struct {
 	StartOffset int64
 
 	// StateBatches are the state batches for this share-partition.
-	StateBatches []ReadShareGroupStateResponseTopicPartitionStateBatche
+	StateBatches []ReadShareGroupStateResponseTopicPartitionStateBatch
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -57723,15 +57911,12 @@ func (v *ReadShareGroupStateResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ReadShareGroupStateResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ReadShareGroupStateResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ReadShareGroupStateResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -57831,7 +58016,7 @@ func (v *ReadShareGroupStateResponse) readFrom(src []byte, unsafe bool) error {
 						}
 						a = a[:0]
 						if l > 0 {
-							a = append(a, make([]ReadShareGroupStateResponseTopicPartitionStateBatche, l)...)
+							a = append(a, make([]ReadShareGroupStateResponseTopicPartitionStateBatch, l)...)
 						}
 						for i := int32(0); i < l; i++ {
 							v := &a[i]
@@ -57901,7 +58086,7 @@ func NewReadShareGroupStateResponse() ReadShareGroupStateResponse {
 	return v
 }
 
-type WriteShareGroupStateRequestTopicPartitionStateBatche struct {
+type WriteShareGroupStateRequestTopicPartitionStateBatch struct {
 	// FirstOffset is the first offset of this state batch.
 	FirstOffset int64
 
@@ -57920,14 +58105,14 @@ type WriteShareGroupStateRequestTopicPartitionStateBatche struct {
 }
 
 // Default sets any default fields. Calling this allows for future compatibility
-// if new fields are added to WriteShareGroupStateRequestTopicPartitionStateBatche.
-func (v *WriteShareGroupStateRequestTopicPartitionStateBatche) Default() {
+// if new fields are added to WriteShareGroupStateRequestTopicPartitionStateBatch.
+func (v *WriteShareGroupStateRequestTopicPartitionStateBatch) Default() {
 }
 
-// NewWriteShareGroupStateRequestTopicPartitionStateBatche returns a default WriteShareGroupStateRequestTopicPartitionStateBatche
+// NewWriteShareGroupStateRequestTopicPartitionStateBatch returns a default WriteShareGroupStateRequestTopicPartitionStateBatch
 // This is a shortcut for creating a struct and calling Default yourself.
-func NewWriteShareGroupStateRequestTopicPartitionStateBatche() WriteShareGroupStateRequestTopicPartitionStateBatche {
-	var v WriteShareGroupStateRequestTopicPartitionStateBatche
+func NewWriteShareGroupStateRequestTopicPartitionStateBatch() WriteShareGroupStateRequestTopicPartitionStateBatch {
+	var v WriteShareGroupStateRequestTopicPartitionStateBatch
 	v.Default()
 	return v
 }
@@ -57946,8 +58131,14 @@ type WriteShareGroupStateRequestTopicPartition struct {
 	// offset is not being written.
 	StartOffset int64
 
+	// DeliveryCompleteCount is the number of offsets >= share-partition start
+	// offset for which delivery has been completed. -1 if not set.
+	//
+	// This field has a default of -1.
+	DeliveryCompleteCount int32 // v1+
+
 	// StateBatches are the state batches for the share-partition.
-	StateBatches []WriteShareGroupStateRequestTopicPartitionStateBatche
+	StateBatches []WriteShareGroupStateRequestTopicPartitionStateBatch
 
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
@@ -57956,6 +58147,7 @@ type WriteShareGroupStateRequestTopicPartition struct {
 // Default sets any default fields. Calling this allows for future compatibility
 // if new fields are added to WriteShareGroupStateRequestTopicPartition.
 func (v *WriteShareGroupStateRequestTopicPartition) Default() {
+	v.DeliveryCompleteCount = -1
 }
 
 // NewWriteShareGroupStateRequestTopicPartition returns a default WriteShareGroupStateRequestTopicPartition
@@ -57991,6 +58183,7 @@ func NewWriteShareGroupStateRequestTopic() WriteShareGroupStateRequestTopic {
 }
 
 // WriteShareGroupStateRequest is a request to write share group state.
+// Version 1, introduced in Kafka 4.2, adds DeliveryCompleteCount (KIP-1226).
 type WriteShareGroupStateRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -58005,11 +58198,12 @@ type WriteShareGroupStateRequest struct {
 	UnknownTags Tags
 }
 
-func (*WriteShareGroupStateRequest) Key() int16                 { return 85 }
-func (*WriteShareGroupStateRequest) MaxVersion() int16          { return 0 }
-func (v *WriteShareGroupStateRequest) SetVersion(version int16) { v.Version = version }
-func (v *WriteShareGroupStateRequest) GetVersion() int16        { return v.Version }
-func (v *WriteShareGroupStateRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*WriteShareGroupStateRequest) Key() int16                   { return 85 }
+func (*WriteShareGroupStateRequest) MaxVersion() int16            { return 1 }
+func (v *WriteShareGroupStateRequest) SetVersion(version int16)   { v.Version = version }
+func (v *WriteShareGroupStateRequest) GetVersion() int16          { return v.Version }
+func (v *WriteShareGroupStateRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *WriteShareGroupStateRequest) IsShareCoordinatorRequest() {}
 func (v *WriteShareGroupStateRequest) ResponseKind() Response {
 	r := &WriteShareGroupStateResponse{Version: v.Version}
 	r.Default()
@@ -58076,6 +58270,10 @@ func (v *WriteShareGroupStateRequest) AppendTo(dst []byte) []byte {
 						v := v.StartOffset
 						dst = kbin.AppendInt64(dst, v)
 					}
+					if version >= 1 {
+						v := v.DeliveryCompleteCount
+						dst = kbin.AppendInt32(dst, v)
+					}
 					{
 						v := v.StateBatches
 						if isFlexible {
@@ -58125,15 +58323,12 @@ func (v *WriteShareGroupStateRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *WriteShareGroupStateRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *WriteShareGroupStateRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *WriteShareGroupStateRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -58219,6 +58414,10 @@ func (v *WriteShareGroupStateRequest) readFrom(src []byte, unsafe bool) error {
 						v := b.Int64()
 						s.StartOffset = v
 					}
+					if version >= 1 {
+						v := b.Int32()
+						s.DeliveryCompleteCount = v
+					}
 					{
 						v := s.StateBatches
 						a := v
@@ -58233,7 +58432,7 @@ func (v *WriteShareGroupStateRequest) readFrom(src []byte, unsafe bool) error {
 						}
 						a = a[:0]
 						if l > 0 {
-							a = append(a, make([]WriteShareGroupStateRequestTopicPartitionStateBatche, l)...)
+							a = append(a, make([]WriteShareGroupStateRequestTopicPartitionStateBatch, l)...)
 						}
 						for i := int32(0); i < l; i++ {
 							v := &a[i]
@@ -58377,7 +58576,7 @@ type WriteShareGroupStateResponse struct {
 }
 
 func (*WriteShareGroupStateResponse) Key() int16                 { return 85 }
-func (*WriteShareGroupStateResponse) MaxVersion() int16          { return 0 }
+func (*WriteShareGroupStateResponse) MaxVersion() int16          { return 1 }
 func (v *WriteShareGroupStateResponse) SetVersion(version int16) { v.Version = version }
 func (v *WriteShareGroupStateResponse) GetVersion() int16        { return v.Version }
 func (v *WriteShareGroupStateResponse) IsFlexible() bool         { return v.Version >= 0 }
@@ -58446,15 +58645,12 @@ func (v *WriteShareGroupStateResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *WriteShareGroupStateResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *WriteShareGroupStateResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *WriteShareGroupStateResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -58633,11 +58829,12 @@ type DeleteShareGroupStateRequest struct {
 	UnknownTags Tags
 }
 
-func (*DeleteShareGroupStateRequest) Key() int16                 { return 86 }
-func (*DeleteShareGroupStateRequest) MaxVersion() int16          { return 0 }
-func (v *DeleteShareGroupStateRequest) SetVersion(version int16) { v.Version = version }
-func (v *DeleteShareGroupStateRequest) GetVersion() int16        { return v.Version }
-func (v *DeleteShareGroupStateRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*DeleteShareGroupStateRequest) Key() int16                   { return 86 }
+func (*DeleteShareGroupStateRequest) MaxVersion() int16            { return 0 }
+func (v *DeleteShareGroupStateRequest) SetVersion(version int16)   { v.Version = version }
+func (v *DeleteShareGroupStateRequest) GetVersion() int16          { return v.Version }
+func (v *DeleteShareGroupStateRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *DeleteShareGroupStateRequest) IsShareCoordinatorRequest() {}
 func (v *DeleteShareGroupStateRequest) ResponseKind() Response {
 	r := &DeleteShareGroupStateResponse{Version: v.Version}
 	r.Default()
@@ -58710,15 +58907,12 @@ func (v *DeleteShareGroupStateRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteShareGroupStateRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteShareGroupStateRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteShareGroupStateRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -58975,15 +59169,12 @@ func (v *DeleteShareGroupStateResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteShareGroupStateResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteShareGroupStateResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteShareGroupStateResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -59151,6 +59342,8 @@ func NewReadShareGroupStateSummaryRequestTopic() ReadShareGroupStateSummaryReque
 }
 
 // ReadShareGroupStateSummaryRequest is a request to read share group state summary.
+// Version 1, introduced in Kafka 4.2, adds DeliveryCompleteCount to the
+// response (KIP-1226).
 type ReadShareGroupStateSummaryRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -59165,11 +59358,12 @@ type ReadShareGroupStateSummaryRequest struct {
 	UnknownTags Tags
 }
 
-func (*ReadShareGroupStateSummaryRequest) Key() int16                 { return 87 }
-func (*ReadShareGroupStateSummaryRequest) MaxVersion() int16          { return 0 }
-func (v *ReadShareGroupStateSummaryRequest) SetVersion(version int16) { v.Version = version }
-func (v *ReadShareGroupStateSummaryRequest) GetVersion() int16        { return v.Version }
-func (v *ReadShareGroupStateSummaryRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*ReadShareGroupStateSummaryRequest) Key() int16                   { return 87 }
+func (*ReadShareGroupStateSummaryRequest) MaxVersion() int16            { return 1 }
+func (v *ReadShareGroupStateSummaryRequest) SetVersion(version int16)   { v.Version = version }
+func (v *ReadShareGroupStateSummaryRequest) GetVersion() int16          { return v.Version }
+func (v *ReadShareGroupStateSummaryRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *ReadShareGroupStateSummaryRequest) IsShareCoordinatorRequest() {}
 func (v *ReadShareGroupStateSummaryRequest) ResponseKind() Response {
 	r := &ReadShareGroupStateSummaryResponse{Version: v.Version}
 	r.Default()
@@ -59246,15 +59440,12 @@ func (v *ReadShareGroupStateSummaryRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ReadShareGroupStateSummaryRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ReadShareGroupStateSummaryRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ReadShareGroupStateSummaryRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -59392,6 +59583,12 @@ type ReadShareGroupStateSummaryResponseTopicPartition struct {
 	// StartOffset is the share-partition start offset.
 	StartOffset int64
 
+	// DeliveryCompleteCount is the number of offsets >= share-partition start
+	// offset for which delivery has been completed. -1 if not set.
+	//
+	// This field has a default of -1.
+	DeliveryCompleteCount int32 // v1+
+
 	// UnknownTags are tags Kafka sent that we do not know the purpose of.
 	UnknownTags Tags
 }
@@ -59399,6 +59596,7 @@ type ReadShareGroupStateSummaryResponseTopicPartition struct {
 // Default sets any default fields. Calling this allows for future compatibility
 // if new fields are added to ReadShareGroupStateSummaryResponseTopicPartition.
 func (v *ReadShareGroupStateSummaryResponseTopicPartition) Default() {
+	v.DeliveryCompleteCount = -1
 }
 
 // NewReadShareGroupStateSummaryResponseTopicPartition returns a default ReadShareGroupStateSummaryResponseTopicPartition
@@ -59455,7 +59653,7 @@ type ReadShareGroupStateSummaryResponse struct {
 }
 
 func (*ReadShareGroupStateSummaryResponse) Key() int16                 { return 87 }
-func (*ReadShareGroupStateSummaryResponse) MaxVersion() int16          { return 0 }
+func (*ReadShareGroupStateSummaryResponse) MaxVersion() int16          { return 1 }
 func (v *ReadShareGroupStateSummaryResponse) SetVersion(version int16) { v.Version = version }
 func (v *ReadShareGroupStateSummaryResponse) GetVersion() int16        { return v.Version }
 func (v *ReadShareGroupStateSummaryResponse) IsFlexible() bool         { return v.Version >= 0 }
@@ -59518,6 +59716,10 @@ func (v *ReadShareGroupStateSummaryResponse) AppendTo(dst []byte) []byte {
 						v := v.StartOffset
 						dst = kbin.AppendInt64(dst, v)
 					}
+					if version >= 1 {
+						v := v.DeliveryCompleteCount
+						dst = kbin.AppendInt32(dst, v)
+					}
 					if isFlexible {
 						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
 						dst = v.UnknownTags.AppendEach(dst)
@@ -59536,15 +59738,12 @@ func (v *ReadShareGroupStateSummaryResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *ReadShareGroupStateSummaryResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *ReadShareGroupStateSummaryResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *ReadShareGroupStateSummaryResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -59634,6 +59833,10 @@ func (v *ReadShareGroupStateSummaryResponse) readFrom(src []byte, unsafe bool) e
 						v := b.Int64()
 						s.StartOffset = v
 					}
+					if version >= 1 {
+						v := b.Int32()
+						s.DeliveryCompleteCount = v
+					}
 					if isFlexible {
 						s.UnknownTags = internalReadTags(&b)
 					}
@@ -59671,6 +59874,6411 @@ func (v *ReadShareGroupStateSummaryResponse) Default() {
 // This is a shortcut for creating a struct and calling Default yourself.
 func NewReadShareGroupStateSummaryResponse() ReadShareGroupStateSummaryResponse {
 	var v ReadShareGroupStateSummaryResponse
+	v.Default()
+	return v
+}
+
+// TaskIDs contains a subtopology and its partitions.
+type TaskIDs struct {
+	// SubtopologyID is a string that uniquely identifies the subtopology.
+	SubtopologyID string
+
+	// Partitions are the partitions of the input topics processed by this
+	// member.
+	Partitions []int32
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TaskIDs.
+func (v *TaskIDs) Default() {
+}
+
+// NewTaskIDs returns a default TaskIDs
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTaskIDs() TaskIDs {
+	var v TaskIDs
+	v.Default()
+	return v
+}
+
+// TopicInfo describes a topic's configuration for streams.
+type TopicInfo struct {
+	// Topic is the name of the topic.
+	Topic string
+
+	// NumPartitions is the number of partitions in the topic. 0 if no specific
+	// number is enforced; always 0 for changelog topics.
+	NumPartitions int32
+
+	// ReplicationFactor is the replication factor of the topic. 0 if the
+	// default replication factor should be used.
+	ReplicationFactor int16
+
+	// Configs are topic-level configurations as key-value pairs.
+	Configs []TopicInfoConfig
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TopicInfo.
+func (v *TopicInfo) Default() {
+}
+
+// NewTopicInfo returns a default TopicInfo
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTopicInfo() TopicInfo {
+	var v TopicInfo
+	v.Default()
+	return v
+}
+
+// Endpoint describes a host:port endpoint.
+type Endpoint struct {
+	// Host is the hostname.
+	Host string
+
+	// Port is the port.
+	Port uint16
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to Endpoint.
+func (v *Endpoint) Default() {
+}
+
+// NewEndpoint returns a default Endpoint
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewEndpoint() Endpoint {
+	var v Endpoint
+	v.Default()
+	return v
+}
+
+// TaskOffset describes a changelog offset for a task.
+type TaskOffset struct {
+	// SubtopologyID is the subtopology identifier.
+	SubtopologyID string
+
+	// Partition is the partition.
+	Partition int32
+
+	// Offset is the offset.
+	Offset int64
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TaskOffset.
+func (v *TaskOffset) Default() {
+}
+
+// NewTaskOffset returns a default TaskOffset
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTaskOffset() TaskOffset {
+	var v TaskOffset
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup struct {
+	// SourceTopics are indexes into the subtopology's SourceTopics array.
+	SourceTopics []int16
+
+	// SourceTopicRegex are indexes into the subtopology's SourceTopicRegex
+	// array.
+	SourceTopicRegex []int16
+
+	// RepartitionSourceTopics are indexes into the subtopology's
+	// RepartitionSourceTopics array.
+	RepartitionSourceTopics []int16
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup.
+func (v *StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup) Default() {
+}
+
+// NewStreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup returns a default StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup() StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup {
+	var v StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatRequestTopologySubtopology struct {
+	// SubtopologyID uniquely identifies the subtopology.
+	SubtopologyID string
+
+	// SourceTopics are the topics the topology reads from.
+	SourceTopics []string
+
+	// SourceTopicRegex are regular expressions identifying topics the
+	// subtopology reads from.
+	SourceTopicRegex []string
+
+	// StateChangelogTopics are changelog topics associated with this
+	// subtopology, created automatically.
+	StateChangelogTopics []TopicInfo
+
+	// RepartitionSinkTopics are the repartition topics the subtopology
+	// writes to.
+	RepartitionSinkTopics []string
+
+	// RepartitionSourceTopics are source topics that are internally created
+	// repartition topics, created automatically.
+	RepartitionSourceTopics []TopicInfo
+
+	// CopartitionGroups are subsets of source topics that must be
+	// copartitioned.
+	CopartitionGroups []StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatRequestTopologySubtopology.
+func (v *StreamsGroupHeartbeatRequestTopologySubtopology) Default() {
+}
+
+// NewStreamsGroupHeartbeatRequestTopologySubtopology returns a default StreamsGroupHeartbeatRequestTopologySubtopology
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatRequestTopologySubtopology() StreamsGroupHeartbeatRequestTopologySubtopology {
+	var v StreamsGroupHeartbeatRequestTopologySubtopology
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatRequestTopology struct {
+	// Epoch is the epoch of the topology.
+	Epoch int32
+
+	// Subtopologies are the sub-topologies of the streams application.
+	Subtopologies []StreamsGroupHeartbeatRequestTopologySubtopology
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatRequestTopology.
+func (v *StreamsGroupHeartbeatRequestTopology) Default() {
+}
+
+// NewStreamsGroupHeartbeatRequestTopology returns a default StreamsGroupHeartbeatRequestTopology
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatRequestTopology() StreamsGroupHeartbeatRequestTopology {
+	var v StreamsGroupHeartbeatRequestTopology
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatRequestUserEndpoint struct {
+	// Host is the hostname.
+	Host string
+
+	// Port is the port.
+	Port uint16
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatRequestUserEndpoint.
+func (v *StreamsGroupHeartbeatRequestUserEndpoint) Default() {
+}
+
+// NewStreamsGroupHeartbeatRequestUserEndpoint returns a default StreamsGroupHeartbeatRequestUserEndpoint
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatRequestUserEndpoint() StreamsGroupHeartbeatRequestUserEndpoint {
+	var v StreamsGroupHeartbeatRequestUserEndpoint
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatRequestClientTag struct {
+	// Key is the tag key.
+	Key string
+
+	// Value is the tag value.
+	Value string
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatRequestClientTag.
+func (v *StreamsGroupHeartbeatRequestClientTag) Default() {
+}
+
+// NewStreamsGroupHeartbeatRequestClientTag returns a default StreamsGroupHeartbeatRequestClientTag
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatRequestClientTag() StreamsGroupHeartbeatRequestClientTag {
+	var v StreamsGroupHeartbeatRequestClientTag
+	v.Default()
+	return v
+}
+
+// StreamsGroupHeartbeatRequest is a part of KIP-1071; documentation is left
+// to the KIP itself for brevity.
+type StreamsGroupHeartbeatRequest struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// Group is the group identifier.
+	Group string
+
+	// MemberID is the member ID generated by the streams consumer. Must be
+	// kept during the entire lifetime of the streams consumer process.
+	MemberID string
+
+	// MemberEpoch is the current member epoch; 0 to join the group; -1 to
+	// leave the group; -2 to indicate that the static member will rejoin.
+	MemberEpoch int32
+
+	// EndpointInformationEpoch is the current endpoint epoch of this client,
+	// represents the latest endpoint epoch this client received.
+	EndpointInformationEpoch int32
+
+	// InstanceID is the instance ID for static membership; null if not provided
+	// or if unchanged since the last heartbeat.
+	InstanceID *string
+
+	// RackID is the rack ID of the member; null if not provided or if unchanged
+	// since the last heartbeat.
+	RackID *string
+
+	// RebalanceTimeoutMillis is the maximum time in milliseconds that the
+	// coordinator will wait on the member to revoke its tasks. -1 if unchanged
+	// since last heartbeat.
+	//
+	// This field has a default of -1.
+	RebalanceTimeoutMillis int32
+
+	// Topology is the topology metadata of the streams application. Only sent
+	// when memberEpoch = 0. Null otherwise.
+	Topology *StreamsGroupHeartbeatRequestTopology
+
+	// ActiveTasks are the currently owned active tasks. Null if unchanged since
+	// last heartbeat.
+	ActiveTasks []TaskIDs
+
+	// StandbyTasks are the currently owned standby tasks. Null if unchanged
+	// since last heartbeat.
+	StandbyTasks []TaskIDs
+
+	// WarmupTasks are the currently owned warm-up tasks. Null if unchanged
+	// since last heartbeat.
+	WarmupTasks []TaskIDs
+
+	// ProcessID is the identity of the streams instance that may have multiple
+	// consumers. Null if unchanged since last heartbeat.
+	ProcessID *string
+
+	// UserEndpoint is the user-defined endpoint for Interactive Queries. Null
+	// if unchanged since last heartbeat or if not defined on the client.
+	UserEndpoint *StreamsGroupHeartbeatRequestUserEndpoint
+
+	// ClientTags are used for rack-aware assignment. Null if unchanged since
+	// last heartbeat.
+	ClientTags []StreamsGroupHeartbeatRequestClientTag
+
+	// TaskOffsets are cumulative changelog offsets for tasks. Null if unchanged
+	// since last heartbeat.
+	TaskOffsets []TaskOffset
+
+	// TaskEndOffsets are cumulative changelog end-offsets for tasks. Null if
+	// unchanged since last heartbeat.
+	TaskEndOffsets []TaskOffset
+
+	// ShutdownApplication indicates whether all Streams clients in the group
+	// should shut down.
+	ShutdownApplication bool
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*StreamsGroupHeartbeatRequest) Key() int16                   { return 88 }
+func (*StreamsGroupHeartbeatRequest) MaxVersion() int16            { return 1 }
+func (v *StreamsGroupHeartbeatRequest) SetVersion(version int16)   { v.Version = version }
+func (v *StreamsGroupHeartbeatRequest) GetVersion() int16          { return v.Version }
+func (v *StreamsGroupHeartbeatRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *StreamsGroupHeartbeatRequest) IsGroupCoordinatorRequest() {}
+func (v *StreamsGroupHeartbeatRequest) ResponseKind() Response {
+	r := &StreamsGroupHeartbeatResponse{Version: v.Version}
+	r.Default()
+	return r
+}
+
+// RequestWith is requests v on r and returns the response or an error.
+// For sharded requests, the response may be merged and still return an error.
+// It is better to rely on client.RequestSharded than to rely on proper merging behavior.
+func (v *StreamsGroupHeartbeatRequest) RequestWith(ctx context.Context, r Requestor) (*StreamsGroupHeartbeatResponse, error) {
+	kresp, err := r.Request(ctx, v)
+	resp, _ := kresp.(*StreamsGroupHeartbeatResponse)
+	return resp, err
+}
+
+func (v *StreamsGroupHeartbeatRequest) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.Group
+		if isFlexible {
+			dst = kbin.AppendCompactString(dst, v)
+		} else {
+			dst = kbin.AppendString(dst, v)
+		}
+	}
+	{
+		v := v.MemberID
+		if isFlexible {
+			dst = kbin.AppendCompactString(dst, v)
+		} else {
+			dst = kbin.AppendString(dst, v)
+		}
+	}
+	{
+		v := v.MemberEpoch
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.EndpointInformationEpoch
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.InstanceID
+		if isFlexible {
+			dst = kbin.AppendCompactNullableString(dst, v)
+		} else {
+			dst = kbin.AppendNullableString(dst, v)
+		}
+	}
+	{
+		v := v.RackID
+		if isFlexible {
+			dst = kbin.AppendCompactNullableString(dst, v)
+		} else {
+			dst = kbin.AppendNullableString(dst, v)
+		}
+	}
+	{
+		v := v.RebalanceTimeoutMillis
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.Topology
+		if v == nil {
+			dst = append(dst, 255)
+		} else {
+			dst = append(dst, 1)
+			{
+				v := v.Epoch
+				dst = kbin.AppendInt32(dst, v)
+			}
+			{
+				v := v.Subtopologies
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := &v[i]
+					{
+						v := v.SubtopologyID
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.SourceTopics
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					{
+						v := v.SourceTopicRegex
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					{
+						v := v.StateChangelogTopics
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.Topic
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.NumPartitions
+								dst = kbin.AppendInt32(dst, v)
+							}
+							{
+								v := v.ReplicationFactor
+								dst = kbin.AppendInt16(dst, v)
+							}
+							{
+								v := v.Configs
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := &v[i]
+									{
+										v := v.Key
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+									{
+										v := v.Value
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+									if isFlexible {
+										dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+										dst = v.UnknownTags.AppendEach(dst)
+									}
+								}
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					{
+						v := v.RepartitionSinkTopics
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					{
+						v := v.RepartitionSourceTopics
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.Topic
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.NumPartitions
+								dst = kbin.AppendInt32(dst, v)
+							}
+							{
+								v := v.ReplicationFactor
+								dst = kbin.AppendInt16(dst, v)
+							}
+							{
+								v := v.Configs
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := &v[i]
+									{
+										v := v.Key
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+									{
+										v := v.Value
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+									if isFlexible {
+										dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+										dst = v.UnknownTags.AppendEach(dst)
+									}
+								}
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					{
+						v := v.CopartitionGroups
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.SourceTopics
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := v[i]
+									dst = kbin.AppendInt16(dst, v)
+								}
+							}
+							{
+								v := v.SourceTopicRegex
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := v[i]
+									dst = kbin.AppendInt16(dst, v)
+								}
+							}
+							{
+								v := v.RepartitionSourceTopics
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := v[i]
+									dst = kbin.AppendInt16(dst, v)
+								}
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.ActiveTasks
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := v[i]
+					dst = kbin.AppendInt32(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.StandbyTasks
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := v[i]
+					dst = kbin.AppendInt32(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.WarmupTasks
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := v[i]
+					dst = kbin.AppendInt32(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.ProcessID
+		if isFlexible {
+			dst = kbin.AppendCompactNullableString(dst, v)
+		} else {
+			dst = kbin.AppendNullableString(dst, v)
+		}
+	}
+	{
+		v := v.UserEndpoint
+		if v == nil {
+			dst = append(dst, 255)
+		} else {
+			dst = append(dst, 1)
+			{
+				v := v.Host
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Port
+				dst = kbin.AppendUint16(dst, v)
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.ClientTags
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.Key
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Value
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.TaskOffsets
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partition
+				dst = kbin.AppendInt32(dst, v)
+			}
+			{
+				v := v.Offset
+				dst = kbin.AppendInt64(dst, v)
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.TaskEndOffsets
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partition
+				dst = kbin.AppendInt32(dst, v)
+			}
+			{
+				v := v.Offset
+				dst = kbin.AppendInt64(dst, v)
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.ShutdownApplication
+		dst = kbin.AppendBool(dst, v)
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *StreamsGroupHeartbeatRequest) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *StreamsGroupHeartbeatRequest) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *StreamsGroupHeartbeatRequest) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		var v string
+		if unsafe {
+			if isFlexible {
+				v = b.UnsafeCompactString()
+			} else {
+				v = b.UnsafeString()
+			}
+		} else {
+			if isFlexible {
+				v = b.CompactString()
+			} else {
+				v = b.String()
+			}
+		}
+		s.Group = v
+	}
+	{
+		var v string
+		if unsafe {
+			if isFlexible {
+				v = b.UnsafeCompactString()
+			} else {
+				v = b.UnsafeString()
+			}
+		} else {
+			if isFlexible {
+				v = b.CompactString()
+			} else {
+				v = b.String()
+			}
+		}
+		s.MemberID = v
+	}
+	{
+		v := b.Int32()
+		s.MemberEpoch = v
+	}
+	{
+		v := b.Int32()
+		s.EndpointInformationEpoch = v
+	}
+	{
+		var v *string
+		if isFlexible {
+			if unsafe {
+				v = b.UnsafeCompactNullableString()
+			} else {
+				v = b.CompactNullableString()
+			}
+		} else {
+			if unsafe {
+				v = b.UnsafeNullableString()
+			} else {
+				v = b.NullableString()
+			}
+		}
+		s.InstanceID = v
+	}
+	{
+		var v *string
+		if isFlexible {
+			if unsafe {
+				v = b.UnsafeCompactNullableString()
+			} else {
+				v = b.CompactNullableString()
+			}
+		} else {
+			if unsafe {
+				v = b.UnsafeNullableString()
+			} else {
+				v = b.NullableString()
+			}
+		}
+		s.RackID = v
+	}
+	{
+		v := b.Int32()
+		s.RebalanceTimeoutMillis = v
+	}
+	{
+		if present := b.Int8(); present != -1 && b.Ok() {
+			s.Topology = new(StreamsGroupHeartbeatRequestTopology)
+			v := s.Topology
+			v.Default()
+			s := v
+			{
+				v := b.Int32()
+				s.Epoch = v
+			}
+			{
+				v := s.Subtopologies
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]StreamsGroupHeartbeatRequestTopologySubtopology, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := &a[i]
+					v.Default()
+					s := v
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.SubtopologyID = v
+					}
+					{
+						v := s.SourceTopics
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.SourceTopics = v
+					}
+					{
+						v := s.SourceTopicRegex
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.SourceTopicRegex = v
+					}
+					{
+						v := s.StateChangelogTopics
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]TopicInfo, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.Topic = v
+							}
+							{
+								v := b.Int32()
+								s.NumPartitions = v
+							}
+							{
+								v := b.Int16()
+								s.ReplicationFactor = v
+							}
+							{
+								v := s.Configs
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]TopicInfoConfig, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := &a[i]
+									v.Default()
+									s := v
+									{
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										s.Key = v
+									}
+									{
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										s.Value = v
+									}
+									if isFlexible {
+										s.UnknownTags = internalReadTags(&b)
+									}
+								}
+								v = a
+								s.Configs = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.StateChangelogTopics = v
+					}
+					{
+						v := s.RepartitionSinkTopics
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.RepartitionSinkTopics = v
+					}
+					{
+						v := s.RepartitionSourceTopics
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]TopicInfo, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.Topic = v
+							}
+							{
+								v := b.Int32()
+								s.NumPartitions = v
+							}
+							{
+								v := b.Int16()
+								s.ReplicationFactor = v
+							}
+							{
+								v := s.Configs
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]TopicInfoConfig, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := &a[i]
+									v.Default()
+									s := v
+									{
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										s.Key = v
+									}
+									{
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										s.Value = v
+									}
+									if isFlexible {
+										s.UnknownTags = internalReadTags(&b)
+									}
+								}
+								v = a
+								s.Configs = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.RepartitionSourceTopics = v
+					}
+					{
+						v := s.CopartitionGroups
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]StreamsGroupHeartbeatRequestTopologySubtopologyCopartitionGroup, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								v := s.SourceTopics
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]int16, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := b.Int16()
+									a[i] = v
+								}
+								v = a
+								s.SourceTopics = v
+							}
+							{
+								v := s.SourceTopicRegex
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]int16, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := b.Int16()
+									a[i] = v
+								}
+								v = a
+								s.SourceTopicRegex = v
+							}
+							{
+								v := s.RepartitionSourceTopics
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]int16, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := b.Int16()
+									a[i] = v
+								}
+								v = a
+								s.RepartitionSourceTopics = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.CopartitionGroups = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+				v = a
+				s.Subtopologies = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+	}
+	{
+		v := s.ActiveTasks
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskIDs{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskIDs, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := s.Partitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]int32, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := b.Int32()
+					a[i] = v
+				}
+				v = a
+				s.Partitions = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.ActiveTasks = v
+	}
+	{
+		v := s.StandbyTasks
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskIDs{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskIDs, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := s.Partitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]int32, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := b.Int32()
+					a[i] = v
+				}
+				v = a
+				s.Partitions = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.StandbyTasks = v
+	}
+	{
+		v := s.WarmupTasks
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskIDs{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskIDs, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := s.Partitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]int32, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := b.Int32()
+					a[i] = v
+				}
+				v = a
+				s.Partitions = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.WarmupTasks = v
+	}
+	{
+		var v *string
+		if isFlexible {
+			if unsafe {
+				v = b.UnsafeCompactNullableString()
+			} else {
+				v = b.CompactNullableString()
+			}
+		} else {
+			if unsafe {
+				v = b.UnsafeNullableString()
+			} else {
+				v = b.NullableString()
+			}
+		}
+		s.ProcessID = v
+	}
+	{
+		if present := b.Int8(); present != -1 && b.Ok() {
+			s.UserEndpoint = new(StreamsGroupHeartbeatRequestUserEndpoint)
+			v := s.UserEndpoint
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.Host = v
+			}
+			{
+				v := b.Uint16()
+				s.Port = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+	}
+	{
+		v := s.ClientTags
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []StreamsGroupHeartbeatRequestClientTag{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]StreamsGroupHeartbeatRequestClientTag, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.Key = v
+			}
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.Value = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.ClientTags = v
+	}
+	{
+		v := s.TaskOffsets
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskOffset{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskOffset, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := b.Int32()
+				s.Partition = v
+			}
+			{
+				v := b.Int64()
+				s.Offset = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.TaskOffsets = v
+	}
+	{
+		v := s.TaskEndOffsets
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskOffset{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskOffset, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := b.Int32()
+				s.Partition = v
+			}
+			{
+				v := b.Int64()
+				s.Offset = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.TaskEndOffsets = v
+	}
+	{
+		v := b.Bool()
+		s.ShutdownApplication = v
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrStreamsGroupHeartbeatRequest returns a pointer to a default StreamsGroupHeartbeatRequest
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrStreamsGroupHeartbeatRequest() *StreamsGroupHeartbeatRequest {
+	var v StreamsGroupHeartbeatRequest
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatRequest.
+func (v *StreamsGroupHeartbeatRequest) Default() {
+	v.RebalanceTimeoutMillis = -1
+	{
+		v := &v.Topology
+		_ = v
+	}
+	{
+		v := &v.UserEndpoint
+		_ = v
+	}
+}
+
+// NewStreamsGroupHeartbeatRequest returns a default StreamsGroupHeartbeatRequest
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatRequest() StreamsGroupHeartbeatRequest {
+	var v StreamsGroupHeartbeatRequest
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatResponseStatus struct {
+	// StatusCode indicates a particular status; 0:STALE_TOPOLOGY,
+	// 1:MISSING_SOURCE_TOPICS, 2:INCORRECTLY_PARTITIONED_TOPICS,
+	// 3:MISSING_INTERNAL_TOPICS, 4:SHUTDOWN_APPLICATION,
+	// 5:ASSIGNMENT_DELAYED.
+	StatusCode int8
+
+	// StatusDetail is a string representation of the status.
+	StatusDetail string
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatResponseStatus.
+func (v *StreamsGroupHeartbeatResponseStatus) Default() {
+}
+
+// NewStreamsGroupHeartbeatResponseStatus returns a default StreamsGroupHeartbeatResponseStatus
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatResponseStatus() StreamsGroupHeartbeatResponseStatus {
+	var v StreamsGroupHeartbeatResponseStatus
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition struct {
+	// Topic is the topic name.
+	Topic string
+
+	// Partitions are the partitions.
+	Partitions []int32
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition.
+func (v *StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition) Default() {
+}
+
+// NewStreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition returns a default StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition() StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition {
+	var v StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition struct {
+	// Topic is the topic name.
+	Topic string
+
+	// Partitions are the partitions.
+	Partitions []int32
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition.
+func (v *StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition) Default() {
+}
+
+// NewStreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition returns a default StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition() StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition {
+	var v StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition
+	v.Default()
+	return v
+}
+
+type StreamsGroupHeartbeatResponsePartitionsByUserEndpoint struct {
+	// UserEndpoint is the user-defined endpoint to connect to the node.
+	UserEndpoint Endpoint
+
+	// ActivePartitions are all topic partitions materialized by active tasks
+	// on the node.
+	ActivePartitions []StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition
+
+	// StandbyPartitions are all topic partitions materialized by standby
+	// tasks on the node.
+	StandbyPartitions []StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatResponsePartitionsByUserEndpoint.
+func (v *StreamsGroupHeartbeatResponsePartitionsByUserEndpoint) Default() {
+	{
+		v := &v.UserEndpoint
+		_ = v
+	}
+}
+
+// NewStreamsGroupHeartbeatResponsePartitionsByUserEndpoint returns a default StreamsGroupHeartbeatResponsePartitionsByUserEndpoint
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatResponsePartitionsByUserEndpoint() StreamsGroupHeartbeatResponsePartitionsByUserEndpoint {
+	var v StreamsGroupHeartbeatResponsePartitionsByUserEndpoint
+	v.Default()
+	return v
+}
+
+// StreamsGroupHeartbeatResponse is returned from a StreamsGroupHeartbeatRequest.
+type StreamsGroupHeartbeatResponse struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// ThrottleMillis is how long of a throttle Kafka will apply to the client
+	// after responding to this request.
+	ThrottleMillis int32
+
+	// ErrorCode is the top-level error code, or 0 if there was no error.
+	ErrorCode int16
+
+	// ErrorMessage is the top-level error message, or null if there was no
+	// error.
+	ErrorMessage *string
+
+	// MemberID is the member ID.
+	MemberID string
+
+	// MemberEpoch is the member epoch.
+	MemberEpoch int32
+
+	// HeartbeatIntervalMillis is the heartbeat interval in milliseconds.
+	HeartbeatIntervalMillis int32
+
+	// AcceptableRecoveryLagLegacy is the maximal lag a warm-up task can have
+	// to be considered caught-up; deprecated in v1 in favor of the int64
+	// AcceptableRecoveryLag below.
+	AcceptableRecoveryLagLegacy int32
+
+	// TaskOffsetIntervalMillis is the interval in which the task changelog
+	// offsets on a client are updated on the broker.
+	TaskOffsetIntervalMillis int32
+
+	// AcceptableRecoveryLag is the maximal lag a warm-up task can have to be
+	// considered caught-up. -1 indicates the broker does not support this
+	// configuration.
+	//
+	// This field has a default of -1.
+	AcceptableRecoveryLag int64 // v1+
+
+	// Status indicates zero or more statuses for the group membership.
+	Status []StreamsGroupHeartbeatResponseStatus
+
+	// ActiveTasks are assigned active tasks. Null if unchanged since last
+	// heartbeat.
+	ActiveTasks []TaskIDs
+
+	// StandbyTasks are assigned standby tasks. Null if unchanged since last
+	// heartbeat.
+	StandbyTasks []TaskIDs
+
+	// WarmupTasks are assigned warm-up tasks. Null if unchanged since last
+	// heartbeat.
+	WarmupTasks []TaskIDs
+
+	// TopologyDescriptionRequired is true if the broker does not have an
+	// up-to-date topology description for this group; the client should send
+	// the description via StreamsGroupTopologyDescriptionUpdate.
+	TopologyDescriptionRequired bool // v1+
+
+	// EndpointInformationEpoch is the endpoint epoch set in the response.
+	EndpointInformationEpoch int32
+
+	// PartitionsByUserEndpoint is global assignment information used for
+	// Interactive Queries. Null if unchanged since last heartbeat.
+	PartitionsByUserEndpoint []StreamsGroupHeartbeatResponsePartitionsByUserEndpoint
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*StreamsGroupHeartbeatResponse) Key() int16                 { return 88 }
+func (*StreamsGroupHeartbeatResponse) MaxVersion() int16          { return 1 }
+func (v *StreamsGroupHeartbeatResponse) SetVersion(version int16) { v.Version = version }
+func (v *StreamsGroupHeartbeatResponse) GetVersion() int16        { return v.Version }
+func (v *StreamsGroupHeartbeatResponse) IsFlexible() bool         { return v.Version >= 0 }
+func (v *StreamsGroupHeartbeatResponse) Throttle() (int32, bool) {
+	return v.ThrottleMillis, v.Version >= 0
+}
+func (v *StreamsGroupHeartbeatResponse) SetThrottle(throttleMillis int32) {
+	v.ThrottleMillis = throttleMillis
+}
+func (v *StreamsGroupHeartbeatResponse) RequestKind() Request {
+	return &StreamsGroupHeartbeatRequest{Version: v.Version}
+}
+
+func (v *StreamsGroupHeartbeatResponse) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.ThrottleMillis
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.ErrorCode
+		dst = kbin.AppendInt16(dst, v)
+	}
+	{
+		v := v.ErrorMessage
+		if isFlexible {
+			dst = kbin.AppendCompactNullableString(dst, v)
+		} else {
+			dst = kbin.AppendNullableString(dst, v)
+		}
+	}
+	{
+		v := v.MemberID
+		if isFlexible {
+			dst = kbin.AppendCompactString(dst, v)
+		} else {
+			dst = kbin.AppendString(dst, v)
+		}
+	}
+	{
+		v := v.MemberEpoch
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.HeartbeatIntervalMillis
+		dst = kbin.AppendInt32(dst, v)
+	}
+	if version >= 0 && version <= 0 {
+		v := v.AcceptableRecoveryLagLegacy
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.TaskOffsetIntervalMillis
+		dst = kbin.AppendInt32(dst, v)
+	}
+	if version >= 1 {
+		v := v.AcceptableRecoveryLag
+		dst = kbin.AppendInt64(dst, v)
+	}
+	{
+		v := v.Status
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.StatusCode
+				dst = kbin.AppendInt8(dst, v)
+			}
+			{
+				v := v.StatusDetail
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.ActiveTasks
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := v[i]
+					dst = kbin.AppendInt32(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.StandbyTasks
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := v[i]
+					dst = kbin.AppendInt32(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	{
+		v := v.WarmupTasks
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.SubtopologyID
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Partitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := v[i]
+					dst = kbin.AppendInt32(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	if version >= 1 {
+		v := v.TopologyDescriptionRequired
+		dst = kbin.AppendBool(dst, v)
+	}
+	{
+		v := v.EndpointInformationEpoch
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.PartitionsByUserEndpoint
+		if isFlexible {
+			dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+		} else {
+			dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := &v.UserEndpoint
+				{
+					v := v.Host
+					if isFlexible {
+						dst = kbin.AppendCompactString(dst, v)
+					} else {
+						dst = kbin.AppendString(dst, v)
+					}
+				}
+				{
+					v := v.Port
+					dst = kbin.AppendUint16(dst, v)
+				}
+				if isFlexible {
+					dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+					dst = v.UnknownTags.AppendEach(dst)
+				}
+			}
+			{
+				v := v.ActivePartitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := &v[i]
+					{
+						v := v.Topic
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.Partitions
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							dst = kbin.AppendInt32(dst, v)
+						}
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+			}
+			{
+				v := v.StandbyPartitions
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := &v[i]
+					{
+						v := v.Topic
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.Partitions
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							dst = kbin.AppendInt32(dst, v)
+						}
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *StreamsGroupHeartbeatResponse) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *StreamsGroupHeartbeatResponse) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *StreamsGroupHeartbeatResponse) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		v := b.Int32()
+		s.ThrottleMillis = v
+	}
+	{
+		v := b.Int16()
+		s.ErrorCode = v
+	}
+	{
+		var v *string
+		if isFlexible {
+			if unsafe {
+				v = b.UnsafeCompactNullableString()
+			} else {
+				v = b.CompactNullableString()
+			}
+		} else {
+			if unsafe {
+				v = b.UnsafeNullableString()
+			} else {
+				v = b.NullableString()
+			}
+		}
+		s.ErrorMessage = v
+	}
+	{
+		var v string
+		if unsafe {
+			if isFlexible {
+				v = b.UnsafeCompactString()
+			} else {
+				v = b.UnsafeString()
+			}
+		} else {
+			if isFlexible {
+				v = b.CompactString()
+			} else {
+				v = b.String()
+			}
+		}
+		s.MemberID = v
+	}
+	{
+		v := b.Int32()
+		s.MemberEpoch = v
+	}
+	{
+		v := b.Int32()
+		s.HeartbeatIntervalMillis = v
+	}
+	if version >= 0 && version <= 0 {
+		v := b.Int32()
+		s.AcceptableRecoveryLagLegacy = v
+	}
+	{
+		v := b.Int32()
+		s.TaskOffsetIntervalMillis = v
+	}
+	if version >= 1 {
+		v := b.Int64()
+		s.AcceptableRecoveryLag = v
+	}
+	{
+		v := s.Status
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []StreamsGroupHeartbeatResponseStatus{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]StreamsGroupHeartbeatResponseStatus, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				v := b.Int8()
+				s.StatusCode = v
+			}
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.StatusDetail = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.Status = v
+	}
+	{
+		v := s.ActiveTasks
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskIDs{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskIDs, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := s.Partitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]int32, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := b.Int32()
+					a[i] = v
+				}
+				v = a
+				s.Partitions = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.ActiveTasks = v
+	}
+	{
+		v := s.StandbyTasks
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskIDs{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskIDs, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := s.Partitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]int32, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := b.Int32()
+					a[i] = v
+				}
+				v = a
+				s.Partitions = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.StandbyTasks = v
+	}
+	{
+		v := s.WarmupTasks
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []TaskIDs{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]TaskIDs, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.SubtopologyID = v
+			}
+			{
+				v := s.Partitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]int32, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := b.Int32()
+					a[i] = v
+				}
+				v = a
+				s.Partitions = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.WarmupTasks = v
+	}
+	if version >= 1 {
+		v := b.Bool()
+		s.TopologyDescriptionRequired = v
+	}
+	{
+		v := b.Int32()
+		s.EndpointInformationEpoch = v
+	}
+	{
+		v := s.PartitionsByUserEndpoint
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if version < 0 || l == 0 {
+			a = []StreamsGroupHeartbeatResponsePartitionsByUserEndpoint{}
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]StreamsGroupHeartbeatResponsePartitionsByUserEndpoint, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				v := &s.UserEndpoint
+				v.Default()
+				s := v
+				{
+					var v string
+					if unsafe {
+						if isFlexible {
+							v = b.UnsafeCompactString()
+						} else {
+							v = b.UnsafeString()
+						}
+					} else {
+						if isFlexible {
+							v = b.CompactString()
+						} else {
+							v = b.String()
+						}
+					}
+					s.Host = v
+				}
+				{
+					v := b.Uint16()
+					s.Port = v
+				}
+				if isFlexible {
+					s.UnknownTags = internalReadTags(&b)
+				}
+			}
+			{
+				v := s.ActivePartitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]StreamsGroupHeartbeatResponsePartitionsByUserEndpointActivePartition, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := &a[i]
+					v.Default()
+					s := v
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.Topic = v
+					}
+					{
+						v := s.Partitions
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]int32, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := b.Int32()
+							a[i] = v
+						}
+						v = a
+						s.Partitions = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+				v = a
+				s.ActivePartitions = v
+			}
+			{
+				v := s.StandbyPartitions
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]StreamsGroupHeartbeatResponsePartitionsByUserEndpointStandbyPartition, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := &a[i]
+					v.Default()
+					s := v
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.Topic = v
+					}
+					{
+						v := s.Partitions
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]int32, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := b.Int32()
+							a[i] = v
+						}
+						v = a
+						s.Partitions = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+				v = a
+				s.StandbyPartitions = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.PartitionsByUserEndpoint = v
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrStreamsGroupHeartbeatResponse returns a pointer to a default StreamsGroupHeartbeatResponse
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrStreamsGroupHeartbeatResponse() *StreamsGroupHeartbeatResponse {
+	var v StreamsGroupHeartbeatResponse
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupHeartbeatResponse.
+func (v *StreamsGroupHeartbeatResponse) Default() {
+	v.AcceptableRecoveryLag = -1
+}
+
+// NewStreamsGroupHeartbeatResponse returns a default StreamsGroupHeartbeatResponse
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupHeartbeatResponse() StreamsGroupHeartbeatResponse {
+	var v StreamsGroupHeartbeatResponse
+	v.Default()
+	return v
+}
+
+// TopologyDescriptionSubtopology is a subtopology within a streams topology
+// description.
+type TopologyDescriptionSubtopology struct {
+	// SubtopologyID uniquely identifies the subtopology.
+	SubtopologyID string
+
+	// Nodes are the processor nodes of the subtopology.
+	Nodes []TopologyDescriptionNode
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TopologyDescriptionSubtopology.
+func (v *TopologyDescriptionSubtopology) Default() {
+}
+
+// NewTopologyDescriptionSubtopology returns a default TopologyDescriptionSubtopology
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTopologyDescriptionSubtopology() TopologyDescriptionSubtopology {
+	var v TopologyDescriptionSubtopology
+	v.Default()
+	return v
+}
+
+// TopologyDescriptionGlobalStore is a global store within a streams topology
+// description.
+type TopologyDescriptionGlobalStore struct {
+	// Source is the source node of the global store.
+	Source TopologyDescriptionNode
+
+	// Processor is the processor node of the global store.
+	Processor TopologyDescriptionNode
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TopologyDescriptionGlobalStore.
+func (v *TopologyDescriptionGlobalStore) Default() {
+	{
+		v := &v.Source
+		_ = v
+	}
+	{
+		v := &v.Processor
+		_ = v
+	}
+}
+
+// NewTopologyDescriptionGlobalStore returns a default TopologyDescriptionGlobalStore
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTopologyDescriptionGlobalStore() TopologyDescriptionGlobalStore {
+	var v TopologyDescriptionGlobalStore
+	v.Default()
+	return v
+}
+
+// StreamsAssignment contains streams group task assignments.
+type StreamsAssignment struct {
+	// ActiveTasks are active tasks for this client.
+	ActiveTasks []TaskIDs
+
+	// StandbyTasks are standby tasks for this client.
+	StandbyTasks []TaskIDs
+
+	// WarmupTasks are warm-up tasks for this client.
+	WarmupTasks []TaskIDs
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsAssignment.
+func (v *StreamsAssignment) Default() {
+}
+
+// NewStreamsAssignment returns a default StreamsAssignment
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsAssignment() StreamsAssignment {
+	var v StreamsAssignment
+	v.Default()
+	return v
+}
+
+// StreamsGroupDescribeRequest describes one or more streams groups. This is
+// part of KIP-1071.
+type StreamsGroupDescribeRequest struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// Groups are the IDs of the groups to describe.
+	Groups []string
+
+	// IncludeAuthorizedOperations controls whether to include authorized
+	// operations.
+	IncludeAuthorizedOperations bool
+
+	// IncludeTopologyDescription controls whether to include the full
+	// topology description in the response.
+	IncludeTopologyDescription bool // v1+
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*StreamsGroupDescribeRequest) Key() int16                 { return 89 }
+func (*StreamsGroupDescribeRequest) MaxVersion() int16          { return 1 }
+func (v *StreamsGroupDescribeRequest) SetVersion(version int16) { v.Version = version }
+func (v *StreamsGroupDescribeRequest) GetVersion() int16        { return v.Version }
+func (v *StreamsGroupDescribeRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (v *StreamsGroupDescribeRequest) ResponseKind() Response {
+	r := &StreamsGroupDescribeResponse{Version: v.Version}
+	r.Default()
+	return r
+}
+
+// RequestWith is requests v on r and returns the response or an error.
+// For sharded requests, the response may be merged and still return an error.
+// It is better to rely on client.RequestSharded than to rely on proper merging behavior.
+func (v *StreamsGroupDescribeRequest) RequestWith(ctx context.Context, r Requestor) (*StreamsGroupDescribeResponse, error) {
+	kresp, err := r.Request(ctx, v)
+	resp, _ := kresp.(*StreamsGroupDescribeResponse)
+	return resp, err
+}
+
+func (v *StreamsGroupDescribeRequest) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.Groups
+		if isFlexible {
+			dst = kbin.AppendCompactArrayLen(dst, len(v))
+		} else {
+			dst = kbin.AppendArrayLen(dst, len(v))
+		}
+		for i := range v {
+			v := v[i]
+			if isFlexible {
+				dst = kbin.AppendCompactString(dst, v)
+			} else {
+				dst = kbin.AppendString(dst, v)
+			}
+		}
+	}
+	{
+		v := v.IncludeAuthorizedOperations
+		dst = kbin.AppendBool(dst, v)
+	}
+	if version >= 1 {
+		v := v.IncludeTopologyDescription
+		dst = kbin.AppendBool(dst, v)
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *StreamsGroupDescribeRequest) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *StreamsGroupDescribeRequest) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *StreamsGroupDescribeRequest) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		v := s.Groups
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]string, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			var v string
+			if unsafe {
+				if isFlexible {
+					v = b.UnsafeCompactString()
+				} else {
+					v = b.UnsafeString()
+				}
+			} else {
+				if isFlexible {
+					v = b.CompactString()
+				} else {
+					v = b.String()
+				}
+			}
+			a[i] = v
+		}
+		v = a
+		s.Groups = v
+	}
+	{
+		v := b.Bool()
+		s.IncludeAuthorizedOperations = v
+	}
+	if version >= 1 {
+		v := b.Bool()
+		s.IncludeTopologyDescription = v
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrStreamsGroupDescribeRequest returns a pointer to a default StreamsGroupDescribeRequest
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrStreamsGroupDescribeRequest() *StreamsGroupDescribeRequest {
+	var v StreamsGroupDescribeRequest
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeRequest.
+func (v *StreamsGroupDescribeRequest) Default() {
+}
+
+// NewStreamsGroupDescribeRequest returns a default StreamsGroupDescribeRequest
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeRequest() StreamsGroupDescribeRequest {
+	var v StreamsGroupDescribeRequest
+	v.Default()
+	return v
+}
+
+type StreamsGroupDescribeResponseGroupTopologySubtopology struct {
+	// SubtopologyID uniquely identifies the subtopology.
+	SubtopologyID string
+
+	// SourceTopics are the topics the subtopology reads from.
+	SourceTopics []string
+
+	// RepartitionSinkTopics are the repartition topics the subtopology
+	// writes to.
+	RepartitionSinkTopics []string
+
+	// StateChangelogTopics are changelog topics associated with this
+	// subtopology.
+	StateChangelogTopics []TopicInfo
+
+	// RepartitionSourceTopics are source topics that are internally
+	// created repartition topics.
+	RepartitionSourceTopics []TopicInfo
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponseGroupTopologySubtopology.
+func (v *StreamsGroupDescribeResponseGroupTopologySubtopology) Default() {
+}
+
+// NewStreamsGroupDescribeResponseGroupTopologySubtopology returns a default StreamsGroupDescribeResponseGroupTopologySubtopology
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponseGroupTopologySubtopology() StreamsGroupDescribeResponseGroupTopologySubtopology {
+	var v StreamsGroupDescribeResponseGroupTopologySubtopology
+	v.Default()
+	return v
+}
+
+type StreamsGroupDescribeResponseGroupTopology struct {
+	// Epoch is the epoch of the currently initialized topology.
+	Epoch int32
+
+	// Subtopologies are the subtopologies of the streams application. Null
+	// if the group is uninitialized, source topics are missing, or
+	// incorrectly partitioned.
+	Subtopologies []StreamsGroupDescribeResponseGroupTopologySubtopology
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponseGroupTopology.
+func (v *StreamsGroupDescribeResponseGroupTopology) Default() {
+}
+
+// NewStreamsGroupDescribeResponseGroupTopology returns a default StreamsGroupDescribeResponseGroupTopology
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponseGroupTopology() StreamsGroupDescribeResponseGroupTopology {
+	var v StreamsGroupDescribeResponseGroupTopology
+	v.Default()
+	return v
+}
+
+type StreamsGroupDescribeResponseGroupMemberUserEndpoint struct {
+	// Host is the hostname.
+	Host string
+
+	// Port is the port.
+	Port uint16
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponseGroupMemberUserEndpoint.
+func (v *StreamsGroupDescribeResponseGroupMemberUserEndpoint) Default() {
+}
+
+// NewStreamsGroupDescribeResponseGroupMemberUserEndpoint returns a default StreamsGroupDescribeResponseGroupMemberUserEndpoint
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponseGroupMemberUserEndpoint() StreamsGroupDescribeResponseGroupMemberUserEndpoint {
+	var v StreamsGroupDescribeResponseGroupMemberUserEndpoint
+	v.Default()
+	return v
+}
+
+type StreamsGroupDescribeResponseGroupMemberClientTag struct {
+	// Key is the tag key.
+	Key string
+
+	// Value is the tag value.
+	Value string
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponseGroupMemberClientTag.
+func (v *StreamsGroupDescribeResponseGroupMemberClientTag) Default() {
+}
+
+// NewStreamsGroupDescribeResponseGroupMemberClientTag returns a default StreamsGroupDescribeResponseGroupMemberClientTag
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponseGroupMemberClientTag() StreamsGroupDescribeResponseGroupMemberClientTag {
+	var v StreamsGroupDescribeResponseGroupMemberClientTag
+	v.Default()
+	return v
+}
+
+type StreamsGroupDescribeResponseGroupMember struct {
+	// MemberID is the member ID.
+	MemberID string
+
+	// MemberEpoch is the member epoch.
+	MemberEpoch int32
+
+	// InstanceID is the member instance ID for static membership.
+	InstanceID *string
+
+	// RackID is the rack ID.
+	RackID *string
+
+	// ClientID is the client ID.
+	ClientID string
+
+	// ClientHost is the client host.
+	ClientHost string
+
+	// TopologyEpoch is the epoch of the topology on the client.
+	TopologyEpoch int32
+
+	// ProcessID is the identity of the streams instance that may have
+	// multiple clients.
+	ProcessID string
+
+	// UserEndpoint is the user-defined endpoint for Interactive Queries.
+	// Null if not defined for this client.
+	UserEndpoint *StreamsGroupDescribeResponseGroupMemberUserEndpoint
+
+	// ClientTags are used for rack-aware assignment.
+	ClientTags []StreamsGroupDescribeResponseGroupMemberClientTag
+
+	// TaskOffsets are cumulative changelog offsets for tasks.
+	TaskOffsets []TaskOffset
+
+	// TaskEndOffsets are cumulative changelog end offsets for tasks.
+	TaskEndOffsets []TaskOffset
+
+	// Assignment is the current assignment.
+	Assignment StreamsAssignment
+
+	// TargetAssignment is the target assignment.
+	TargetAssignment StreamsAssignment
+
+	// IsClassic is true for classic members that have not been upgraded yet.
+	IsClassic bool
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponseGroupMember.
+func (v *StreamsGroupDescribeResponseGroupMember) Default() {
+	{
+		v := &v.UserEndpoint
+		_ = v
+	}
+	{
+		v := &v.Assignment
+		_ = v
+	}
+	{
+		v := &v.TargetAssignment
+		_ = v
+	}
+}
+
+// NewStreamsGroupDescribeResponseGroupMember returns a default StreamsGroupDescribeResponseGroupMember
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponseGroupMember() StreamsGroupDescribeResponseGroupMember {
+	var v StreamsGroupDescribeResponseGroupMember
+	v.Default()
+	return v
+}
+
+type StreamsGroupDescribeResponseGroupTopologyDescription struct {
+	// Subtopologies are the subtopologies that make up this topology.
+	Subtopologies []TopologyDescriptionSubtopology
+
+	// GlobalStores are the global stores of this topology.
+	GlobalStores []TopologyDescriptionGlobalStore
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponseGroupTopologyDescription.
+func (v *StreamsGroupDescribeResponseGroupTopologyDescription) Default() {
+}
+
+// NewStreamsGroupDescribeResponseGroupTopologyDescription returns a default StreamsGroupDescribeResponseGroupTopologyDescription
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponseGroupTopologyDescription() StreamsGroupDescribeResponseGroupTopologyDescription {
+	var v StreamsGroupDescribeResponseGroupTopologyDescription
+	v.Default()
+	return v
+}
+
+type StreamsGroupDescribeResponseGroup struct {
+	// ErrorCode is the describe error, or 0 if there was no error.
+	ErrorCode int16
+
+	// ErrorMessage is the top-level error message, or null if there was no
+	// error.
+	ErrorMessage *string
+
+	// Group is the group ID.
+	Group string
+
+	// State is the group state.
+	State string
+
+	// Epoch is the group epoch.
+	Epoch int32
+
+	// AssignmentEpoch is the assignment epoch.
+	AssignmentEpoch int32
+
+	// Topology is the topology metadata currently initialized for the streams
+	// application. Null in case of a describe error.
+	Topology *StreamsGroupDescribeResponseGroupTopology
+
+	// Members are the members of the group.
+	Members []StreamsGroupDescribeResponseGroupMember
+
+	// AuthorizedOperations is a 32-bit bitfield representing authorized
+	// operations for the group.
+	//
+	// This field has a default of -2147483648.
+	AuthorizedOperations int32
+
+	// TopologyDescription is the full topology description for this group;
+	// non-null if and only if TopologyDescriptionStatus is AVAILABLE (3).
+	TopologyDescription *StreamsGroupDescribeResponseGroupTopologyDescription // v1+
+
+	// TopologyDescriptionStatus is the status of the topology description:
+	// 0=NOT_REQUESTED, 1=NOT_STORED, 2=ERROR, 3=AVAILABLE.
+	TopologyDescriptionStatus int8 // v1+
+
+	// AssignorName is the task assignor the group coordinator will use for
+	// the next assignment (KIP-1357). This may differ from the assignor that
+	// computed the current assignment, because changing the assignor
+	// configuration does not trigger a rebalance. Null in case of a describe
+	// error.
+	AssignorName *string // v1+
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponseGroup.
+func (v *StreamsGroupDescribeResponseGroup) Default() {
+	{
+		v := &v.Topology
+		_ = v
+	}
+	v.AuthorizedOperations = -2147483648
+	{
+		v := &v.TopologyDescription
+		_ = v
+	}
+}
+
+// NewStreamsGroupDescribeResponseGroup returns a default StreamsGroupDescribeResponseGroup
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponseGroup() StreamsGroupDescribeResponseGroup {
+	var v StreamsGroupDescribeResponseGroup
+	v.Default()
+	return v
+}
+
+// StreamsGroupDescribeResponse is returned from a StreamsGroupDescribeRequest.
+type StreamsGroupDescribeResponse struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// ThrottleMillis is how long of a throttle Kafka will apply to the client
+	// after responding to this request.
+	ThrottleMillis int32
+
+	// Groups contains each described group.
+	Groups []StreamsGroupDescribeResponseGroup
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*StreamsGroupDescribeResponse) Key() int16                 { return 89 }
+func (*StreamsGroupDescribeResponse) MaxVersion() int16          { return 1 }
+func (v *StreamsGroupDescribeResponse) SetVersion(version int16) { v.Version = version }
+func (v *StreamsGroupDescribeResponse) GetVersion() int16        { return v.Version }
+func (v *StreamsGroupDescribeResponse) IsFlexible() bool         { return v.Version >= 0 }
+func (v *StreamsGroupDescribeResponse) Throttle() (int32, bool) {
+	return v.ThrottleMillis, v.Version >= 0
+}
+func (v *StreamsGroupDescribeResponse) SetThrottle(throttleMillis int32) {
+	v.ThrottleMillis = throttleMillis
+}
+func (v *StreamsGroupDescribeResponse) RequestKind() Request {
+	return &StreamsGroupDescribeRequest{Version: v.Version}
+}
+
+func (v *StreamsGroupDescribeResponse) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.ThrottleMillis
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.Groups
+		if isFlexible {
+			dst = kbin.AppendCompactArrayLen(dst, len(v))
+		} else {
+			dst = kbin.AppendArrayLen(dst, len(v))
+		}
+		for i := range v {
+			v := &v[i]
+			{
+				v := v.ErrorCode
+				dst = kbin.AppendInt16(dst, v)
+			}
+			{
+				v := v.ErrorMessage
+				if isFlexible {
+					dst = kbin.AppendCompactNullableString(dst, v)
+				} else {
+					dst = kbin.AppendNullableString(dst, v)
+				}
+			}
+			{
+				v := v.Group
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.State
+				if isFlexible {
+					dst = kbin.AppendCompactString(dst, v)
+				} else {
+					dst = kbin.AppendString(dst, v)
+				}
+			}
+			{
+				v := v.Epoch
+				dst = kbin.AppendInt32(dst, v)
+			}
+			{
+				v := v.AssignmentEpoch
+				dst = kbin.AppendInt32(dst, v)
+			}
+			{
+				v := v.Topology
+				if v == nil {
+					dst = append(dst, 255)
+				} else {
+					dst = append(dst, 1)
+					{
+						v := v.Epoch
+						dst = kbin.AppendInt32(dst, v)
+					}
+					{
+						v := v.Subtopologies
+						if isFlexible {
+							dst = kbin.AppendCompactNullableArrayLen(dst, len(v), v == nil)
+						} else {
+							dst = kbin.AppendNullableArrayLen(dst, len(v), v == nil)
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.SubtopologyID
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.SourceTopics
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := v[i]
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+							}
+							{
+								v := v.RepartitionSinkTopics
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := v[i]
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+							}
+							{
+								v := v.StateChangelogTopics
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := &v[i]
+									{
+										v := v.Topic
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+									{
+										v := v.NumPartitions
+										dst = kbin.AppendInt32(dst, v)
+									}
+									{
+										v := v.ReplicationFactor
+										dst = kbin.AppendInt16(dst, v)
+									}
+									{
+										v := v.Configs
+										if isFlexible {
+											dst = kbin.AppendCompactArrayLen(dst, len(v))
+										} else {
+											dst = kbin.AppendArrayLen(dst, len(v))
+										}
+										for i := range v {
+											v := &v[i]
+											{
+												v := v.Key
+												if isFlexible {
+													dst = kbin.AppendCompactString(dst, v)
+												} else {
+													dst = kbin.AppendString(dst, v)
+												}
+											}
+											{
+												v := v.Value
+												if isFlexible {
+													dst = kbin.AppendCompactString(dst, v)
+												} else {
+													dst = kbin.AppendString(dst, v)
+												}
+											}
+											if isFlexible {
+												dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+												dst = v.UnknownTags.AppendEach(dst)
+											}
+										}
+									}
+									if isFlexible {
+										dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+										dst = v.UnknownTags.AppendEach(dst)
+									}
+								}
+							}
+							{
+								v := v.RepartitionSourceTopics
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := &v[i]
+									{
+										v := v.Topic
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+									{
+										v := v.NumPartitions
+										dst = kbin.AppendInt32(dst, v)
+									}
+									{
+										v := v.ReplicationFactor
+										dst = kbin.AppendInt16(dst, v)
+									}
+									{
+										v := v.Configs
+										if isFlexible {
+											dst = kbin.AppendCompactArrayLen(dst, len(v))
+										} else {
+											dst = kbin.AppendArrayLen(dst, len(v))
+										}
+										for i := range v {
+											v := &v[i]
+											{
+												v := v.Key
+												if isFlexible {
+													dst = kbin.AppendCompactString(dst, v)
+												} else {
+													dst = kbin.AppendString(dst, v)
+												}
+											}
+											{
+												v := v.Value
+												if isFlexible {
+													dst = kbin.AppendCompactString(dst, v)
+												} else {
+													dst = kbin.AppendString(dst, v)
+												}
+											}
+											if isFlexible {
+												dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+												dst = v.UnknownTags.AppendEach(dst)
+											}
+										}
+									}
+									if isFlexible {
+										dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+										dst = v.UnknownTags.AppendEach(dst)
+									}
+								}
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+			}
+			{
+				v := v.Members
+				if isFlexible {
+					dst = kbin.AppendCompactArrayLen(dst, len(v))
+				} else {
+					dst = kbin.AppendArrayLen(dst, len(v))
+				}
+				for i := range v {
+					v := &v[i]
+					{
+						v := v.MemberID
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.MemberEpoch
+						dst = kbin.AppendInt32(dst, v)
+					}
+					{
+						v := v.InstanceID
+						if isFlexible {
+							dst = kbin.AppendCompactNullableString(dst, v)
+						} else {
+							dst = kbin.AppendNullableString(dst, v)
+						}
+					}
+					{
+						v := v.RackID
+						if isFlexible {
+							dst = kbin.AppendCompactNullableString(dst, v)
+						} else {
+							dst = kbin.AppendNullableString(dst, v)
+						}
+					}
+					{
+						v := v.ClientID
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.ClientHost
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.TopologyEpoch
+						dst = kbin.AppendInt32(dst, v)
+					}
+					{
+						v := v.ProcessID
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.UserEndpoint
+						if v == nil {
+							dst = append(dst, 255)
+						} else {
+							dst = append(dst, 1)
+							{
+								v := v.Host
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.Port
+								dst = kbin.AppendUint16(dst, v)
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					{
+						v := v.ClientTags
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.Key
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.Value
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					{
+						v := v.TaskOffsets
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.SubtopologyID
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.Partition
+								dst = kbin.AppendInt32(dst, v)
+							}
+							{
+								v := v.Offset
+								dst = kbin.AppendInt64(dst, v)
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					{
+						v := v.TaskEndOffsets
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.SubtopologyID
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.Partition
+								dst = kbin.AppendInt32(dst, v)
+							}
+							{
+								v := v.Offset
+								dst = kbin.AppendInt64(dst, v)
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					{
+						v := &v.Assignment
+						{
+							v := v.ActiveTasks
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := &v[i]
+								{
+									v := v.SubtopologyID
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.Partitions
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										dst = kbin.AppendInt32(dst, v)
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+						}
+						{
+							v := v.StandbyTasks
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := &v[i]
+								{
+									v := v.SubtopologyID
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.Partitions
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										dst = kbin.AppendInt32(dst, v)
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+						}
+						{
+							v := v.WarmupTasks
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := &v[i]
+								{
+									v := v.SubtopologyID
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.Partitions
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										dst = kbin.AppendInt32(dst, v)
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+						}
+						if isFlexible {
+							dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+							dst = v.UnknownTags.AppendEach(dst)
+						}
+					}
+					{
+						v := &v.TargetAssignment
+						{
+							v := v.ActiveTasks
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := &v[i]
+								{
+									v := v.SubtopologyID
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.Partitions
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										dst = kbin.AppendInt32(dst, v)
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+						}
+						{
+							v := v.StandbyTasks
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := &v[i]
+								{
+									v := v.SubtopologyID
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.Partitions
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										dst = kbin.AppendInt32(dst, v)
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+						}
+						{
+							v := v.WarmupTasks
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := &v[i]
+								{
+									v := v.SubtopologyID
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.Partitions
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										dst = kbin.AppendInt32(dst, v)
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+						}
+						if isFlexible {
+							dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+							dst = v.UnknownTags.AppendEach(dst)
+						}
+					}
+					{
+						v := v.IsClassic
+						dst = kbin.AppendBool(dst, v)
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+			}
+			{
+				v := v.AuthorizedOperations
+				dst = kbin.AppendInt32(dst, v)
+			}
+			if version >= 1 {
+				v := v.TopologyDescription
+				if v == nil {
+					dst = append(dst, 255)
+				} else {
+					dst = append(dst, 1)
+					{
+						v := v.Subtopologies
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := v.SubtopologyID
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+							{
+								v := v.Nodes
+								if isFlexible {
+									dst = kbin.AppendCompactArrayLen(dst, len(v))
+								} else {
+									dst = kbin.AppendArrayLen(dst, len(v))
+								}
+								for i := range v {
+									v := &v[i]
+									{
+										v := v.Name
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+									{
+										v := v.NodeType
+										dst = kbin.AppendInt8(dst, v)
+									}
+									{
+										v := v.SourceTopics
+										if isFlexible {
+											dst = kbin.AppendCompactArrayLen(dst, len(v))
+										} else {
+											dst = kbin.AppendArrayLen(dst, len(v))
+										}
+										for i := range v {
+											v := v[i]
+											if isFlexible {
+												dst = kbin.AppendCompactString(dst, v)
+											} else {
+												dst = kbin.AppendString(dst, v)
+											}
+										}
+									}
+									{
+										v := v.SinkTopic
+										if isFlexible {
+											dst = kbin.AppendCompactNullableString(dst, v)
+										} else {
+											dst = kbin.AppendNullableString(dst, v)
+										}
+									}
+									{
+										v := v.Stores
+										if isFlexible {
+											dst = kbin.AppendCompactArrayLen(dst, len(v))
+										} else {
+											dst = kbin.AppendArrayLen(dst, len(v))
+										}
+										for i := range v {
+											v := v[i]
+											if isFlexible {
+												dst = kbin.AppendCompactString(dst, v)
+											} else {
+												dst = kbin.AppendString(dst, v)
+											}
+										}
+									}
+									{
+										v := v.Successors
+										if isFlexible {
+											dst = kbin.AppendCompactArrayLen(dst, len(v))
+										} else {
+											dst = kbin.AppendArrayLen(dst, len(v))
+										}
+										for i := range v {
+											v := v[i]
+											if isFlexible {
+												dst = kbin.AppendCompactString(dst, v)
+											} else {
+												dst = kbin.AppendString(dst, v)
+											}
+										}
+									}
+									if isFlexible {
+										dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+										dst = v.UnknownTags.AppendEach(dst)
+									}
+								}
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					{
+						v := v.GlobalStores
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := &v[i]
+							{
+								v := &v.Source
+								{
+									v := v.Name
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.NodeType
+									dst = kbin.AppendInt8(dst, v)
+								}
+								{
+									v := v.SourceTopics
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+								}
+								{
+									v := v.SinkTopic
+									if isFlexible {
+										dst = kbin.AppendCompactNullableString(dst, v)
+									} else {
+										dst = kbin.AppendNullableString(dst, v)
+									}
+								}
+								{
+									v := v.Stores
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+								}
+								{
+									v := v.Successors
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+							{
+								v := &v.Processor
+								{
+									v := v.Name
+									if isFlexible {
+										dst = kbin.AppendCompactString(dst, v)
+									} else {
+										dst = kbin.AppendString(dst, v)
+									}
+								}
+								{
+									v := v.NodeType
+									dst = kbin.AppendInt8(dst, v)
+								}
+								{
+									v := v.SourceTopics
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+								}
+								{
+									v := v.SinkTopic
+									if isFlexible {
+										dst = kbin.AppendCompactNullableString(dst, v)
+									} else {
+										dst = kbin.AppendNullableString(dst, v)
+									}
+								}
+								{
+									v := v.Stores
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+								}
+								{
+									v := v.Successors
+									if isFlexible {
+										dst = kbin.AppendCompactArrayLen(dst, len(v))
+									} else {
+										dst = kbin.AppendArrayLen(dst, len(v))
+									}
+									for i := range v {
+										v := v[i]
+										if isFlexible {
+											dst = kbin.AppendCompactString(dst, v)
+										} else {
+											dst = kbin.AppendString(dst, v)
+										}
+									}
+								}
+								if isFlexible {
+									dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+									dst = v.UnknownTags.AppendEach(dst)
+								}
+							}
+							if isFlexible {
+								dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+								dst = v.UnknownTags.AppendEach(dst)
+							}
+						}
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+			}
+			if version >= 1 {
+				v := v.TopologyDescriptionStatus
+				dst = kbin.AppendInt8(dst, v)
+			}
+			if version >= 1 {
+				v := v.AssignorName
+				if isFlexible {
+					dst = kbin.AppendCompactNullableString(dst, v)
+				} else {
+					dst = kbin.AppendNullableString(dst, v)
+				}
+			}
+			if isFlexible {
+				dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+				dst = v.UnknownTags.AppendEach(dst)
+			}
+		}
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *StreamsGroupDescribeResponse) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *StreamsGroupDescribeResponse) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *StreamsGroupDescribeResponse) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		v := b.Int32()
+		s.ThrottleMillis = v
+	}
+	{
+		v := s.Groups
+		a := v
+		var l int32
+		if isFlexible {
+			l = b.CompactArrayLen()
+		} else {
+			l = b.ArrayLen()
+		}
+		if !b.Ok() {
+			return b.Complete()
+		}
+		a = a[:0]
+		if l > 0 {
+			a = append(a, make([]StreamsGroupDescribeResponseGroup, l)...)
+		}
+		for i := int32(0); i < l; i++ {
+			v := &a[i]
+			v.Default()
+			s := v
+			{
+				v := b.Int16()
+				s.ErrorCode = v
+			}
+			{
+				var v *string
+				if isFlexible {
+					if unsafe {
+						v = b.UnsafeCompactNullableString()
+					} else {
+						v = b.CompactNullableString()
+					}
+				} else {
+					if unsafe {
+						v = b.UnsafeNullableString()
+					} else {
+						v = b.NullableString()
+					}
+				}
+				s.ErrorMessage = v
+			}
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.Group = v
+			}
+			{
+				var v string
+				if unsafe {
+					if isFlexible {
+						v = b.UnsafeCompactString()
+					} else {
+						v = b.UnsafeString()
+					}
+				} else {
+					if isFlexible {
+						v = b.CompactString()
+					} else {
+						v = b.String()
+					}
+				}
+				s.State = v
+			}
+			{
+				v := b.Int32()
+				s.Epoch = v
+			}
+			{
+				v := b.Int32()
+				s.AssignmentEpoch = v
+			}
+			{
+				if present := b.Int8(); present != -1 && b.Ok() {
+					s.Topology = new(StreamsGroupDescribeResponseGroupTopology)
+					v := s.Topology
+					v.Default()
+					s := v
+					{
+						v := b.Int32()
+						s.Epoch = v
+					}
+					{
+						v := s.Subtopologies
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if version < 0 || l == 0 {
+							a = []StreamsGroupDescribeResponseGroupTopologySubtopology{}
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]StreamsGroupDescribeResponseGroupTopologySubtopology, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.SubtopologyID = v
+							}
+							{
+								v := s.SourceTopics
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]string, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									a[i] = v
+								}
+								v = a
+								s.SourceTopics = v
+							}
+							{
+								v := s.RepartitionSinkTopics
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]string, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									a[i] = v
+								}
+								v = a
+								s.RepartitionSinkTopics = v
+							}
+							{
+								v := s.StateChangelogTopics
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]TopicInfo, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := &a[i]
+									v.Default()
+									s := v
+									{
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										s.Topic = v
+									}
+									{
+										v := b.Int32()
+										s.NumPartitions = v
+									}
+									{
+										v := b.Int16()
+										s.ReplicationFactor = v
+									}
+									{
+										v := s.Configs
+										a := v
+										var l int32
+										if isFlexible {
+											l = b.CompactArrayLen()
+										} else {
+											l = b.ArrayLen()
+										}
+										if !b.Ok() {
+											return b.Complete()
+										}
+										a = a[:0]
+										if l > 0 {
+											a = append(a, make([]TopicInfoConfig, l)...)
+										}
+										for i := int32(0); i < l; i++ {
+											v := &a[i]
+											v.Default()
+											s := v
+											{
+												var v string
+												if unsafe {
+													if isFlexible {
+														v = b.UnsafeCompactString()
+													} else {
+														v = b.UnsafeString()
+													}
+												} else {
+													if isFlexible {
+														v = b.CompactString()
+													} else {
+														v = b.String()
+													}
+												}
+												s.Key = v
+											}
+											{
+												var v string
+												if unsafe {
+													if isFlexible {
+														v = b.UnsafeCompactString()
+													} else {
+														v = b.UnsafeString()
+													}
+												} else {
+													if isFlexible {
+														v = b.CompactString()
+													} else {
+														v = b.String()
+													}
+												}
+												s.Value = v
+											}
+											if isFlexible {
+												s.UnknownTags = internalReadTags(&b)
+											}
+										}
+										v = a
+										s.Configs = v
+									}
+									if isFlexible {
+										s.UnknownTags = internalReadTags(&b)
+									}
+								}
+								v = a
+								s.StateChangelogTopics = v
+							}
+							{
+								v := s.RepartitionSourceTopics
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]TopicInfo, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := &a[i]
+									v.Default()
+									s := v
+									{
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										s.Topic = v
+									}
+									{
+										v := b.Int32()
+										s.NumPartitions = v
+									}
+									{
+										v := b.Int16()
+										s.ReplicationFactor = v
+									}
+									{
+										v := s.Configs
+										a := v
+										var l int32
+										if isFlexible {
+											l = b.CompactArrayLen()
+										} else {
+											l = b.ArrayLen()
+										}
+										if !b.Ok() {
+											return b.Complete()
+										}
+										a = a[:0]
+										if l > 0 {
+											a = append(a, make([]TopicInfoConfig, l)...)
+										}
+										for i := int32(0); i < l; i++ {
+											v := &a[i]
+											v.Default()
+											s := v
+											{
+												var v string
+												if unsafe {
+													if isFlexible {
+														v = b.UnsafeCompactString()
+													} else {
+														v = b.UnsafeString()
+													}
+												} else {
+													if isFlexible {
+														v = b.CompactString()
+													} else {
+														v = b.String()
+													}
+												}
+												s.Key = v
+											}
+											{
+												var v string
+												if unsafe {
+													if isFlexible {
+														v = b.UnsafeCompactString()
+													} else {
+														v = b.UnsafeString()
+													}
+												} else {
+													if isFlexible {
+														v = b.CompactString()
+													} else {
+														v = b.String()
+													}
+												}
+												s.Value = v
+											}
+											if isFlexible {
+												s.UnknownTags = internalReadTags(&b)
+											}
+										}
+										v = a
+										s.Configs = v
+									}
+									if isFlexible {
+										s.UnknownTags = internalReadTags(&b)
+									}
+								}
+								v = a
+								s.RepartitionSourceTopics = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.Subtopologies = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+			}
+			{
+				v := s.Members
+				a := v
+				var l int32
+				if isFlexible {
+					l = b.CompactArrayLen()
+				} else {
+					l = b.ArrayLen()
+				}
+				if !b.Ok() {
+					return b.Complete()
+				}
+				a = a[:0]
+				if l > 0 {
+					a = append(a, make([]StreamsGroupDescribeResponseGroupMember, l)...)
+				}
+				for i := int32(0); i < l; i++ {
+					v := &a[i]
+					v.Default()
+					s := v
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.MemberID = v
+					}
+					{
+						v := b.Int32()
+						s.MemberEpoch = v
+					}
+					{
+						var v *string
+						if isFlexible {
+							if unsafe {
+								v = b.UnsafeCompactNullableString()
+							} else {
+								v = b.CompactNullableString()
+							}
+						} else {
+							if unsafe {
+								v = b.UnsafeNullableString()
+							} else {
+								v = b.NullableString()
+							}
+						}
+						s.InstanceID = v
+					}
+					{
+						var v *string
+						if isFlexible {
+							if unsafe {
+								v = b.UnsafeCompactNullableString()
+							} else {
+								v = b.CompactNullableString()
+							}
+						} else {
+							if unsafe {
+								v = b.UnsafeNullableString()
+							} else {
+								v = b.NullableString()
+							}
+						}
+						s.RackID = v
+					}
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.ClientID = v
+					}
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.ClientHost = v
+					}
+					{
+						v := b.Int32()
+						s.TopologyEpoch = v
+					}
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.ProcessID = v
+					}
+					{
+						if present := b.Int8(); present != -1 && b.Ok() {
+							s.UserEndpoint = new(StreamsGroupDescribeResponseGroupMemberUserEndpoint)
+							v := s.UserEndpoint
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.Host = v
+							}
+							{
+								v := b.Uint16()
+								s.Port = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+					}
+					{
+						v := s.ClientTags
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]StreamsGroupDescribeResponseGroupMemberClientTag, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.Key = v
+							}
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.Value = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.ClientTags = v
+					}
+					{
+						v := s.TaskOffsets
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]TaskOffset, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.SubtopologyID = v
+							}
+							{
+								v := b.Int32()
+								s.Partition = v
+							}
+							{
+								v := b.Int64()
+								s.Offset = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.TaskOffsets = v
+					}
+					{
+						v := s.TaskEndOffsets
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]TaskOffset, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.SubtopologyID = v
+							}
+							{
+								v := b.Int32()
+								s.Partition = v
+							}
+							{
+								v := b.Int64()
+								s.Offset = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.TaskEndOffsets = v
+					}
+					{
+						v := &s.Assignment
+						v.Default()
+						s := v
+						{
+							v := s.ActiveTasks
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]TaskIDs, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								v := &a[i]
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.SubtopologyID = v
+								}
+								{
+									v := s.Partitions
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]int32, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										v := b.Int32()
+										a[i] = v
+									}
+									v = a
+									s.Partitions = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							v = a
+							s.ActiveTasks = v
+						}
+						{
+							v := s.StandbyTasks
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]TaskIDs, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								v := &a[i]
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.SubtopologyID = v
+								}
+								{
+									v := s.Partitions
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]int32, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										v := b.Int32()
+										a[i] = v
+									}
+									v = a
+									s.Partitions = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							v = a
+							s.StandbyTasks = v
+						}
+						{
+							v := s.WarmupTasks
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]TaskIDs, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								v := &a[i]
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.SubtopologyID = v
+								}
+								{
+									v := s.Partitions
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]int32, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										v := b.Int32()
+										a[i] = v
+									}
+									v = a
+									s.Partitions = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							v = a
+							s.WarmupTasks = v
+						}
+						if isFlexible {
+							s.UnknownTags = internalReadTags(&b)
+						}
+					}
+					{
+						v := &s.TargetAssignment
+						v.Default()
+						s := v
+						{
+							v := s.ActiveTasks
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]TaskIDs, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								v := &a[i]
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.SubtopologyID = v
+								}
+								{
+									v := s.Partitions
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]int32, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										v := b.Int32()
+										a[i] = v
+									}
+									v = a
+									s.Partitions = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							v = a
+							s.ActiveTasks = v
+						}
+						{
+							v := s.StandbyTasks
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]TaskIDs, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								v := &a[i]
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.SubtopologyID = v
+								}
+								{
+									v := s.Partitions
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]int32, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										v := b.Int32()
+										a[i] = v
+									}
+									v = a
+									s.Partitions = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							v = a
+							s.StandbyTasks = v
+						}
+						{
+							v := s.WarmupTasks
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]TaskIDs, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								v := &a[i]
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.SubtopologyID = v
+								}
+								{
+									v := s.Partitions
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]int32, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										v := b.Int32()
+										a[i] = v
+									}
+									v = a
+									s.Partitions = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							v = a
+							s.WarmupTasks = v
+						}
+						if isFlexible {
+							s.UnknownTags = internalReadTags(&b)
+						}
+					}
+					{
+						v := b.Bool()
+						s.IsClassic = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+				v = a
+				s.Members = v
+			}
+			{
+				v := b.Int32()
+				s.AuthorizedOperations = v
+			}
+			if version >= 1 {
+				if present := b.Int8(); present != -1 && b.Ok() {
+					s.TopologyDescription = new(StreamsGroupDescribeResponseGroupTopologyDescription)
+					v := s.TopologyDescription
+					v.Default()
+					s := v
+					{
+						v := s.Subtopologies
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]TopologyDescriptionSubtopology, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								s.SubtopologyID = v
+							}
+							{
+								v := s.Nodes
+								a := v
+								var l int32
+								if isFlexible {
+									l = b.CompactArrayLen()
+								} else {
+									l = b.ArrayLen()
+								}
+								if !b.Ok() {
+									return b.Complete()
+								}
+								a = a[:0]
+								if l > 0 {
+									a = append(a, make([]TopologyDescriptionNode, l)...)
+								}
+								for i := int32(0); i < l; i++ {
+									v := &a[i]
+									v.Default()
+									s := v
+									{
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										s.Name = v
+									}
+									{
+										v := b.Int8()
+										s.NodeType = v
+									}
+									{
+										v := s.SourceTopics
+										a := v
+										var l int32
+										if isFlexible {
+											l = b.CompactArrayLen()
+										} else {
+											l = b.ArrayLen()
+										}
+										if !b.Ok() {
+											return b.Complete()
+										}
+										a = a[:0]
+										if l > 0 {
+											a = append(a, make([]string, l)...)
+										}
+										for i := int32(0); i < l; i++ {
+											var v string
+											if unsafe {
+												if isFlexible {
+													v = b.UnsafeCompactString()
+												} else {
+													v = b.UnsafeString()
+												}
+											} else {
+												if isFlexible {
+													v = b.CompactString()
+												} else {
+													v = b.String()
+												}
+											}
+											a[i] = v
+										}
+										v = a
+										s.SourceTopics = v
+									}
+									{
+										var v *string
+										if isFlexible {
+											if unsafe {
+												v = b.UnsafeCompactNullableString()
+											} else {
+												v = b.CompactNullableString()
+											}
+										} else {
+											if unsafe {
+												v = b.UnsafeNullableString()
+											} else {
+												v = b.NullableString()
+											}
+										}
+										s.SinkTopic = v
+									}
+									{
+										v := s.Stores
+										a := v
+										var l int32
+										if isFlexible {
+											l = b.CompactArrayLen()
+										} else {
+											l = b.ArrayLen()
+										}
+										if !b.Ok() {
+											return b.Complete()
+										}
+										a = a[:0]
+										if l > 0 {
+											a = append(a, make([]string, l)...)
+										}
+										for i := int32(0); i < l; i++ {
+											var v string
+											if unsafe {
+												if isFlexible {
+													v = b.UnsafeCompactString()
+												} else {
+													v = b.UnsafeString()
+												}
+											} else {
+												if isFlexible {
+													v = b.CompactString()
+												} else {
+													v = b.String()
+												}
+											}
+											a[i] = v
+										}
+										v = a
+										s.Stores = v
+									}
+									{
+										v := s.Successors
+										a := v
+										var l int32
+										if isFlexible {
+											l = b.CompactArrayLen()
+										} else {
+											l = b.ArrayLen()
+										}
+										if !b.Ok() {
+											return b.Complete()
+										}
+										a = a[:0]
+										if l > 0 {
+											a = append(a, make([]string, l)...)
+										}
+										for i := int32(0); i < l; i++ {
+											var v string
+											if unsafe {
+												if isFlexible {
+													v = b.UnsafeCompactString()
+												} else {
+													v = b.UnsafeString()
+												}
+											} else {
+												if isFlexible {
+													v = b.CompactString()
+												} else {
+													v = b.String()
+												}
+											}
+											a[i] = v
+										}
+										v = a
+										s.Successors = v
+									}
+									if isFlexible {
+										s.UnknownTags = internalReadTags(&b)
+									}
+								}
+								v = a
+								s.Nodes = v
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.Subtopologies = v
+					}
+					{
+						v := s.GlobalStores
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]TopologyDescriptionGlobalStore, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							v := &a[i]
+							v.Default()
+							s := v
+							{
+								v := &s.Source
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.Name = v
+								}
+								{
+									v := b.Int8()
+									s.NodeType = v
+								}
+								{
+									v := s.SourceTopics
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]string, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										a[i] = v
+									}
+									v = a
+									s.SourceTopics = v
+								}
+								{
+									var v *string
+									if isFlexible {
+										if unsafe {
+											v = b.UnsafeCompactNullableString()
+										} else {
+											v = b.CompactNullableString()
+										}
+									} else {
+										if unsafe {
+											v = b.UnsafeNullableString()
+										} else {
+											v = b.NullableString()
+										}
+									}
+									s.SinkTopic = v
+								}
+								{
+									v := s.Stores
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]string, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										a[i] = v
+									}
+									v = a
+									s.Stores = v
+								}
+								{
+									v := s.Successors
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]string, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										a[i] = v
+									}
+									v = a
+									s.Successors = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							{
+								v := &s.Processor
+								v.Default()
+								s := v
+								{
+									var v string
+									if unsafe {
+										if isFlexible {
+											v = b.UnsafeCompactString()
+										} else {
+											v = b.UnsafeString()
+										}
+									} else {
+										if isFlexible {
+											v = b.CompactString()
+										} else {
+											v = b.String()
+										}
+									}
+									s.Name = v
+								}
+								{
+									v := b.Int8()
+									s.NodeType = v
+								}
+								{
+									v := s.SourceTopics
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]string, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										a[i] = v
+									}
+									v = a
+									s.SourceTopics = v
+								}
+								{
+									var v *string
+									if isFlexible {
+										if unsafe {
+											v = b.UnsafeCompactNullableString()
+										} else {
+											v = b.CompactNullableString()
+										}
+									} else {
+										if unsafe {
+											v = b.UnsafeNullableString()
+										} else {
+											v = b.NullableString()
+										}
+									}
+									s.SinkTopic = v
+								}
+								{
+									v := s.Stores
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]string, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										a[i] = v
+									}
+									v = a
+									s.Stores = v
+								}
+								{
+									v := s.Successors
+									a := v
+									var l int32
+									if isFlexible {
+										l = b.CompactArrayLen()
+									} else {
+										l = b.ArrayLen()
+									}
+									if !b.Ok() {
+										return b.Complete()
+									}
+									a = a[:0]
+									if l > 0 {
+										a = append(a, make([]string, l)...)
+									}
+									for i := int32(0); i < l; i++ {
+										var v string
+										if unsafe {
+											if isFlexible {
+												v = b.UnsafeCompactString()
+											} else {
+												v = b.UnsafeString()
+											}
+										} else {
+											if isFlexible {
+												v = b.CompactString()
+											} else {
+												v = b.String()
+											}
+										}
+										a[i] = v
+									}
+									v = a
+									s.Successors = v
+								}
+								if isFlexible {
+									s.UnknownTags = internalReadTags(&b)
+								}
+							}
+							if isFlexible {
+								s.UnknownTags = internalReadTags(&b)
+							}
+						}
+						v = a
+						s.GlobalStores = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+			}
+			if version >= 1 {
+				v := b.Int8()
+				s.TopologyDescriptionStatus = v
+			}
+			if version >= 1 {
+				var v *string
+				if isFlexible {
+					if unsafe {
+						v = b.UnsafeCompactNullableString()
+					} else {
+						v = b.CompactNullableString()
+					}
+				} else {
+					if unsafe {
+						v = b.UnsafeNullableString()
+					} else {
+						v = b.NullableString()
+					}
+				}
+				s.AssignorName = v
+			}
+			if isFlexible {
+				s.UnknownTags = internalReadTags(&b)
+			}
+		}
+		v = a
+		s.Groups = v
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrStreamsGroupDescribeResponse returns a pointer to a default StreamsGroupDescribeResponse
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrStreamsGroupDescribeResponse() *StreamsGroupDescribeResponse {
+	var v StreamsGroupDescribeResponse
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupDescribeResponse.
+func (v *StreamsGroupDescribeResponse) Default() {
+}
+
+// NewStreamsGroupDescribeResponse returns a default StreamsGroupDescribeResponse
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupDescribeResponse() StreamsGroupDescribeResponse {
+	var v StreamsGroupDescribeResponse
 	v.Default()
 	return v
 }
@@ -59725,6 +66333,7 @@ func NewDescribeShareGroupOffsetsRequestGroup() DescribeShareGroupOffsetsRequest
 }
 
 // DescribeShareGroupOffsetsRequest is a request to describe share group offsets.
+// Version 1, introduced in Kafka 4.2, adds Lag to the response (KIP-1226).
 type DescribeShareGroupOffsetsRequest struct {
 	// Version is the version of this message used with a Kafka broker.
 	Version int16
@@ -59736,11 +66345,12 @@ type DescribeShareGroupOffsetsRequest struct {
 	UnknownTags Tags
 }
 
-func (*DescribeShareGroupOffsetsRequest) Key() int16                 { return 90 }
-func (*DescribeShareGroupOffsetsRequest) MaxVersion() int16          { return 0 }
-func (v *DescribeShareGroupOffsetsRequest) SetVersion(version int16) { v.Version = version }
-func (v *DescribeShareGroupOffsetsRequest) GetVersion() int16        { return v.Version }
-func (v *DescribeShareGroupOffsetsRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*DescribeShareGroupOffsetsRequest) Key() int16                   { return 90 }
+func (*DescribeShareGroupOffsetsRequest) MaxVersion() int16            { return 1 }
+func (v *DescribeShareGroupOffsetsRequest) SetVersion(version int16)   { v.Version = version }
+func (v *DescribeShareGroupOffsetsRequest) GetVersion() int16          { return v.Version }
+func (v *DescribeShareGroupOffsetsRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *DescribeShareGroupOffsetsRequest) IsGroupCoordinatorRequest() {}
 func (v *DescribeShareGroupOffsetsRequest) ResponseKind() Response {
 	r := &DescribeShareGroupOffsetsResponse{Version: v.Version}
 	r.Default()
@@ -59825,15 +66435,12 @@ func (v *DescribeShareGroupOffsetsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeShareGroupOffsetsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeShareGroupOffsetsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeShareGroupOffsetsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -59993,6 +66600,11 @@ type DescribeShareGroupOffsetsResponseGroupTopicPartition struct {
 	// LeaderEpoch is the leader epoch of the partition.
 	LeaderEpoch int32
 
+	// Lag is the share-partition lag. -1 if not available.
+	//
+	// This field has a default of -1.
+	Lag int64 // v1+
+
 	// ErrorCode is the partition-level error code, or 0 if there was no
 	// error.
 	ErrorCode int16
@@ -60008,6 +66620,7 @@ type DescribeShareGroupOffsetsResponseGroupTopicPartition struct {
 // Default sets any default fields. Calling this allows for future compatibility
 // if new fields are added to DescribeShareGroupOffsetsResponseGroupTopicPartition.
 func (v *DescribeShareGroupOffsetsResponseGroupTopicPartition) Default() {
+	v.Lag = -1
 }
 
 // NewDescribeShareGroupOffsetsResponseGroupTopicPartition returns a default DescribeShareGroupOffsetsResponseGroupTopicPartition
@@ -60103,18 +66716,16 @@ type DescribeShareGroupOffsetsResponse struct {
 }
 
 func (*DescribeShareGroupOffsetsResponse) Key() int16                 { return 90 }
-func (*DescribeShareGroupOffsetsResponse) MaxVersion() int16          { return 0 }
+func (*DescribeShareGroupOffsetsResponse) MaxVersion() int16          { return 1 }
 func (v *DescribeShareGroupOffsetsResponse) SetVersion(version int16) { v.Version = version }
 func (v *DescribeShareGroupOffsetsResponse) GetVersion() int16        { return v.Version }
 func (v *DescribeShareGroupOffsetsResponse) IsFlexible() bool         { return v.Version >= 0 }
 func (v *DescribeShareGroupOffsetsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *DescribeShareGroupOffsetsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DescribeShareGroupOffsetsResponse) RequestKind() Request {
 	return &DescribeShareGroupOffsetsRequest{Version: v.Version}
 }
@@ -60187,6 +66798,10 @@ func (v *DescribeShareGroupOffsetsResponse) AppendTo(dst []byte) []byte {
 								v := v.LeaderEpoch
 								dst = kbin.AppendInt32(dst, v)
 							}
+							if version >= 1 {
+								v := v.Lag
+								dst = kbin.AppendInt64(dst, v)
+							}
 							{
 								v := v.ErrorCode
 								dst = kbin.AppendInt16(dst, v)
@@ -60235,15 +66850,12 @@ func (v *DescribeShareGroupOffsetsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DescribeShareGroupOffsetsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DescribeShareGroupOffsetsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DescribeShareGroupOffsetsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -60365,6 +66977,10 @@ func (v *DescribeShareGroupOffsetsResponse) readFrom(src []byte, unsafe bool) er
 							{
 								v := b.Int32()
 								s.LeaderEpoch = v
+							}
+							if version >= 1 {
+								v := b.Int64()
+								s.Lag = v
 							}
 							{
 								v := b.Int16()
@@ -60519,11 +67135,12 @@ type AlterShareGroupOffsetsRequest struct {
 	UnknownTags Tags
 }
 
-func (*AlterShareGroupOffsetsRequest) Key() int16                 { return 91 }
-func (*AlterShareGroupOffsetsRequest) MaxVersion() int16          { return 0 }
-func (v *AlterShareGroupOffsetsRequest) SetVersion(version int16) { v.Version = version }
-func (v *AlterShareGroupOffsetsRequest) GetVersion() int16        { return v.Version }
-func (v *AlterShareGroupOffsetsRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*AlterShareGroupOffsetsRequest) Key() int16                   { return 91 }
+func (*AlterShareGroupOffsetsRequest) MaxVersion() int16            { return 0 }
+func (v *AlterShareGroupOffsetsRequest) SetVersion(version int16)   { v.Version = version }
+func (v *AlterShareGroupOffsetsRequest) GetVersion() int16          { return v.Version }
+func (v *AlterShareGroupOffsetsRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *AlterShareGroupOffsetsRequest) IsGroupCoordinatorRequest() {}
 func (v *AlterShareGroupOffsetsRequest) ResponseKind() Response {
 	r := &AlterShareGroupOffsetsResponse{Version: v.Version}
 	r.Default()
@@ -60604,15 +67221,12 @@ func (v *AlterShareGroupOffsetsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterShareGroupOffsetsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterShareGroupOffsetsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterShareGroupOffsetsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -60841,11 +67455,9 @@ func (v *AlterShareGroupOffsetsResponse) IsFlexible() bool         { return v.Ve
 func (v *AlterShareGroupOffsetsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *AlterShareGroupOffsetsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *AlterShareGroupOffsetsResponse) RequestKind() Request {
 	return &AlterShareGroupOffsetsRequest{Version: v.Version}
 }
@@ -60935,15 +67547,12 @@ func (v *AlterShareGroupOffsetsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *AlterShareGroupOffsetsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *AlterShareGroupOffsetsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *AlterShareGroupOffsetsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -61140,11 +67749,12 @@ type DeleteShareGroupOffsetsRequest struct {
 	UnknownTags Tags
 }
 
-func (*DeleteShareGroupOffsetsRequest) Key() int16                 { return 92 }
-func (*DeleteShareGroupOffsetsRequest) MaxVersion() int16          { return 0 }
-func (v *DeleteShareGroupOffsetsRequest) SetVersion(version int16) { v.Version = version }
-func (v *DeleteShareGroupOffsetsRequest) GetVersion() int16        { return v.Version }
-func (v *DeleteShareGroupOffsetsRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (*DeleteShareGroupOffsetsRequest) Key() int16                   { return 92 }
+func (*DeleteShareGroupOffsetsRequest) MaxVersion() int16            { return 0 }
+func (v *DeleteShareGroupOffsetsRequest) SetVersion(version int16)   { v.Version = version }
+func (v *DeleteShareGroupOffsetsRequest) GetVersion() int16          { return v.Version }
+func (v *DeleteShareGroupOffsetsRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *DeleteShareGroupOffsetsRequest) IsGroupCoordinatorRequest() {}
 func (v *DeleteShareGroupOffsetsRequest) ResponseKind() Response {
 	r := &DeleteShareGroupOffsetsResponse{Version: v.Version}
 	r.Default()
@@ -61202,15 +67812,12 @@ func (v *DeleteShareGroupOffsetsRequest) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteShareGroupOffsetsRequest) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteShareGroupOffsetsRequest) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteShareGroupOffsetsRequest) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -61382,11 +67989,9 @@ func (v *DeleteShareGroupOffsetsResponse) IsFlexible() bool         { return v.V
 func (v *DeleteShareGroupOffsetsResponse) Throttle() (int32, bool) {
 	return v.ThrottleMillis, v.Version >= 0
 }
-
 func (v *DeleteShareGroupOffsetsResponse) SetThrottle(throttleMillis int32) {
 	v.ThrottleMillis = throttleMillis
 }
-
 func (v *DeleteShareGroupOffsetsResponse) RequestKind() Request {
 	return &DeleteShareGroupOffsetsRequest{Version: v.Version}
 }
@@ -61457,15 +68062,12 @@ func (v *DeleteShareGroupOffsetsResponse) AppendTo(dst []byte) []byte {
 	}
 	return dst
 }
-
 func (v *DeleteShareGroupOffsetsResponse) ReadFrom(src []byte) error {
 	return v.readFrom(src, false)
 }
-
 func (v *DeleteShareGroupOffsetsResponse) UnsafeReadFrom(src []byte) error {
 	return v.readFrom(src, true)
 }
-
 func (v *DeleteShareGroupOffsetsResponse) readFrom(src []byte, unsafe bool) error {
 	v.Default()
 	b := kbin.Reader{Src: src}
@@ -61591,6 +68193,1379 @@ func (v *DeleteShareGroupOffsetsResponse) Default() {
 // This is a shortcut for creating a struct and calling Default yourself.
 func NewDeleteShareGroupOffsetsResponse() DeleteShareGroupOffsetsResponse {
 	var v DeleteShareGroupOffsetsResponse
+	v.Default()
+	return v
+}
+
+// TopologyDescription is a full streams topology description, sent by a
+// client when the broker requests it via TopologyDescriptionRequired in a
+// StreamsGroupHeartbeatResponse.
+type TopologyDescription struct {
+	// Subtopologies are the subtopologies that make up this topology.
+	Subtopologies []TopologyDescriptionSubtopology
+
+	// GlobalStores are the global stores of this topology.
+	GlobalStores []TopologyDescriptionGlobalStore
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to TopologyDescription.
+func (v *TopologyDescription) Default() {
+}
+
+// NewTopologyDescription returns a default TopologyDescription
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewTopologyDescription() TopologyDescription {
+	var v TopologyDescription
+	v.Default()
+	return v
+}
+
+// StreamsGroupTopologyDescriptionUpdateRequest sends a group's topology
+// description to the broker; part of KIP-1331.
+type StreamsGroupTopologyDescriptionUpdateRequest struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// Group is the group identifier.
+	Group string
+
+	// MemberID is the member ID.
+	MemberID string
+
+	// TopologyEpoch is the epoch of the topology this description describes.
+	TopologyEpoch int32
+
+	// TopologyDescription is the full topology description.
+	TopologyDescription TopologyDescription
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*StreamsGroupTopologyDescriptionUpdateRequest) Key() int16                   { return 93 }
+func (*StreamsGroupTopologyDescriptionUpdateRequest) MaxVersion() int16            { return 0 }
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) SetVersion(version int16)   { v.Version = version }
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) GetVersion() int16          { return v.Version }
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) IsFlexible() bool           { return v.Version >= 0 }
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) IsGroupCoordinatorRequest() {}
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) ResponseKind() Response {
+	r := &StreamsGroupTopologyDescriptionUpdateResponse{Version: v.Version}
+	r.Default()
+	return r
+}
+
+// RequestWith is requests v on r and returns the response or an error.
+// For sharded requests, the response may be merged and still return an error.
+// It is better to rely on client.RequestSharded than to rely on proper merging behavior.
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) RequestWith(ctx context.Context, r Requestor) (*StreamsGroupTopologyDescriptionUpdateResponse, error) {
+	kresp, err := r.Request(ctx, v)
+	resp, _ := kresp.(*StreamsGroupTopologyDescriptionUpdateResponse)
+	return resp, err
+}
+
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.Group
+		if isFlexible {
+			dst = kbin.AppendCompactString(dst, v)
+		} else {
+			dst = kbin.AppendString(dst, v)
+		}
+	}
+	{
+		v := v.MemberID
+		if isFlexible {
+			dst = kbin.AppendCompactString(dst, v)
+		} else {
+			dst = kbin.AppendString(dst, v)
+		}
+	}
+	{
+		v := v.TopologyEpoch
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := &v.TopologyDescription
+		{
+			v := v.Subtopologies
+			if isFlexible {
+				dst = kbin.AppendCompactArrayLen(dst, len(v))
+			} else {
+				dst = kbin.AppendArrayLen(dst, len(v))
+			}
+			for i := range v {
+				v := &v[i]
+				{
+					v := v.SubtopologyID
+					if isFlexible {
+						dst = kbin.AppendCompactString(dst, v)
+					} else {
+						dst = kbin.AppendString(dst, v)
+					}
+				}
+				{
+					v := v.Nodes
+					if isFlexible {
+						dst = kbin.AppendCompactArrayLen(dst, len(v))
+					} else {
+						dst = kbin.AppendArrayLen(dst, len(v))
+					}
+					for i := range v {
+						v := &v[i]
+						{
+							v := v.Name
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+						{
+							v := v.NodeType
+							dst = kbin.AppendInt8(dst, v)
+						}
+						{
+							v := v.SourceTopics
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := v[i]
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+						}
+						{
+							v := v.SinkTopic
+							if isFlexible {
+								dst = kbin.AppendCompactNullableString(dst, v)
+							} else {
+								dst = kbin.AppendNullableString(dst, v)
+							}
+						}
+						{
+							v := v.Stores
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := v[i]
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+						}
+						{
+							v := v.Successors
+							if isFlexible {
+								dst = kbin.AppendCompactArrayLen(dst, len(v))
+							} else {
+								dst = kbin.AppendArrayLen(dst, len(v))
+							}
+							for i := range v {
+								v := v[i]
+								if isFlexible {
+									dst = kbin.AppendCompactString(dst, v)
+								} else {
+									dst = kbin.AppendString(dst, v)
+								}
+							}
+						}
+						if isFlexible {
+							dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+							dst = v.UnknownTags.AppendEach(dst)
+						}
+					}
+				}
+				if isFlexible {
+					dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+					dst = v.UnknownTags.AppendEach(dst)
+				}
+			}
+		}
+		{
+			v := v.GlobalStores
+			if isFlexible {
+				dst = kbin.AppendCompactArrayLen(dst, len(v))
+			} else {
+				dst = kbin.AppendArrayLen(dst, len(v))
+			}
+			for i := range v {
+				v := &v[i]
+				{
+					v := &v.Source
+					{
+						v := v.Name
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.NodeType
+						dst = kbin.AppendInt8(dst, v)
+					}
+					{
+						v := v.SourceTopics
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					{
+						v := v.SinkTopic
+						if isFlexible {
+							dst = kbin.AppendCompactNullableString(dst, v)
+						} else {
+							dst = kbin.AppendNullableString(dst, v)
+						}
+					}
+					{
+						v := v.Stores
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					{
+						v := v.Successors
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+				{
+					v := &v.Processor
+					{
+						v := v.Name
+						if isFlexible {
+							dst = kbin.AppendCompactString(dst, v)
+						} else {
+							dst = kbin.AppendString(dst, v)
+						}
+					}
+					{
+						v := v.NodeType
+						dst = kbin.AppendInt8(dst, v)
+					}
+					{
+						v := v.SourceTopics
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					{
+						v := v.SinkTopic
+						if isFlexible {
+							dst = kbin.AppendCompactNullableString(dst, v)
+						} else {
+							dst = kbin.AppendNullableString(dst, v)
+						}
+					}
+					{
+						v := v.Stores
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					{
+						v := v.Successors
+						if isFlexible {
+							dst = kbin.AppendCompactArrayLen(dst, len(v))
+						} else {
+							dst = kbin.AppendArrayLen(dst, len(v))
+						}
+						for i := range v {
+							v := v[i]
+							if isFlexible {
+								dst = kbin.AppendCompactString(dst, v)
+							} else {
+								dst = kbin.AppendString(dst, v)
+							}
+						}
+					}
+					if isFlexible {
+						dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+						dst = v.UnknownTags.AppendEach(dst)
+					}
+				}
+				if isFlexible {
+					dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+					dst = v.UnknownTags.AppendEach(dst)
+				}
+			}
+		}
+		if isFlexible {
+			dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+			dst = v.UnknownTags.AppendEach(dst)
+		}
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		var v string
+		if unsafe {
+			if isFlexible {
+				v = b.UnsafeCompactString()
+			} else {
+				v = b.UnsafeString()
+			}
+		} else {
+			if isFlexible {
+				v = b.CompactString()
+			} else {
+				v = b.String()
+			}
+		}
+		s.Group = v
+	}
+	{
+		var v string
+		if unsafe {
+			if isFlexible {
+				v = b.UnsafeCompactString()
+			} else {
+				v = b.UnsafeString()
+			}
+		} else {
+			if isFlexible {
+				v = b.CompactString()
+			} else {
+				v = b.String()
+			}
+		}
+		s.MemberID = v
+	}
+	{
+		v := b.Int32()
+		s.TopologyEpoch = v
+	}
+	{
+		v := &s.TopologyDescription
+		v.Default()
+		s := v
+		{
+			v := s.Subtopologies
+			a := v
+			var l int32
+			if isFlexible {
+				l = b.CompactArrayLen()
+			} else {
+				l = b.ArrayLen()
+			}
+			if !b.Ok() {
+				return b.Complete()
+			}
+			a = a[:0]
+			if l > 0 {
+				a = append(a, make([]TopologyDescriptionSubtopology, l)...)
+			}
+			for i := int32(0); i < l; i++ {
+				v := &a[i]
+				v.Default()
+				s := v
+				{
+					var v string
+					if unsafe {
+						if isFlexible {
+							v = b.UnsafeCompactString()
+						} else {
+							v = b.UnsafeString()
+						}
+					} else {
+						if isFlexible {
+							v = b.CompactString()
+						} else {
+							v = b.String()
+						}
+					}
+					s.SubtopologyID = v
+				}
+				{
+					v := s.Nodes
+					a := v
+					var l int32
+					if isFlexible {
+						l = b.CompactArrayLen()
+					} else {
+						l = b.ArrayLen()
+					}
+					if !b.Ok() {
+						return b.Complete()
+					}
+					a = a[:0]
+					if l > 0 {
+						a = append(a, make([]TopologyDescriptionNode, l)...)
+					}
+					for i := int32(0); i < l; i++ {
+						v := &a[i]
+						v.Default()
+						s := v
+						{
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							s.Name = v
+						}
+						{
+							v := b.Int8()
+							s.NodeType = v
+						}
+						{
+							v := s.SourceTopics
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]string, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								a[i] = v
+							}
+							v = a
+							s.SourceTopics = v
+						}
+						{
+							var v *string
+							if isFlexible {
+								if unsafe {
+									v = b.UnsafeCompactNullableString()
+								} else {
+									v = b.CompactNullableString()
+								}
+							} else {
+								if unsafe {
+									v = b.UnsafeNullableString()
+								} else {
+									v = b.NullableString()
+								}
+							}
+							s.SinkTopic = v
+						}
+						{
+							v := s.Stores
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]string, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								a[i] = v
+							}
+							v = a
+							s.Stores = v
+						}
+						{
+							v := s.Successors
+							a := v
+							var l int32
+							if isFlexible {
+								l = b.CompactArrayLen()
+							} else {
+								l = b.ArrayLen()
+							}
+							if !b.Ok() {
+								return b.Complete()
+							}
+							a = a[:0]
+							if l > 0 {
+								a = append(a, make([]string, l)...)
+							}
+							for i := int32(0); i < l; i++ {
+								var v string
+								if unsafe {
+									if isFlexible {
+										v = b.UnsafeCompactString()
+									} else {
+										v = b.UnsafeString()
+									}
+								} else {
+									if isFlexible {
+										v = b.CompactString()
+									} else {
+										v = b.String()
+									}
+								}
+								a[i] = v
+							}
+							v = a
+							s.Successors = v
+						}
+						if isFlexible {
+							s.UnknownTags = internalReadTags(&b)
+						}
+					}
+					v = a
+					s.Nodes = v
+				}
+				if isFlexible {
+					s.UnknownTags = internalReadTags(&b)
+				}
+			}
+			v = a
+			s.Subtopologies = v
+		}
+		{
+			v := s.GlobalStores
+			a := v
+			var l int32
+			if isFlexible {
+				l = b.CompactArrayLen()
+			} else {
+				l = b.ArrayLen()
+			}
+			if !b.Ok() {
+				return b.Complete()
+			}
+			a = a[:0]
+			if l > 0 {
+				a = append(a, make([]TopologyDescriptionGlobalStore, l)...)
+			}
+			for i := int32(0); i < l; i++ {
+				v := &a[i]
+				v.Default()
+				s := v
+				{
+					v := &s.Source
+					v.Default()
+					s := v
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.Name = v
+					}
+					{
+						v := b.Int8()
+						s.NodeType = v
+					}
+					{
+						v := s.SourceTopics
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.SourceTopics = v
+					}
+					{
+						var v *string
+						if isFlexible {
+							if unsafe {
+								v = b.UnsafeCompactNullableString()
+							} else {
+								v = b.CompactNullableString()
+							}
+						} else {
+							if unsafe {
+								v = b.UnsafeNullableString()
+							} else {
+								v = b.NullableString()
+							}
+						}
+						s.SinkTopic = v
+					}
+					{
+						v := s.Stores
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.Stores = v
+					}
+					{
+						v := s.Successors
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.Successors = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+				{
+					v := &s.Processor
+					v.Default()
+					s := v
+					{
+						var v string
+						if unsafe {
+							if isFlexible {
+								v = b.UnsafeCompactString()
+							} else {
+								v = b.UnsafeString()
+							}
+						} else {
+							if isFlexible {
+								v = b.CompactString()
+							} else {
+								v = b.String()
+							}
+						}
+						s.Name = v
+					}
+					{
+						v := b.Int8()
+						s.NodeType = v
+					}
+					{
+						v := s.SourceTopics
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.SourceTopics = v
+					}
+					{
+						var v *string
+						if isFlexible {
+							if unsafe {
+								v = b.UnsafeCompactNullableString()
+							} else {
+								v = b.CompactNullableString()
+							}
+						} else {
+							if unsafe {
+								v = b.UnsafeNullableString()
+							} else {
+								v = b.NullableString()
+							}
+						}
+						s.SinkTopic = v
+					}
+					{
+						v := s.Stores
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.Stores = v
+					}
+					{
+						v := s.Successors
+						a := v
+						var l int32
+						if isFlexible {
+							l = b.CompactArrayLen()
+						} else {
+							l = b.ArrayLen()
+						}
+						if !b.Ok() {
+							return b.Complete()
+						}
+						a = a[:0]
+						if l > 0 {
+							a = append(a, make([]string, l)...)
+						}
+						for i := int32(0); i < l; i++ {
+							var v string
+							if unsafe {
+								if isFlexible {
+									v = b.UnsafeCompactString()
+								} else {
+									v = b.UnsafeString()
+								}
+							} else {
+								if isFlexible {
+									v = b.CompactString()
+								} else {
+									v = b.String()
+								}
+							}
+							a[i] = v
+						}
+						v = a
+						s.Successors = v
+					}
+					if isFlexible {
+						s.UnknownTags = internalReadTags(&b)
+					}
+				}
+				if isFlexible {
+					s.UnknownTags = internalReadTags(&b)
+				}
+			}
+			v = a
+			s.GlobalStores = v
+		}
+		if isFlexible {
+			s.UnknownTags = internalReadTags(&b)
+		}
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrStreamsGroupTopologyDescriptionUpdateRequest returns a pointer to a default StreamsGroupTopologyDescriptionUpdateRequest
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrStreamsGroupTopologyDescriptionUpdateRequest() *StreamsGroupTopologyDescriptionUpdateRequest {
+	var v StreamsGroupTopologyDescriptionUpdateRequest
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupTopologyDescriptionUpdateRequest.
+func (v *StreamsGroupTopologyDescriptionUpdateRequest) Default() {
+	{
+		v := &v.TopologyDescription
+		_ = v
+	}
+}
+
+// NewStreamsGroupTopologyDescriptionUpdateRequest returns a default StreamsGroupTopologyDescriptionUpdateRequest
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupTopologyDescriptionUpdateRequest() StreamsGroupTopologyDescriptionUpdateRequest {
+	var v StreamsGroupTopologyDescriptionUpdateRequest
+	v.Default()
+	return v
+}
+
+// StreamsGroupTopologyDescriptionUpdateResponse is returned from a
+// StreamsGroupTopologyDescriptionUpdateRequest.
+type StreamsGroupTopologyDescriptionUpdateResponse struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// ThrottleMillis is how long of a throttle Kafka will apply to the client
+	// after responding to this request.
+	ThrottleMillis int32
+
+	// ErrorCode is the error code, or 0 if there was no error.
+	ErrorCode int16
+
+	// ErrorMessage is the error message, or null if there was no error.
+	ErrorMessage *string
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*StreamsGroupTopologyDescriptionUpdateResponse) Key() int16        { return 93 }
+func (*StreamsGroupTopologyDescriptionUpdateResponse) MaxVersion() int16 { return 0 }
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) SetVersion(version int16) {
+	v.Version = version
+}
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) GetVersion() int16 { return v.Version }
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) IsFlexible() bool  { return v.Version >= 0 }
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) Throttle() (int32, bool) {
+	return v.ThrottleMillis, v.Version >= 0
+}
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) SetThrottle(throttleMillis int32) {
+	v.ThrottleMillis = throttleMillis
+}
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) RequestKind() Request {
+	return &StreamsGroupTopologyDescriptionUpdateRequest{Version: v.Version}
+}
+
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.ThrottleMillis
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.ErrorCode
+		dst = kbin.AppendInt16(dst, v)
+	}
+	{
+		v := v.ErrorMessage
+		if isFlexible {
+			dst = kbin.AppendCompactNullableString(dst, v)
+		} else {
+			dst = kbin.AppendNullableString(dst, v)
+		}
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		v := b.Int32()
+		s.ThrottleMillis = v
+	}
+	{
+		v := b.Int16()
+		s.ErrorCode = v
+	}
+	{
+		var v *string
+		if isFlexible {
+			if unsafe {
+				v = b.UnsafeCompactNullableString()
+			} else {
+				v = b.CompactNullableString()
+			}
+		} else {
+			if unsafe {
+				v = b.UnsafeNullableString()
+			} else {
+				v = b.NullableString()
+			}
+		}
+		s.ErrorMessage = v
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrStreamsGroupTopologyDescriptionUpdateResponse returns a pointer to a default StreamsGroupTopologyDescriptionUpdateResponse
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrStreamsGroupTopologyDescriptionUpdateResponse() *StreamsGroupTopologyDescriptionUpdateResponse {
+	var v StreamsGroupTopologyDescriptionUpdateResponse
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to StreamsGroupTopologyDescriptionUpdateResponse.
+func (v *StreamsGroupTopologyDescriptionUpdateResponse) Default() {
+}
+
+// NewStreamsGroupTopologyDescriptionUpdateResponse returns a default StreamsGroupTopologyDescriptionUpdateResponse
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewStreamsGroupTopologyDescriptionUpdateResponse() StreamsGroupTopologyDescriptionUpdateResponse {
+	var v StreamsGroupTopologyDescriptionUpdateResponse
+	v.Default()
+	return v
+}
+
+// UnregisterControllerRequest is an admin request to remove the registration
+// of a controller from the cluster, mirroring UnregisterBroker for brokers.
+// This is served by both the broker and controller listeners.
+type UnregisterControllerRequest struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// The controller ID to unregister.
+	ControllerID int32
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*UnregisterControllerRequest) Key() int16                 { return 94 }
+func (*UnregisterControllerRequest) MaxVersion() int16          { return 0 }
+func (v *UnregisterControllerRequest) SetVersion(version int16) { v.Version = version }
+func (v *UnregisterControllerRequest) GetVersion() int16        { return v.Version }
+func (v *UnregisterControllerRequest) IsFlexible() bool         { return v.Version >= 0 }
+func (v *UnregisterControllerRequest) ResponseKind() Response {
+	r := &UnregisterControllerResponse{Version: v.Version}
+	r.Default()
+	return r
+}
+
+// RequestWith is requests v on r and returns the response or an error.
+// For sharded requests, the response may be merged and still return an error.
+// It is better to rely on client.RequestSharded than to rely on proper merging behavior.
+func (v *UnregisterControllerRequest) RequestWith(ctx context.Context, r Requestor) (*UnregisterControllerResponse, error) {
+	kresp, err := r.Request(ctx, v)
+	resp, _ := kresp.(*UnregisterControllerResponse)
+	return resp, err
+}
+
+func (v *UnregisterControllerRequest) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.ControllerID
+		dst = kbin.AppendInt32(dst, v)
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *UnregisterControllerRequest) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *UnregisterControllerRequest) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *UnregisterControllerRequest) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		v := b.Int32()
+		s.ControllerID = v
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrUnregisterControllerRequest returns a pointer to a default UnregisterControllerRequest
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrUnregisterControllerRequest() *UnregisterControllerRequest {
+	var v UnregisterControllerRequest
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to UnregisterControllerRequest.
+func (v *UnregisterControllerRequest) Default() {
+}
+
+// NewUnregisterControllerRequest returns a default UnregisterControllerRequest
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewUnregisterControllerRequest() UnregisterControllerRequest {
+	var v UnregisterControllerRequest
+	v.Default()
+	return v
+}
+
+// UnregisterControllerResponse is a response to an UnregisterControllerRequest.
+type UnregisterControllerResponse struct {
+	// Version is the version of this message used with a Kafka broker.
+	Version int16
+
+	// ThrottleMillis is how long of a throttle Kafka will apply to the client
+	// after responding to this request.
+	ThrottleMillis int32
+
+	// Any error code, or 0.
+	ErrorCode int16
+
+	// The error message, if any.
+	ErrorMessage *string
+
+	// UnknownTags are tags Kafka sent that we do not know the purpose of.
+	UnknownTags Tags
+}
+
+func (*UnregisterControllerResponse) Key() int16                 { return 94 }
+func (*UnregisterControllerResponse) MaxVersion() int16          { return 0 }
+func (v *UnregisterControllerResponse) SetVersion(version int16) { v.Version = version }
+func (v *UnregisterControllerResponse) GetVersion() int16        { return v.Version }
+func (v *UnregisterControllerResponse) IsFlexible() bool         { return v.Version >= 0 }
+func (v *UnregisterControllerResponse) Throttle() (int32, bool) {
+	return v.ThrottleMillis, v.Version >= 0
+}
+func (v *UnregisterControllerResponse) SetThrottle(throttleMillis int32) {
+	v.ThrottleMillis = throttleMillis
+}
+func (v *UnregisterControllerResponse) RequestKind() Request {
+	return &UnregisterControllerRequest{Version: v.Version}
+}
+
+func (v *UnregisterControllerResponse) AppendTo(dst []byte) []byte {
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	{
+		v := v.ThrottleMillis
+		dst = kbin.AppendInt32(dst, v)
+	}
+	{
+		v := v.ErrorCode
+		dst = kbin.AppendInt16(dst, v)
+	}
+	{
+		v := v.ErrorMessage
+		if isFlexible {
+			dst = kbin.AppendCompactNullableString(dst, v)
+		} else {
+			dst = kbin.AppendNullableString(dst, v)
+		}
+	}
+	if isFlexible {
+		dst = kbin.AppendUvarint(dst, 0+uint32(v.UnknownTags.Len()))
+		dst = v.UnknownTags.AppendEach(dst)
+	}
+	return dst
+}
+func (v *UnregisterControllerResponse) ReadFrom(src []byte) error {
+	return v.readFrom(src, false)
+}
+func (v *UnregisterControllerResponse) UnsafeReadFrom(src []byte) error {
+	return v.readFrom(src, true)
+}
+func (v *UnregisterControllerResponse) readFrom(src []byte, unsafe bool) error {
+	v.Default()
+	b := kbin.Reader{Src: src}
+	version := v.Version
+	_ = version
+	isFlexible := version >= 0
+	_ = isFlexible
+	s := v
+	{
+		v := b.Int32()
+		s.ThrottleMillis = v
+	}
+	{
+		v := b.Int16()
+		s.ErrorCode = v
+	}
+	{
+		var v *string
+		if isFlexible {
+			if unsafe {
+				v = b.UnsafeCompactNullableString()
+			} else {
+				v = b.CompactNullableString()
+			}
+		} else {
+			if unsafe {
+				v = b.UnsafeNullableString()
+			} else {
+				v = b.NullableString()
+			}
+		}
+		s.ErrorMessage = v
+	}
+	if isFlexible {
+		s.UnknownTags = internalReadTags(&b)
+	}
+	return b.Complete()
+}
+
+// NewPtrUnregisterControllerResponse returns a pointer to a default UnregisterControllerResponse
+// This is a shortcut for creating a new(struct) and calling Default yourself.
+func NewPtrUnregisterControllerResponse() *UnregisterControllerResponse {
+	var v UnregisterControllerResponse
+	v.Default()
+	return &v
+}
+
+// Default sets any default fields. Calling this allows for future compatibility
+// if new fields are added to UnregisterControllerResponse.
+func (v *UnregisterControllerResponse) Default() {
+}
+
+// NewUnregisterControllerResponse returns a default UnregisterControllerResponse
+// This is a shortcut for creating a struct and calling Default yourself.
+func NewUnregisterControllerResponse() UnregisterControllerResponse {
+	var v UnregisterControllerResponse
 	v.Default()
 	return v
 }
@@ -61777,12 +69752,20 @@ func RequestForKey(key int16) Request {
 		return NewPtrDeleteShareGroupStateRequest()
 	case 87:
 		return NewPtrReadShareGroupStateSummaryRequest()
+	case 88:
+		return NewPtrStreamsGroupHeartbeatRequest()
+	case 89:
+		return NewPtrStreamsGroupDescribeRequest()
 	case 90:
 		return NewPtrDescribeShareGroupOffsetsRequest()
 	case 91:
 		return NewPtrAlterShareGroupOffsetsRequest()
 	case 92:
 		return NewPtrDeleteShareGroupOffsetsRequest()
+	case 93:
+		return NewPtrStreamsGroupTopologyDescriptionUpdateRequest()
+	case 94:
+		return NewPtrUnregisterControllerRequest()
 	}
 }
 
@@ -61968,12 +69951,20 @@ func ResponseForKey(key int16) Response {
 		return NewPtrDeleteShareGroupStateResponse()
 	case 87:
 		return NewPtrReadShareGroupStateSummaryResponse()
+	case 88:
+		return NewPtrStreamsGroupHeartbeatResponse()
+	case 89:
+		return NewPtrStreamsGroupDescribeResponse()
 	case 90:
 		return NewPtrDescribeShareGroupOffsetsResponse()
 	case 91:
 		return NewPtrAlterShareGroupOffsetsResponse()
 	case 92:
 		return NewPtrDeleteShareGroupOffsetsResponse()
+	case 93:
+		return NewPtrStreamsGroupTopologyDescriptionUpdateResponse()
+	case 94:
+		return NewPtrUnregisterControllerResponse()
 	}
 }
 
@@ -62159,12 +70150,20 @@ func NameForKey(key int16) string {
 		return "DeleteShareGroupState"
 	case 87:
 		return "ReadShareGroupStateSummary"
+	case 88:
+		return "StreamsGroupHeartbeat"
+	case 89:
+		return "StreamsGroupDescribe"
 	case 90:
 		return "DescribeShareGroupOffsets"
 	case 91:
 		return "AlterShareGroupOffsets"
 	case 92:
 		return "DeleteShareGroupOffsets"
+	case 93:
+		return "StreamsGroupTopologyDescriptionUpdate"
+	case 94:
+		return "UnregisterController"
 	}
 }
 
@@ -62172,97 +70171,101 @@ func NameForKey(key int16) string {
 type Key int16
 
 const (
-	Produce                      Key = 0
-	Fetch                        Key = 1
-	ListOffsets                  Key = 2
-	Metadata                     Key = 3
-	LeaderAndISR                 Key = 4
-	StopReplica                  Key = 5
-	UpdateMetadata               Key = 6
-	ControlledShutdown           Key = 7
-	OffsetCommit                 Key = 8
-	OffsetFetch                  Key = 9
-	FindCoordinator              Key = 10
-	JoinGroup                    Key = 11
-	Heartbeat                    Key = 12
-	LeaveGroup                   Key = 13
-	SyncGroup                    Key = 14
-	DescribeGroups               Key = 15
-	ListGroups                   Key = 16
-	SASLHandshake                Key = 17
-	ApiVersions                  Key = 18
-	CreateTopics                 Key = 19
-	DeleteTopics                 Key = 20
-	DeleteRecords                Key = 21
-	InitProducerID               Key = 22
-	OffsetForLeaderEpoch         Key = 23
-	AddPartitionsToTxn           Key = 24
-	AddOffsetsToTxn              Key = 25
-	EndTxn                       Key = 26
-	WriteTxnMarkers              Key = 27
-	TxnOffsetCommit              Key = 28
-	DescribeACLs                 Key = 29
-	CreateACLs                   Key = 30
-	DeleteACLs                   Key = 31
-	DescribeConfigs              Key = 32
-	AlterConfigs                 Key = 33
-	AlterReplicaLogDirs          Key = 34
-	DescribeLogDirs              Key = 35
-	SASLAuthenticate             Key = 36
-	CreatePartitions             Key = 37
-	CreateDelegationToken        Key = 38
-	RenewDelegationToken         Key = 39
-	ExpireDelegationToken        Key = 40
-	DescribeDelegationToken      Key = 41
-	DeleteGroups                 Key = 42
-	ElectLeaders                 Key = 43
-	IncrementalAlterConfigs      Key = 44
-	AlterPartitionAssignments    Key = 45
-	ListPartitionReassignments   Key = 46
-	OffsetDelete                 Key = 47
-	DescribeClientQuotas         Key = 48
-	AlterClientQuotas            Key = 49
-	DescribeUserSCRAMCredentials Key = 50
-	AlterUserSCRAMCredentials    Key = 51
-	Vote                         Key = 52
-	BeginQuorumEpoch             Key = 53
-	EndQuorumEpoch               Key = 54
-	DescribeQuorum               Key = 55
-	AlterPartition               Key = 56
-	UpdateFeatures               Key = 57
-	Envelope                     Key = 58
-	FetchSnapshot                Key = 59
-	DescribeCluster              Key = 60
-	DescribeProducers            Key = 61
-	BrokerRegistration           Key = 62
-	BrokerHeartbeat              Key = 63
-	UnregisterBroker             Key = 64
-	DescribeTransactions         Key = 65
-	ListTransactions             Key = 66
-	AllocateProducerIDs          Key = 67
-	ConsumerGroupHeartbeat       Key = 68
-	ConsumerGroupDescribe        Key = 69
-	ControllerRegistration       Key = 70
-	GetTelemetrySubscriptions    Key = 71
-	PushTelemetry                Key = 72
-	AssignReplicasToDirs         Key = 73
-	ListConfigResources          Key = 74
-	DescribeTopicPartitions      Key = 75
-	ShareGroupHeartbeat          Key = 76
-	ShareGroupDescribe           Key = 77
-	ShareFetch                   Key = 78
-	ShareAcknowledge             Key = 79
-	AddRaftVoter                 Key = 80
-	RemoveRaftVoter              Key = 81
-	UpdateRaftVoter              Key = 82
-	InitializeShareGroupState    Key = 83
-	ReadShareGroupState          Key = 84
-	WriteShareGroupState         Key = 85
-	DeleteShareGroupState        Key = 86
-	ReadShareGroupStateSummary   Key = 87
-	DescribeShareGroupOffsets    Key = 90
-	AlterShareGroupOffsets       Key = 91
-	DeleteShareGroupOffsets      Key = 92
+	Produce                               Key = 0
+	Fetch                                 Key = 1
+	ListOffsets                           Key = 2
+	Metadata                              Key = 3
+	LeaderAndISR                          Key = 4
+	StopReplica                           Key = 5
+	UpdateMetadata                        Key = 6
+	ControlledShutdown                    Key = 7
+	OffsetCommit                          Key = 8
+	OffsetFetch                           Key = 9
+	FindCoordinator                       Key = 10
+	JoinGroup                             Key = 11
+	Heartbeat                             Key = 12
+	LeaveGroup                            Key = 13
+	SyncGroup                             Key = 14
+	DescribeGroups                        Key = 15
+	ListGroups                            Key = 16
+	SASLHandshake                         Key = 17
+	ApiVersions                           Key = 18
+	CreateTopics                          Key = 19
+	DeleteTopics                          Key = 20
+	DeleteRecords                         Key = 21
+	InitProducerID                        Key = 22
+	OffsetForLeaderEpoch                  Key = 23
+	AddPartitionsToTxn                    Key = 24
+	AddOffsetsToTxn                       Key = 25
+	EndTxn                                Key = 26
+	WriteTxnMarkers                       Key = 27
+	TxnOffsetCommit                       Key = 28
+	DescribeACLs                          Key = 29
+	CreateACLs                            Key = 30
+	DeleteACLs                            Key = 31
+	DescribeConfigs                       Key = 32
+	AlterConfigs                          Key = 33
+	AlterReplicaLogDirs                   Key = 34
+	DescribeLogDirs                       Key = 35
+	SASLAuthenticate                      Key = 36
+	CreatePartitions                      Key = 37
+	CreateDelegationToken                 Key = 38
+	RenewDelegationToken                  Key = 39
+	ExpireDelegationToken                 Key = 40
+	DescribeDelegationToken               Key = 41
+	DeleteGroups                          Key = 42
+	ElectLeaders                          Key = 43
+	IncrementalAlterConfigs               Key = 44
+	AlterPartitionAssignments             Key = 45
+	ListPartitionReassignments            Key = 46
+	OffsetDelete                          Key = 47
+	DescribeClientQuotas                  Key = 48
+	AlterClientQuotas                     Key = 49
+	DescribeUserSCRAMCredentials          Key = 50
+	AlterUserSCRAMCredentials             Key = 51
+	Vote                                  Key = 52
+	BeginQuorumEpoch                      Key = 53
+	EndQuorumEpoch                        Key = 54
+	DescribeQuorum                        Key = 55
+	AlterPartition                        Key = 56
+	UpdateFeatures                        Key = 57
+	Envelope                              Key = 58
+	FetchSnapshot                         Key = 59
+	DescribeCluster                       Key = 60
+	DescribeProducers                     Key = 61
+	BrokerRegistration                    Key = 62
+	BrokerHeartbeat                       Key = 63
+	UnregisterBroker                      Key = 64
+	DescribeTransactions                  Key = 65
+	ListTransactions                      Key = 66
+	AllocateProducerIDs                   Key = 67
+	ConsumerGroupHeartbeat                Key = 68
+	ConsumerGroupDescribe                 Key = 69
+	ControllerRegistration                Key = 70
+	GetTelemetrySubscriptions             Key = 71
+	PushTelemetry                         Key = 72
+	AssignReplicasToDirs                  Key = 73
+	ListConfigResources                   Key = 74
+	DescribeTopicPartitions               Key = 75
+	ShareGroupHeartbeat                   Key = 76
+	ShareGroupDescribe                    Key = 77
+	ShareFetch                            Key = 78
+	ShareAcknowledge                      Key = 79
+	AddRaftVoter                          Key = 80
+	RemoveRaftVoter                       Key = 81
+	UpdateRaftVoter                       Key = 82
+	InitializeShareGroupState             Key = 83
+	ReadShareGroupState                   Key = 84
+	WriteShareGroupState                  Key = 85
+	DeleteShareGroupState                 Key = 86
+	ReadShareGroupStateSummary            Key = 87
+	StreamsGroupHeartbeat                 Key = 88
+	StreamsGroupDescribe                  Key = 89
+	DescribeShareGroupOffsets             Key = 90
+	AlterShareGroupOffsets                Key = 91
+	DeleteShareGroupOffsets               Key = 92
+	StreamsGroupTopologyDescriptionUpdate Key = 93
+	UnregisterController                  Key = 94
 )
 
 // Name returns the name for this key.
@@ -62308,7 +70311,6 @@ func (v ConfigResourceType) String() string {
 		return "GROUP_CONFIG"
 	}
 }
-
 func ConfigResourceTypeStrings() []string {
 	return []string{
 		"TOPIC",
@@ -62414,7 +70416,6 @@ func (v ConfigSource) String() string {
 		return "GROUP_CONFIG"
 	}
 }
-
 func ConfigSourceStrings() []string {
 	return []string{
 		"DYNAMIC_TOPIC_CONFIG",
@@ -62527,7 +70528,6 @@ func (v ConfigType) String() string {
 		return "PASSWORD"
 	}
 }
-
 func ConfigTypeStrings() []string {
 	return []string{
 		"BOOLEAN",
@@ -62624,7 +70624,6 @@ func (v IncrementalAlterConfigOp) String() string {
 		return "SUBTRACT"
 	}
 }
-
 func IncrementalAlterConfigOpStrings() []string {
 	return []string{
 		"SET",
@@ -62712,7 +70711,6 @@ func (v ACLResourceType) String() string {
 		return "USER"
 	}
 }
-
 func ACLResourceTypeStrings() []string {
 	return []string{
 		"ANY",
@@ -62807,7 +70805,6 @@ func (v ACLResourcePatternType) String() string {
 		return "PREFIXED"
 	}
 }
-
 func ACLResourcePatternTypeStrings() []string {
 	return []string{
 		"ANY",
@@ -62883,7 +70880,6 @@ func (v ACLPermissionType) String() string {
 		return "ALLOW"
 	}
 }
-
 func ACLPermissionTypeStrings() []string {
 	return []string{
 		"ANY",
@@ -62998,7 +70994,6 @@ func (v ACLOperation) String() string {
 		return "DESCRIBE_TOKENS"
 	}
 }
-
 func ACLOperationStrings() []string {
 	return []string{
 		"ANY",
@@ -63131,7 +71126,6 @@ func (v TransactionState) String() string {
 		return "PrepareEpochFence"
 	}
 }
-
 func TransactionStateStrings() []string {
 	return []string{
 		"Empty",
@@ -63222,7 +71216,6 @@ func (v QuotasMatchType) String() string {
 		return "ANY"
 	}
 }
-
 func QuotasMatchTypeStrings() []string {
 	return []string{
 		"EXACT",
@@ -63274,6 +71267,8 @@ func (e *QuotasMatchType) UnmarshalText(text []byte) error {
 // * 1 (COMMIT)
 //
 // * 2 (QUORUM_REASSIGNMENT)
+// QUORUM_REASSIGNMENT was renamed to LEADER_CHANGE in Kafka 3.0
+// (KAFKA-12952 commit d3ec9f940c), but the meaning is the same.
 //
 // * 3 (SNAPSHOT_HEADER)
 //
@@ -63282,7 +71277,7 @@ func (e *QuotasMatchType) UnmarshalText(text []byte) error {
 // * 5 (KRAFT_VERSION)
 //
 // * 6 (KRAFT_VOTERS)
-type ControlRecordKeyType int8
+type ControlRecordKeyType int16
 
 func (v ControlRecordKeyType) String() string {
 	switch v {
@@ -63304,7 +71299,6 @@ func (v ControlRecordKeyType) String() string {
 		return "KRAFT_VOTERS"
 	}
 }
-
 func ControlRecordKeyTypeStrings() []string {
 	return []string{
 		"ABORT",
@@ -63364,7 +71358,6 @@ func (e *ControlRecordKeyType) UnmarshalText(text []byte) error {
 	*e = v
 	return err
 }
-
 func strnorm(s string) string {
 	s = strings.ReplaceAll(s, ".", "")
 	s = strings.ReplaceAll(s, "_", "")
