@@ -491,7 +491,7 @@ require (
 	gopkg.in/fsnotify/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
-	k8s.io/api v0.35.3 // indirect
+	k8s.io/api v0.37.1 // indirect
 	k8s.io/client-go v0.35.3 // indirect
 	k8s.io/kube-openapi v0.0.0-20250910181357-589584f1c912 // indirect
 	rsc.io/binaryregexp v0.2.0 // indirect
